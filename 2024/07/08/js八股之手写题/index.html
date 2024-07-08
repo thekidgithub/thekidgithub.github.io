@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #ffa2c4">
+                <a href="/tags/js/" style="color: #00bcd4">
                     js
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ffa2c4">
                     八股
                 </a>
             </span>
@@ -192,7 +192,8 @@
     </div>
     
     <div class="content" v-pre>
-        <h2 id="防抖节流"><a href="#防抖节流" class="headerlink" title="防抖节流"></a>防抖节流</h2><p>防抖<br>关键:settimeout,每次调用时清空timer（闭包的应用）</p>
+        <span id="more"></span>
+<h2 id="防抖节流"><a href="#防抖节流" class="headerlink" title="防抖节流"></a>防抖节流</h2><p>防抖<br>关键:settimeout,每次调用时清空timer（闭包的应用）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function debounce(f, time) &#123;</span><br><span class="line">  let timer = null;</span><br><span class="line">  return function() &#123;</span><br><span class="line">    clearTimeOut(timer);</span><br><span class="line">    let args = argement;</span><br><span class="line">    timer = setTimeOut(() =&gt; &#123;</span><br><span class="line">      f.apply(this, args)</span><br><span class="line">    &#125;, time)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>节流<br>关键：设置起始和结束时间</p>
