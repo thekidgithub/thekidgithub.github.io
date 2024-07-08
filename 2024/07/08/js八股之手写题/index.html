@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>my-blog-build | The kid 的小窝</title>
+    <title>js八股之手写题 | The kid 的小窝</title>
     <meta name="author" content="the kid" />
     <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
     <meta name="keywords" content="" />
@@ -156,7 +156,7 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>my-blog-build</h1>
+        <h1>js八股之手写题</h1>
     </div>
     <div class="info">
         <span class="date">
@@ -175,8 +175,15 @@
             
             <span class="tag">
                 
-                <a href="/tags/hexo/" style="color: #ff7d73">
-                    hexo
+                <a href="/tags/js/" style="color: #ffa2c4">
+                    js
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
+                    八股
                 </a>
             </span>
             
@@ -185,8 +192,20 @@
     </div>
     
     <div class="content" v-pre>
-        <p>111</p>
+        <h2 id="防抖节流"><a href="#防抖节流" class="headerlink" title="防抖节流"></a>防抖节流</h2><p>防抖<br>关键:settimeout,每次调用时清空timer（闭包的应用）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function debounce(f, time) &#123;</span><br><span class="line">  let timer = null;</span><br><span class="line">  return function() &#123;</span><br><span class="line">    clearTimeOut(timer);</span><br><span class="line">    let args = argement;</span><br><span class="line">    timer = setTimeOut(() =&gt; &#123;</span><br><span class="line">      f.apply(this, args)</span><br><span class="line">    &#125;, time)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>节流<br>关键：设置起始和结束时间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function throttle(f, time) &#123;</span><br><span class="line">  let startTime = 0;</span><br><span class="line">  return function() &#123;</span><br><span class="line">    const endTime = new Date();</span><br><span class="line">    let args = argument;</span><br><span class="line">    if(endTime - startTime &gt; time) &#123;</span><br><span class="line">      f.apply(this, args);</span><br><span class="line">      startTime = endTime;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h2><p>要点</p>
+<ul>
+<li>判断数据类型</li>
+<li>循环引用</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function clone(target, map = new WeakMap()) &#123;</span><br><span class="line">  if(typeof target !== &#x27;null&#x27; &amp;&amp; (typeof target === &#x27;object&#x27; || typeof target === &#x27;function&#x27;)) &#123;</span><br><span class="line">    const cloneTarget = isArray(target) ? [] : &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    if(map.get(target)) return map.get(target);//解决循环引用</span><br><span class="line">    map.set(target, cloneTarget);</span><br><span class="line"></span><br><span class="line">    for(const key in target) &#123;</span><br><span class="line">      cloneTarget(key) = clone(target(key), map)</span><br><span class="line">    &#125;</span><br><span class="line">    return cloneTarget</span><br><span class="line">  &#125;</span><br><span class="line">  else return target</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="instanceof"><a href="#instanceof" class="headerlink" title="instanceof"></a>instanceof</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function _instanceof(left, right) &#123;</span><br><span class="line">  let rightProto = right.prototype;</span><br><span class="line">  let leftProto = left.__proto__;</span><br><span class="line">  while(1) &#123;</span><br><span class="line">    if(leftProto === null) return false;</span><br><span class="line">    if(leftProto = rightProto) return true;</span><br><span class="line">    leftProto = leftProto.__proto__;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
     
     
