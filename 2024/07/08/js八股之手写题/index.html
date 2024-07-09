@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #ffa2c4">
+                <a href="/tags/js/" style="color: #03a9f4">
                     js
                 </a>
             </span>
@@ -246,6 +246,100 @@
     if(leftProto = rightProto) return true;
     leftProto = leftProto.__proto__;
   &#125;
+&#125;
+</code></pre>
+<h2 id="数组扁平化"><a href="#数组扁平化" class="headerlink" title="数组扁平化"></a>数组扁平化</h2><ul>
+<li>递归</li>
+</ul>
+<pre><code class="javascript">function flat(arr, dep) &#123;
+  const res = [];
+  arr.forEach((item) =&gt; &#123;
+    if(Array.isArray(item) &amp;&amp; depth &gt; 0)
+      res.push(flat(arr, depth - 1))
+    else res.push(item);
+  &#125;)
+  return res;
+&#125;
+</code></pre>
+<ul>
+<li>reduce</li>
+</ul>
+<pre><code class="javascript">function flat(arr, dep) &#123;
+  if(dep &lt; 1) return;
+  const res = arr.reduce((sum, val) =&gt; &#123;sum.push(Array.isArray(val) ? flat(val, dep - 1) : val)&#125;,[])
+&#125;;
+</code></pre>
+<ul>
+<li>使用栈避免递归</li>
+</ul>
+<pre><code class="javascript">function flat(arr) &#123;
+  const res = [];
+  const stack = [...arr];
+  while(stack.length) &#123;
+    const item = stack.pop();
+    if(Array.isArray(item)) stack.push(...item);
+    else res.push(item);
+  &#125;
+  return res.reverse();
+&#125;
+</code></pre>
+<h2 id="call-apply-bind"><a href="#call-apply-bind" class="headerlink" title="call apply bind"></a>call apply bind</h2><p>call apply<br>相当于在目标对象上创建一个临时方法<br>（边界判断，使用symbol， 绑定this，用后即删）</p>
+<pre><code class="javascript">Function.prototype.myCall(target, ...args) &#123;//apply args
+  target = target || window;
+  const symbolKey = Symbol();
+  target[symbolKey] = this;
+  const res = target[symbolKey](...args);
+  delete target[symbolKey];
+  return res;
+&#125;
+</code></pre>
+<p>bind<br>返回一个函数</p>
+<pre><code class="js">Function.prototype.myBind(target, ...outerArgs) &#123;
+  target = target || &#123;&#125;;
+  const symbolKey = Symbol();
+  target[symbolKey] = this;
+  return function(...innerArgs) &#123;
+    const res = target[symbolKey](...outerArgs, ...innerArgs);
+    return res;
+  &#125;
+&#125;
+</code></pre>
+<h2 id="函数柯里化"><a href="#函数柯里化" class="headerlink" title="函数柯里化"></a>函数柯里化</h2><p>把一个函数分解成多个子函数<br>(bind运用了柯里化思想)</p>
+<ul>
+<li>参数定长 （如 fn &#x3D; (a,b,c) &#x3D;&gt; a+b+c）</li>
+</ul>
+<pre><code class="js">function curry(fn, ...presetArgs) &#123;
+  const argLen = fn.length //求函数参数长度
+  return function(...restArgs) &#123;
+    const allArgs = [...presetArgs, ...restArgs];
+    if(allArgs.length &gt;= argLen) &#123;
+      return fn.call(this, ...allArgs);
+    &#125;
+    else &#123;
+      return curry.call(null, fn, ...allArgs);
+    &#125;
+  &#125; 
+&#125;
+</code></pre>
+<ul>
+<li>参数不定长<br>因为没法判断边界条件，所以改写toString方法</li>
+</ul>
+<pre><code class="js">function curry(fn, ...presetArgs) &#123;
+  function curried(...restArgs) &#123;
+    const allArgs = [...presetArgs, ...restArgs];
+    return curry.call(null, fn, ...allArgs);
+  &#125;
+  curried.toString = () =&gt; &#123;
+    return fn.call(this, ...presetArgs);
+  &#125;
+
+  return curried;
+&#125;
+</code></pre>
+<h2 id="new"><a href="#new" class="headerlink" title="new"></a>new</h2><pre><code class="js">function _new(obj, ...rest) &#123;//new Obj(...) = _new(obj, ...)
+  const newObj = Object.create(obj.prototype);//注意create方法，以xx为原型创建对象，而不是直接&#123;&#125;，继承方法
+  const res = obj.call(newObj, ...rest);//继承属性
+  return typeof res === &#39;object&#39; &amp;&amp; res ? res : newObj;//返回值判断
 &#125;
 </code></pre>
 
