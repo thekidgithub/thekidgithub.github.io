@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>my-blog-build | The kid 的小窝</title>
+    <title>计网 | The kid 的小窝</title>
     <meta name="author" content="the kid" />
     <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
     <meta name="keywords" content="" />
@@ -156,14 +156,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>my-blog-build</h1>
+        <h1>计网</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2024/7/8
+            2024/7/10
         </span>
         
         
@@ -175,8 +175,15 @@
             
             <span class="tag">
                 
-                <a href="/tags/hexo/" style="color: #03a9f4">
-                    hexo
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
+                    八股
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #ffa2c4">
+                    计网
                 </a>
             </span>
             
@@ -185,7 +192,26 @@
     </div>
     
     <div class="content" v-pre>
-        <p>111</p>
+        <h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><span id="more"></span>
+<p>TCP&#x2F;IP模型：<br>应用层（仅负责应用，不负责传输 HTTP DNS）<br>传输层（TCP UDP 传输 分块）<br>网络层（IP）<br>网络接口层（五层模型又分为数据链路层和物理层）</p>
+<h2 id="经典之输入URL后发生什么"><a href="#经典之输入URL后发生什么" class="headerlink" title="经典之输入URL后发生什么"></a>经典之输入URL后发生什么</h2><p>一 网络请求部分</p>
+<ol>
+<li>DNS解析<br>首先看有无缓存，若没有，通过本地DNS服务器递归查询(根-&gt;顶级域-&gt;权威)</li>
+<li>TCP建立连接：三次握手<br>client发SYN,close -&gt; SYN_SENT<br>server收到后发SYN + ACK, LISTEN -&gt; SYN_RCVD<br>client收到后发ACK, SYN_SENT -&gt; ESTABLISHED<br>server收到后， SYN_RCVD -&gt; ESTAVLISHED<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image1.png" class="">
+三次握手目的是<strong>保证双方都有发送和接收的能力</strong></li>
+<li>发送请求&#x2F;接收响应<br>报文结构：<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image.png" class=""></li>
+</ol>
+<p>二 前端渲染部分 (非计网部分)<br>DOM树 -&gt; CSS规则树 -&gt; 渲染树 -&gt; 布局（Layout&#x2F;reflow）-&gt; 绘制（paint） -&gt;显示（display, GPU进程，合成图层）<br>回流&#x2F;重排：尺寸、位置等变化，代价大于重绘，必然引起重绘<br>重绘：color visibility<br>性能优化策略：</p>
+<ul>
+<li>transform 替代 定位 （减少回流）</li>
+<li>visibility:hidden 替代 display:none(reflow -&gt; repaint)</li>
+<li>减少查询节点的位置属性（会导致回流）</li>
+<li>动画速度(使用requestAnimationFrame)</li>
+<li>不使用table布局</li>
+<li>script标签加上async or defer，或把script标签放底部(js进程和GUI进程互斥，阻塞DOM构建)(async解析完立即执行，defer解析完会在HTML解析完后执行)<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image2.png" class=""></li>
+<li>减少CSS的嵌套层级，简化CSSOM树</li>
+</ul>
+<p>补充：进程与线程</p>
 
     </div>
     
