@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #00a596">
+                <a href="/tags/js/" style="color: #03a9f4">
                     js
                 </a>
             </span>
@@ -231,6 +231,7 @@
     map.set(target, cloneTarget);
 
     for(const key in target) &#123;
+      if(target.hasOwnProperty(key))
       cloneTarget(key) = clone(target(key), map)
     &#125;
     return cloneTarget

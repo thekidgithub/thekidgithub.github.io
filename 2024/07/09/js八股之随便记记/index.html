@@ -182,7 +182,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ffa2c4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
                     八股
                 </a>
             </span>
@@ -203,6 +203,11 @@
 <li>Object.prototype.toString.call</li>
 </ul>
 <p>0.1 + 0.2 ：二进制无限循环 -&gt; 截断 -&gt; 精度损失<br>栈内存和堆内存：引用类型地址位于栈内存，值位于堆内存</p>
+<p>关于symbol: 具有唯一性，常用于对象的键中</p>
+<blockquote>
+<p>symbol 允许我们创建对象的“隐藏”属性，代码的任何其他部分都不能意外访问或重写这些属性。</p>
+</blockquote>
+<p>不会被枚举（for in,keys） 但是assign时会复制<br>全局symbol: Symbol.for()</p>
 <h2 id="闭包与内存"><a href="#闭包与内存" class="headerlink" title="闭包与内存"></a>闭包与内存</h2><p>var let const 区别（块级作用域，变量提升，重复声明）<br>关于变量提升： var变量与函数声明（函数声明：function xx() 函数表达式: xx &#x3D; function() {}）</p>
 <pre><code class="js">console.log(a)
 var a = 1;
@@ -241,7 +246,74 @@ fn2Child = null//解决方法
 <li>Map Set (使用Weak，强引用与弱引用)</li>
 <li>console</li>
 </ul>
-<p>垃圾回收（GC）<br>旧：引用计数（缺点：循环引用）<br>标记清除（缺点：内存碎片 解决：标记整理）<br>V8的优化：新老生代，并行回收，增量标记，懒性清理</p>
+<p>垃圾回收（GC）(判断对象的可达性)<br>旧：引用计数（缺点：循环引用）<br>标记清除（缺点：内存碎片 解决：标记整理）<br>V8的优化：新老生代，并行回收，增量标记，懒性清理</p>
+<h2 id="对象、原型"><a href="#对象、原型" class="headerlink" title="对象、原型"></a>对象、原型</h2><p>拷贝（深，浅）(赋值：复制地址)<br>浅：Object.assign lodash:_.clone 展开（…） slice() concat()<br>深：lodash: _.deepClone 手写 JSON(不能处理函数和正则)</p>
+<p>对象的原始值转换（toString, valueOf）：<br>字符串 toString -&gt; valueOf 数值或其他： valueOf -&gt; toString<br>(toString默认 [object Object], valueOf默认 对象本身0)</p>
+<p><strong>proto</strong> 与 prototype: 前者用于具体对象，后者为构造器属性<br>constructor: 在prototype上，若重写pro会丢失<br>Object.create(pro) 以pro为原型创建对象<br>（Object.create(null) 创建无原型的对象，用于“字典”）</p>
+<h2 id="异步-事件循环"><a href="#异步-事件循环" class="headerlink" title="异步 事件循环"></a>异步 事件循环</h2><p>浏览器事件循环<br>要点： js单线程，同步任务和异步任务，宏任务和微任务，任务队列<br>宏 -&gt; 微 -&gt; 渲染 -&gt; 宏 。。。</p>
+<pre><code class="js">Promise.resolve().then(()=&gt;&#123;
+  console.log(&#39;Promise1&#39;)  
+  setTimeout(()=&gt;&#123;
+    console.log(&#39;setTimeout2&#39;)
+  &#125;,0)
+&#125;)
+setTimeout(()=&gt;&#123;
+  console.log(&#39;setTimeout1&#39;)
+  Promise.resolve().then(()=&gt;&#123;
+    console.log(&#39;Promise2&#39;)    
+  &#125;)
+&#125;,0)
+// p1 s1 p2 s2
+</code></pre>
+<p>宏任务：sett, seti, setimmediate, script 微任务：promise.then process.nextTick(微任务优先级最高) queueMicrotask</p>
+<p>Node事件循环</p>
+<img src="/2024/07/09/js%E5%85%AB%E8%82%A1%E4%B9%8B%E9%9A%8F%E4%BE%BF%E8%AE%B0%E8%AE%B0/image.png" class="">
+<p>timer: sett,seti<br>check : setimmediate</p>
+<pre><code class="js">console.log(&#39;start&#39;)
+setTimeout(() =&gt; &#123;
+  console.log(&#39;timer1&#39;)
+  Promise.resolve().then(function() &#123;
+    console.log(&#39;promise1&#39;)
+  &#125;)
+&#125;, 0)
+setTimeout(() =&gt; &#123;
+  console.log(&#39;timer2&#39;)
+  Promise.resolve().then(function() &#123;
+    console.log(&#39;promise2&#39;)
+  &#125;)
+&#125;, 0)
+Promise.resolve().then(function() &#123;
+  console.log(&#39;promise3&#39;)
+&#125;)
+console.log(&#39;end&#39;)
+//start=&gt;end=&gt;promise3=&gt;timer1=&gt;timer2=&gt;promise1=&gt;promise2
+</code></pre>
+<p>注意：浏览器和node区别： Node在所有timer执行完后才清空微队列，因此上面代码在浏览器执行，是 t1 -&gt; p1 -&gt; t2 -&gt; p2</p>
+<p>关于async await promise</p>
+<pre><code class="js">async function async1() &#123;
+    console.log(&#39;async1 start&#39;);
+    await async2();
+    console.log(&#39;asnyc1 end&#39;);
+&#125;
+async function async2() &#123;
+    console.log(&#39;async2&#39;);
+&#125;
+console.log(&#39;script start&#39;);
+setTimeout(() =&gt; &#123;
+    console.log(&#39;setTimeOut&#39;);
+&#125;, 0);
+async1();
+new Promise(function (reslove) &#123;
+    console.log(&#39;promise1&#39;);
+    reslove();
+&#125;).then(function () &#123;
+    console.log(&#39;promise2&#39;);
+&#125;)
+console.log(&#39;script end&#39;);
+//ss as1s as2 p1 se as1e p2 sto
+//对于async await ，把await后面的当作then 前面的是同步
+</code></pre>
+<h2 id="事件-DOM"><a href="#事件-DOM" class="headerlink" title="事件 DOM"></a>事件 DOM</h2><p>事件冒泡 捕获 委托<br>target 和 currentTarget</p>
 
     </div>
     
