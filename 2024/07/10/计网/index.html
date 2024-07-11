@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #03a9f4">
+                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #00a596">
                     计网
                 </a>
             </span>
@@ -217,7 +217,14 @@
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>强缓存和协商缓存</p>
 <img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image3.png" class="">
 
-<h2 id="强缓存：Cache-Control-Expires协商缓存：Etag和If-None-Match-Last-Modified和If-Modified-SinceEtag优先级更高，因为："><a href="#强缓存：Cache-Control-Expires协商缓存：Etag和If-None-Match-Last-Modified和If-Modified-SinceEtag优先级更高，因为：" class="headerlink" title="强缓存：Cache-Control &gt; Expires协商缓存：Etag和If-None-Match -&gt; Last-Modified和If-Modified-SinceEtag优先级更高，因为："></a>强缓存：Cache-Control &gt; Expires<br>协商缓存：Etag和If-None-Match -&gt; Last-Modified和If-Modified-Since<br>Etag优先级更高，因为：</h2>
+<p>强缓存：Cache-Control &gt; Expires<br>协商缓存：Etag和If-None-Match -&gt; Last-Modified和If-Modified-Since<br>Etag优先级更高，因为：</p>
+<ul>
+<li>文件内容没有修改，最近修改时间也会变动</li>
+<li>时间检测的粒度是秒级</li>
+<li>一些服务器不能正确获取最后修改时间</li>
+</ul>
+<h2 id="HTTP版本"><a href="#HTTP版本" class="headerlink" title="HTTP版本"></a>HTTP版本</h2><p>1.1 优点：简单、易扩展、应用广泛 长连接与管道化<br>缺点：无状态（解决：cookie） 队头堵塞（管道化，但是只能解决请求的堵塞，无法解决响应堵塞） 明文传输<br>2.0 头部压缩 二进制格式 并发传输 服务器推送 问题：TCP队头堵塞<br>3.0 无队头阻塞 更快的连接建立 连接迁移<br>HTTPS 在HTTP层和TCP层间加入SSL&#x2F;TLS层，TCP三次握手后还要SSL&#x2F;TLS握手（信息加密、校验机制、数字证书）</p>
+
     </div>
     
     
