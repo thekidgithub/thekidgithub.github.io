@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #ffa2c4">
+                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #03a9f4">
                     计网
                 </a>
             </span>
@@ -205,14 +205,19 @@
 <ul>
 <li>transform 替代 定位 （减少回流）</li>
 <li>visibility:hidden 替代 display:none(reflow -&gt; repaint)</li>
-<li>减少查询节点的位置属性（会导致回流）</li>
-<li>动画速度(使用requestAnimationFrame)</li>
+<li>减少查询节点的位置属性（会导致回流）、避免频繁操作DOM（使用fragment）</li>
+<li>动画(使用requestAnimationFrame、在absolute上使用动画)</li>
 <li>不使用table布局</li>
 <li>script标签加上async or defer，或把script标签放底部(js进程和GUI进程互斥，阻塞DOM构建)(async解析完立即执行，defer解析完会在HTML解析完后执行)<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image2.png" class=""></li>
-<li>减少CSS的嵌套层级，简化CSSOM树</li>
+<li>简化DOM和CSSOM树（压缩文件、减少选择器嵌套、在DOM树末端改变class）</li>
 </ul>
-<p>补充：进程与线程</p>
+<p>补充：进程与线程<br>进程是 CPU 资源分配的最小单位，线程是 CPU 调度的最小单位，一个进程包含一个或多个线程<br>浏览器的多进程架构：主进程、第三方插件进程、GPU进程、渲染进程<br>渲染进程中：GUI渲染线程、JS引擎线程、事件触发线程、定时触发器线程、异步http请求线程</p>
+<h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><p>1xx: 中间状态，较少见<br>2xx: 成功处理（200 OK 204 No Content 206 Partial Content）<br>3xx: 重定向 (301 Moved Permanently 永久重定向 302 Found 临时重定向 304 Not Modified 缓存)<br>4xx: 客户端错误 (400 Bad Request 403 Forbidden 404 Not Found)<br>5xx: 服务器错误 （500 Internal Server Error 501 502 503）</p>
+<h2 id="字段-请求方法"><a href="#字段-请求方法" class="headerlink" title="字段 请求方法"></a>字段 请求方法</h2><p>GET POST （GET 安全且幂等，可以缓存）<br>字段： Host Content-length Connection(keep-alive保持长连接) Content-Type Content-Encoding</p>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>强缓存和协商缓存</p>
+<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image3.png" class="">
 
+<h2 id="强缓存：Cache-Control-Expires协商缓存：Etag和If-None-Match-Last-Modified和If-Modified-SinceEtag优先级更高，因为："><a href="#强缓存：Cache-Control-Expires协商缓存：Etag和If-None-Match-Last-Modified和If-Modified-SinceEtag优先级更高，因为：" class="headerlink" title="强缓存：Cache-Control &gt; Expires协商缓存：Etag和If-None-Match -&gt; Last-Modified和If-Modified-SinceEtag优先级更高，因为："></a>强缓存：Cache-Control &gt; Expires<br>协商缓存：Etag和If-None-Match -&gt; Last-Modified和If-Modified-Since<br>Etag优先级更高，因为：</h2>
     </div>
     
     
