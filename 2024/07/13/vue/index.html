@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: hexo | The kid 的小窝</title>
+    <title>vue | The kid 的小窝</title>
     <meta name="author" content="the kid" />
     <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
     <meta name="keywords" content="" />
@@ -37,6 +37,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -150,87 +154,150 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/tags/js/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                js
-            </a>
+            <div class="article">
+    <div>
+        <h1>vue</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/7/13
         </span>
         
         
-        
-        <span>
-            <a href="/tags/%E5%85%AB%E8%82%A1/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                八股
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
+                    八股
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/vue/" style="color: #00a596">
+                    vue
+                </a>
+            </span>
+            
         </span>
-        
-        
-        
-        <span>
-            <a href="/tags/hexo/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                hexo
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/tags/%E8%AE%A1%E7%BD%91/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                计网
-            </a>
-        </span>
-        
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/7/8</div>
-            <a href="/2024/07/08/my-blog-build/">
-                <h3>my-blog-build</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/hexo/" style="color: #00a596">
-                            hexo
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <h2 id="响应式原理"><a href="#响应式原理" class="headerlink" title="响应式原理"></a>响应式原理</h2><span id="more"></span>
+<p>Vue2 中使用Object.defineProperty() 实现</p>
+<pre><code class="js">function reactive(obj, key, value) &#123;
+  Object.defineProperty(data, key, &#123;
+    get() &#123;
+      console.log(`访问了$&#123;key&#125;属性`)
+      return value;
+    &#125;,
+    set(val) &#123;
+      console.log(`将$&#123;key&#125;由-&gt;$&#123;value&#125;-&gt;设置成-&gt;$&#123;val&#125;`)
+      if (value !== val) &#123;
+        value = val;
+      &#125;
+    &#125;
+  &#125;)
+&#125;
+</code></pre>
+<p>缺点：只能侦听对象的已有属性，对新增的属性无效</p>
+<p>Vue3改为Proxy + Reflect</p>
+<pre><code class="js">function reactive(target) &#123;
+    const handler = &#123;
+        get(target, key, receiver) &#123;
+            track(receiver, key)
+            return Reflect.get(target, key, receiver)
+        &#125;,
+        set(target, key, value, receiver) &#123;
+            Reflect.set(target, key, value, receiver)
+            trigger(receiver, key)
+        &#125;
+    &#125;
+
+    return new Proxy(target, handler)
+&#125;
+</code></pre>
+<p>对传入reactive的target，将其包装成proxy，对get和set操作进行拦截<br>（Reflect.get相当于receiver[key] .set相当于receiver[key] &#x3D; value）<br>使用reflect的优点：和Proxy搭配提高语义化，且应该把操作放在receiver（代理化的对象）上</p>
+<p>track:依赖收集</p>
+<pre><code class="js">const targetMap = new WeakMap()//存储所有对象
+let activeEffect = null
+
+function track(target, key) &#123;
+    if (!activeEffect) return//避免如console操作
+    let depsMap = targetMap.get(target)//存储单个对象的所有属性
+    if (!depsMap) &#123;
+        targetMap.set(target, depsMap = new Map())
+    &#125;
+
+    let dep = depsMap.get(key)//存储属性的所有依赖
+    if (!dep) &#123;
+        depsMap.set(key, dep = new Set())
+    &#125;
+    dep.add(activeEffect) 
+&#125;//weakMap -&gt; Map -&gt; Set
+
+function effect(fn) &#123;//设置activeEffect为当前effect，使用完清空
+    activeEffect = fn
+    activeEffect()
+    activeEffect = null
+&#125;
+</code></pre>
+<p>trigger: 发布更新</p>
+<pre><code class="js">function trigger(target, key) &#123;
+    let depsMap = targetMap.get(target)
+    if (depsMap) &#123;
+        const dep = depsMap.get(key)
+        if (dep) &#123;
+            dep.forEach(effect =&gt; effect())
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>之后可以基于此实现ref和computed:</p>
+<pre><code class="js">function ref(initValue) &#123;//即只有value属性的reactive
+    return reactive(&#123;
+        value: initValue
+    &#125;)
+&#125;
+function computed(fn) &#123;//内部是一个effect
+    const result = ref()
+    effect(() =&gt; result.value = fn())
+    return result
+&#125;
+</code></pre>
+<h2 id="Diff"><a href="#Diff" class="headerlink" title="Diff"></a>Diff</h2><p>使用虚拟DOM（即对象的形式）更新真实DOM，提高性能<br>原则：深度优先，同层比较<br>isSameVnode判断节点是否一样，不一样直接替换 -&gt; patchVnode判断子节点：</p>
+<ol>
+<li>文本，不一样替换</li>
+<li>新有旧无，加子节点</li>
+<li>新无旧有，删子节点</li>
+<li>都有, updateChildren -&gt;<br>updateChildren:<br>Vue2: 双端比较：新头旧头 新尾旧尾 新头旧尾 新尾旧头<br>剩下，对旧节点建立索引表，在新节点里找，最后进行多删少增<br>Vue3: 新头旧头，新尾旧尾，对剩下的，以新节点在老节点中的位置建立索引表，找出索引表的最长递增子序列，对其他节点基于该序列进行修改。</li>
+</ol>
+<h2 id="组件通信"><a href="#组件通信" class="headerlink" title="组件通信"></a>组件通信</h2><ul>
+<li>props&#x2F;$emit(父子) prop 父对子传属性 emit 子对父传事件</li>
+<li>provide&#x2F;inject 类react的useContext，只要有祖先关系，可跨级</li>
+<li>$attrs&#x2F;$listeners（透传），没有声明为props的属性（class style等）</li>
+<li>$parent&#x2F;$children</li>
+<li>eventBus 事件总线</li>
+<li>状态管理库（Vuex pinia, state getters mutation action）</li>
+<li>$ref</li>
+</ul>
+
     </div>
+    
+    
+    
+    
+    
+    
     
 </div>
 
@@ -262,6 +329,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>
