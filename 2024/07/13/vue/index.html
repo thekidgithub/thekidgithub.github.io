@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ffa2c4">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/vue/" style="color: #03a9f4">
+                <a href="/tags/vue/" style="color: #ff7d73">
                     vue
                 </a>
             </span>
@@ -291,6 +291,36 @@ function computed(fn) &#123;//内部是一个effect
 <li>$ref</li>
 </ul>
 <h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>beforeCreate Created（此时可以获取data、computed等，但是不能获取$el $ref，可以在此时请求数据） beforeMount Mounted(已挂载，可获取DOM) beforeUpdate updated（不能在此时操作数据，会死循环） beforeDestroy(此时可以销毁定时器，解绑事件等回收内存操作) destroyed</p>
+<p>父子组件生命周期顺序：</p>
+<ul>
+<li>父beC C beM -&gt; 子 beC C beM M -&gt; 父M</li>
+<li>父beU -&gt; 子beU U -&gt; 父U</li>
+<li>父beD -&gt; 子beD D -&gt; 父D</li>
+</ul>
+<p>父监听子：@hook<br>&lt;Child @hook:mounted&#x3D;”doSomething” &gt;</Child></p>
+<h2 id="Vue3-与-Vue2"><a href="#Vue3-与-Vue2" class="headerlink" title="Vue3 与 Vue2"></a>Vue3 与 Vue2</h2><ul>
+<li>diff优化</li>
+<li>响应式优化</li>
+<li>新增组合式API</li>
+<li>多根节点</li>
+<li>Teleport Suspend 组件</li>
+<li>生命周期（create -&gt; setup）</li>
+<li>虚拟DOM（静态节点，事件缓存）</li>
+<li>打包优化（tree-shaking） ts支持</li>
+</ul>
+<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><ul>
+<li>MVVM</li>
+<li>SSR SPA</li>
+<li>key</li>
+<li>v-show 和 v-if v-if 和 v-for</li>
+<li>computed watch</li>
+<li>keep-alive teleport suspend </li>
+<li>插槽</li>
+<li>router(history&#x2F;hash) store</li>
+<li>单向数据流</li>
+<li>v-model双向绑定</li>
+<li>性能优化（SSR 路由&#x2F;图片懒加载 虚拟列表 keep-alive 子组件分割&#x2F;hook v-once）</li>
+</ul>
 
     </div>
     
