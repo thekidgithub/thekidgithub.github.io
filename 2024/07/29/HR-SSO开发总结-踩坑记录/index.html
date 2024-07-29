@@ -1,0 +1,466 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>HR/SSO开发总结/踩坑记录 | The kid 的小窝</title>
+    <meta name="author" content="the kid" />
+    <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>THE KID 的小窝</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;THE KID 的小窝</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>HR/SSO开发总结/踩坑记录</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/7/29
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><span id="more"></span>
+<pre><code>.
+├── config
+│   ├── plugin
+│   │   └── arcoStyleImport.ts
+│   ├── vite.config.base.ts
+│   └── vite.config.dev.ts
+├── index.html
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.js
+├── README.md
+├── src
+│   ├── api  // 封装好的api接口
+│   │   ├── application
+│   │   ├── comment
+│   │   ├── index.ts
+│   │   ├── interview
+│   │   ├── locale
+│   │   ├── recruitment
+│   │   ├── _request.ts //封装发请求的函数
+│   │   ├── sms
+│   │   └── user
+│   ├── App.vue
+│   ├── assets
+│   │   └── svg
+│   ├── components
+│   │   ├── breadcrumb
+│   │   ├── menu
+│   │   └── navbar
+│   ├── config
+│   │   └── settings.json
+│   ├── constants
+│   │   ├── httpMsg   // request与response类型定义
+│   │   ├── index.ts
+│   │   └── team.ts
+│   ├── hooks
+│   │   └── locale.ts
+│   ├── layout
+│   │   ├── default-layout.vue
+│   │   └── page-layout.vue
+│   ├── locale 
+│   │   ├── en-US
+│   │   ├── en-US.ts
+│   │   ├── index.ts
+│   │   ├── zh-CN
+│   │   └── zh-CN.ts
+│   ├── main.ts
+│   ├── router
+│   │   ├── app-menus
+│   │   ├── guard
+│   │   ├── index.ts
+│   │   └── routes
+│   ├── store
+│   │   ├── index.ts
+│   │   └── modules
+│   ├── styles
+│   │   └── tailwind.css
+│   ├── utils
+│   │   ├── index.ts
+│   │   ├── route-listener.ts
+│   │   └── types.ts
+│   ├── views  // 各面板代码
+│   │   ├── components
+│   │   ├── dashboard
+│   │   ├── interview
+│   │   ├── login
+│   │   ├── noPermission
+│   │   └── overview
+│   └── vite-env.d.ts
+├── tailwind.config.js
+├── tsconfig.json
+└── tsconfig.node.json
+</code></pre>
+<h2 id="项目简述"><a href="#项目简述" class="headerlink" title="项目简述"></a>项目简述</h2><p>联创团队招新的新HR系统，目前已上线，主要功能包括查看报名数据总览、查看选手信息、查看面试日程、分配面试时间。<br>技术栈：vue3 + typescript + vite + pinia<br>arcodesign + tailwindcss</p>
+<h2 id="个人认为的学习点"><a href="#个人认为的学习点" class="headerlink" title="个人认为的学习点"></a>个人认为的学习点</h2><h4 id="api"><a href="#api" class="headerlink" title="api"></a>api</h4><p>与后端交互的终端，封装调用request的函数，实际是使用_request.ts的axios发请求，请求的类型放在constant里(HttpRes)</p>
+<pre><code class="js">export default function request&lt;T = object&gt;(config: AxiosRequestConfig) &#123;//使用axios发请求
+  const instance: AxiosInstance = axios.create(&#123;
+    baseURL: HR_BASE_URL,
+    timeout: 60000,
+    withCredentials: true,
+  &#125;);//创建实例
+
+  instance.interceptors.request.use(//请求拦截器，发请求前使用config
+    (
+      internalConfig: InternalAxiosRequestConfig,
+    ): InternalAxiosRequestConfig =&gt; &#123;
+      return internalConfig;
+    &#125;,
+    (err: any): any =&gt; &#123;
+      console.error(err);
+      Message.error(err.message);
+    &#125;,
+  );
+
+  instance.interceptors.response.use(
+    //响应拦截器
+    (response) =&gt; &#123;
+      // data的类型是 HttpRes
+      const data = response.data || &#123;&#125;;
+      if (response.status === 200) &#123;
+        return data;
+      &#125;
+      if (data.msg) &#123;
+        Message.error(data.msg);
+      &#125; else &#123;
+        console.error(&#39;# error&#39;, &#123; response &#125;);
+        Message.error(i18n.global.t(&#39;request.unknowErr&#39;));
+      &#125;
+      return null;
+    &#125;,
+    (err: AxiosError&lt;&#123; msg: string &#125;&gt;) =&gt; &#123;
+      const &#123; msg = &#39;&#39; &#125; = err.response!.data!;
+      if (msg.includes(&#39;authentication failed&#39;)) &#123;
+        // 非登录态跳转SSO登录
+        window.location.href = `//$&#123;SSO_DOMAIN&#125;/login?from=$&#123;HR_DOMAIN_FE&#125;`;
+        return;
+      &#125;
+      if (msg.includes(&#39;permission error&#39;)) &#123;
+        // 无权限访问
+        router.push(&#123;
+          path: &#39;/no-permission&#39;,
+        &#125;);
+        return;
+      &#125;
+      Message.error(msg || err.message);
+    &#125;,
+  );
+
+  return new Promise&lt;HttpRes&lt;T&gt;&gt;((resolve, reject) =&gt; &#123;
+    // 这里的res的类型为 data ｜ null ，在请求的时候记得判断是否为null
+    instance(config).then(
+      (res) =&gt; &#123;
+        resolve(res as unknown as HttpRes&lt;T&gt;);
+      &#125;,
+      (reason) =&gt; &#123;
+        reject(reason);
+      &#125;,
+    );
+  &#125;);
+&#125;
+</code></pre>
+<h4 id="router和store"><a href="#router和store" class="headerlink" title="router和store"></a>router和store</h4><p>router</p>
+<ol>
+<li>应用了全局路由守卫guard</li>
+</ol>
+<pre><code class="js">function setupPageGuard(router: Router) &#123;
+  router.beforeEach(async (to) =&gt; &#123;
+    // 路由改变就emit
+    setRouteEmitter(to);
+  &#125;);
+&#125;
+</code></pre>
+<p>setRouteEmitter函数在utils里：</p>
+<pre><code class="js">const emitter = mitt();
+
+const key = Symbol(&#39;ROUTE_CHANGE&#39;);
+
+let latestRoute: RouteLocationNormalized;
+
+export function setRouteEmitter(to: RouteLocationNormalized) &#123;
+  emitter.emit(key, to);
+  latestRoute = to;
+&#125;
+</code></pre>
+<p>这里使用了mitt作为EventBus，当路由改变就更新latestRoute<br>latestRoute用于下面的函数，即监听路由变化，执行handler（应用于menu菜单页）：</p>
+<pre><code class="js">export function listenerRouteChange(
+  handler: (route: RouteLocationNormalized) =&gt; void,
+  immediate = true,
+) &#123;
+  emitter.on(key, handler as Handler);
+  if (immediate &amp;&amp; latestRoute) &#123;
+    handler(latestRoute);
+  &#125;
+&#125;
+</code></pre>
+<ol start="2">
+<li>动态路由：</li>
+</ol>
+<pre><code class="js">const modules = import.meta.glob(&#39;./modules/*.ts&#39;, &#123; eager: true &#125;);
+
+function formatModules(_modules: any, result: RouteRecordNormalized[]) &#123;
+  Object.keys(_modules).forEach((key) =&gt; &#123;
+    const defaultModule = _modules[key].default;
+    if (!defaultModule) return;
+    const moduleList = Array.isArray(defaultModule)
+      ? [...defaultModule]
+      : [defaultModule];
+    result.push(...moduleList);
+  &#125;);
+  return result;
+&#125;
+
+export const appRoutes: RouteRecordNormalized[] = formatModules(modules, []);
+</code></pre>
+<p>使用vite的glob将modules的路由组件导出，通过format函数包装导出，最后在index的根路由组件里使用：</p>
+<pre><code class="js">const router = createRouter(&#123;
+  history: createWebHistory(),
+  routes: [
+    &#123;
+      path: &#39;/&#39;,
+      // 暂时重定向到总览
+      redirect: &#39;/overview/apply-info&#39;,
+    &#125;,
+    ...appRoutes,
+    NO_PERMISSION,
+    // DETAIL,
+  ],
+&#125;);
+</code></pre>
+<p>store:<br>使用pinia，分为app（一些settings）、application（获取报名信息数据）、recruitments（管理不同招新）、user（用户信息）<br>使用状态管理库的好处是把一些全局性的数据和数据请求的逻辑单独封装而不是放在组件里，减少耦合</p>
+<h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p>在vite.config.base.ts里，plugins加载插件（vue vuejsx svgloader）<br>resolve里</p>
+<pre><code class="js">resolve: &#123;
+    alias: [//别名
+      &#123;
+        find: &#39;@&#39;,
+        replacement: resolve(__dirname, &#39;../src&#39;),
+      &#125;,
+      &#123;
+        find: &#39;vue&#39;,
+        replacement: &#39;vue/dist/vue.esm-bundler.js&#39;, // compile template
+      &#125;,
+    ],
+  &#125;,
+</code></pre>
+<p>css&#x2F;postcss 引入tailwind插件<br>build 中 使用cssCodeSplit分割css，使用rollup(类似webpack 支持tree-shaking 主要针对库，在项目里为了打包tailwind模块)</p>
+<p>vite.config.dev.ts里，主要解决跨域问题：（本质上是设置了代理服务器）</p>
+<pre><code class="js">server: &#123;
+      proxy: &#123;
+        &#39;^/api&#39;: &#123;
+          target: &#39;https://dev.back.recruitment2023.hustunique.com&#39;,
+          changeOrigin: true,
+          credentials: &#39;include&#39;,//是否允许发送 Cookie
+          rewrite: (path) =&gt; path.replace(/^\/api/, &#39;&#39;),
+          cookieDomainRewrite: &#123;
+            &#39;*&#39;: &#39;hustunique.com&#39;,//这个规则表示所有的 Cookie 域都将被重写为 &#39;hustunique.com&#39;
+          &#125;,
+        &#125;,
+      &#125;,
+    &#125;,
+</code></pre>
+<p>src中各个目录：api assets（静态资源）components(公共组件) config constants(常量 HttpRes，放请求和响应类型) hooks utils（二者区别:hooks保留响应式和组件的生命周期等，utils只是简单的逻辑复用）layout (总体布局) locale（多语言） router store styles views</p>
+<p>用 ESLint 来检查代码质量，用stylelint，用 Prettier 来格式化代码<br>使用vercel.json在部署时解决404问题</p>
+<h2 id="个人负责"><a href="#个人负责" class="headerlink" title="个人负责"></a>个人负责</h2><p>数据总览部分，主要包含三个模块：数据总览 选手阶段分布和近期日程，逻辑部分不是很难，主要就是获取数据写UI，但是在渲染图表上费了不少精力（沟槽的Echarts）</p>
+<h4 id="难点与个人经验"><a href="#难点与个人经验" class="headerlink" title="难点与个人经验"></a>难点与个人经验</h4><p>自然就是这个沟槽的Echarts了（感觉根本原因是这类工具库和Vue Vite之类的生态链没有兼容，也不是什么组件库，所以很多问题难有现成的解决方案）&#x2F;&#x2F; 待更</p>
+<p>学到的：注意数据的响应性（使用computed而不是普通函数） 性能问题（内存泄漏，及时回收监听器，关注生命周期） 封装与代码抽离 ts类型尽量规范化 </p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 The kid 的小窝
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;the kid
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

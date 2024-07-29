@@ -343,6 +343,48 @@
   return typeof res === &#39;object&#39; &amp;&amp; res ? res : newObj;//返回值判断
 &#125;
 </code></pre>
+<h2 id="发布订阅"><a href="#发布订阅" class="headerlink" title="发布订阅"></a>发布订阅</h2><p>何为发布订阅模式？<br>publisher -&gt; eventEmitter(中间处理) -&gt; subscriber</p>
+<pre><code class="js">class eventEmitter &#123;
+  constructor() &#123;
+    this.events = &#123;&#125;;//存储事件的回调函数
+  &#125;
+
+  on(eventName, callback) &#123;//注册事件的回调
+    const callbacks = this.events[eventName] || [];
+    callbacks.push(callback);
+    this.events[eventName] = callbacks;
+  &#125;
+
+  emit(eventName, ...args) &#123;//发布事件
+    const callbacks = this.events[eventName] || [];
+    callbacks.forEach(cb =&gt; cb(...args))
+  &#125;
+
+  off(eventName, callback) &#123;//取消事件的回调
+    const callbacks = this.events[eventName] || [];
+    const newCallbacks = callbacks.fliter(fn =&gt; fn !== callback || fn.initialCallback !== callback);
+    this.events[eventName] = newCallbacks;
+  &#125;
+
+  once(eventName, callback) &#123;//只执行一次的on
+    const one = (...args) =&gt; &#123;
+      callback(...args);
+      this.off(eventName, on);
+    &#125;
+
+    one.initialCallback = callback;//off时确保取消one
+    this.on(eventName, one);
+  &#125;
+&#125;
+</code></pre>
+<p>e.g.</p>
+<pre><code class="js">const events = new EventEmitter();
+const hl = () =&gt; console.log(&#39;hello&#39;)
+events.on(&#39;hello&#39;, hl);
+events.emit(&#39;hello&#39;);
+events.off(&#39;hello&#39;, hl);
+events.once(&#39;hello&#39;, hl);
+</code></pre>
 
     </div>
     
