@@ -414,8 +414,16 @@ export const appRoutes: RouteRecordNormalized[] = formatModules(modules, []);
 <p>src中各个目录：api assets（静态资源）components(公共组件) config constants(常量 HttpRes，放请求和响应类型) hooks utils（二者区别:hooks保留响应式和组件的生命周期等，utils只是简单的逻辑复用）layout (总体布局) locale（多语言） router store styles views</p>
 <p>用 ESLint 来检查代码质量，用stylelint，用 Prettier 来格式化代码<br>使用vercel.json在部署时解决404问题</p>
 <h2 id="个人负责"><a href="#个人负责" class="headerlink" title="个人负责"></a>个人负责</h2><p>数据总览部分，主要包含三个模块：数据总览 选手阶段分布和近期日程，逻辑部分不是很难，主要就是获取数据写UI，但是在渲染图表上费了不少精力（沟槽的Echarts）</p>
-<h4 id="难点与个人经验"><a href="#难点与个人经验" class="headerlink" title="难点与个人经验"></a>难点与个人经验</h4><p>自然就是这个沟槽的Echarts了（感觉根本原因是这类工具库和Vue Vite之类的生态链没有兼容，也不是什么组件库，所以很多问题难有现成的解决方案）&#x2F;&#x2F; 待更</p>
+<h4 id="难点与个人经验"><a href="#难点与个人经验" class="headerlink" title="难点与个人经验"></a>难点与个人经验</h4><p>自然就是这个沟槽的Echarts了（感觉根本原因是这类工具库和Vue Vite之类的生态链没有兼容，也不是什么组件库，所以很多问题难有现成的解决方案）<br>一是首先图表如何正常渲染：发现只有在组件挂载之后才可以进行图表init（借由生命周期钩子Mounted实现）<br>二是数据的响应式，一个是侦测变化，这里使用watch（而不是computed，因为这里要执行副作用） 一个是数据的响应式，用computed把所有依赖于store的数据封装了，一个是对图表实例也使用ref<br>三是性能优化：最初设置了resize监听器，但是没有及时回收，于是在unmounted里销毁了监听器和图表实例，解决了内存泄漏问题。<br>最后再把代码整理了下，改善了可读性</p>
+<p>关于样式冲突问题：用的是tailwindcss，发现写在arco上的样式有些无法生效，查阅文档后发现存在样式优先级问题，解决方案是在style里对arco组件使用:deep</p>
 <p>学到的：注意数据的响应性（使用computed而不是普通函数） 性能问题（内存泄漏，及时回收监听器，关注生命周期） 封装与代码抽离 ts类型尽量规范化 </p>
+<h2 id="SSO"><a href="#SSO" class="headerlink" title="SSO"></a>SSO</h2><p>差点忘了这个大东西了（</p>
+<p>SSO部分，通俗来说，就是把系统的登录注册功能单独抽出来成一个站点，支持不同端（hr join）的登录注册</p>
+<p>目录结构与hr端大体相同，只是单独抽离了登录注册界面出来，以及加入了个人信息部分</p>
+<h4 id="值得一说的点"><a href="#值得一说的点" class="headerlink" title="值得一说的点"></a>值得一说的点</h4><p>关于跳转逻辑：如果从其他页面跳转过来，就会在URL里加上from查询参数，SSO把这个参数提取出来，如果有，那么登录成功之后就会跳到对应的位置。（如果执行的是logout，那么在login的beforeEnter中截取）</p>
+<p>router部分，在login处加入了beforeEnter守卫，判断是否是logout。user路由内也有beforeEnter，用于鉴权，预获取个人信息，如果失败说明处于未登录状态</p>
+<p>登录注册分别用两个store存储表单信息和请求逻辑等，例如，useLogin里使用loginFormInfo对象state存储登录表单信息（在组件内，使用storeToRef保持其响应性），将handleLogin这样处理请求的逻辑写在action内（好处：保持组件纯粹）处理过程：validate验证（arco组件自带） -&gt; 生成postData并使用api的函数发请求 -&gt; 处理响应和跳转逻辑</p>
+<p>user部分主要是查看和编辑用户信息，逻辑与结构类似</p>
 
     </div>
     
