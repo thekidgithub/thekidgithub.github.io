@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/vue/" style="color: #03a9f4">
+                <a href="/tags/vue/" style="color: #ff7d73">
                     vue
                 </a>
             </span>
@@ -309,17 +309,23 @@ function computed(fn) &#123;//内部是一个effect
 <li>打包优化（tree-shaking） ts支持</li>
 </ul>
 <h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><ul>
-<li>MVVM</li>
-<li>SSR SPA</li>
-<li>key</li>
-<li>v-show 和 v-if v-if 和 v-for</li>
-<li>computed watch</li>
-<li>keep-alive teleport suspend </li>
-<li>插槽</li>
-<li>router(history&#x2F;hash) store</li>
-<li>单向数据流</li>
+<li>MVVM<br>模型（Model）-视图(view)-视图模型（VM）<br>（双向数据绑定、响应式等）</li>
+<li>SSR SPA<br>SSR：服务端渲染，在客户端把标签渲染成HTML的工作放在服务端完成，然后再把html直接返回给客户端<br>优点：SEO 首屏加载快<br>缺点：开发受限（生命周期钩子只支持bC C），只Node.js，负载压力<br>SPA: 单页面应用，使用路由机制实现页面切换而不是请求服务端，首次加载所有资源<br>优点：快 前后端分离 服务器压力小<br>缺点：SEO 首屏慢</li>
+<li>key<br>diff中的节点唯一标识，实现节点复用；用key生成map，更快速</li>
+<li>v-show 和 v-if v-if 和 v-for<br>show: 总是渲染，改变display属性 if: 有组件的销毁重建，惰性</li>
+<li>computed watch<br>computed:，计算属性，多对一，有缓存 watch:侦听器，一对多，“副作用”，支持异步</li>
+<li>keep-alive teleport<br>keep-alive: 结合路由和动态组件，缓存组件，include&#x2F;exclude，max， activated&#x2F;deactivated生命周期<br>teleport: （模态框组件）将组件部分模板“传送”到外层</li>
+<li>插槽<br>父组件中提供内容，替代子组件的slot<br>具名：v-slot&#x2F;#</li>
+<li>router(history&#x2F;hash) store<br>hash: #后面的，location.hash,监听：onHashChange<br>history: 使用堆栈管理历史记录，需服务端允许地址可访问，否则404</li>
+<li>单向数据流<br>数据由父传子，子组件不能随意修改数据</li>
 <li>v-model双向绑定</li>
-<li>性能优化（SSR 路由&#x2F;图片懒加载 虚拟列表 keep-alive 子组件分割&#x2F;hook v-once）</li>
+</ul>
+<pre><code>&lt;input v-model=&#39;something&#39;&gt;
+相当于
+&lt;input :value=&quot;something&quot; @input=&quot;something = $event.target.value&quot;&gt;
+</code></pre>
+<ul>
+<li>性能优化（SSR 路由&#x2F;图片懒加载 虚拟列表 keep-alive 子组件分割&#x2F;hook）</li>
 </ul>
 
     </div>
