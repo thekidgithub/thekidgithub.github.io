@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: js | The kid 的小窝</title>
+    <title>HTML &amp; CSS | The kid 的小窝</title>
     <meta name="author" content="the kid" />
     <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
     <meta name="keywords" content="" />
@@ -37,6 +37,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -150,163 +154,122 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                项目
-            </a>
+            <div class="article">
+    <div>
+        <h1>HTML &amp; CSS</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/2
         </span>
         
         
-        
-        <span>
-            <a href="/tags/%E5%85%AB%E8%82%A1/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                八股
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
+                    八股
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/HTML/" style="color: #00bcd4">
+                    HTML
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/CSS/" style="color: #00a596">
+                    CSS
+                </a>
+            </span>
+            
         </span>
-        
-        
-        
-        <span>
-            <a href="/tags/HTML/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                HTML
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/CSS/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                CSS
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/js/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                js
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/tags/%E8%AE%A1%E7%BD%91/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                计网
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/vue/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                vue
-            </a>
-        </span>
-        
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/7/9</div>
-            <a href="/2024/07/09/js%E5%85%AB%E8%82%A1%E4%B9%8B%E9%9A%8F%E4%BE%BF%E8%AE%B0%E8%AE%B0/">
-                <h3>js八股之随便记记~</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
-                            八股
-                        </a>
-                    </span>
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/js/" style="color: #ff7d73">
-                            js
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><span id="more"></span>
+<h4 id="前端渲染"><a href="#前端渲染" class="headerlink" title="前端渲染"></a>前端渲染</h4><p>DOM树 -&gt; CSS规则树 -&gt; 渲染树 -&gt; 布局（Layout&#x2F;reflow）-&gt; 绘制（paint） -&gt;显示（display, GPU进程，合成图层）<br>回流&#x2F;重排：尺寸、位置等变化，代价大于重绘，必然引起重绘<br>重绘：color visibility<br>性能优化策略：</p>
+<ul>
+<li>transform 替代 定位 （CSS3硬件加速，类似的属性还有opacity）</li>
+<li>批量修改DOM: 1. fragment 2. 先display:none再修改 3. 元素脱离文档流</li>
+<li>减少查询节点的位置属性，可以查询后缓存（会导致回流，尤其是在循环内）<br>(现代浏览器会通过队列批量执行优化重排过程，但是获取布局信息时，会强制队列刷新)</li>
+<li>动画，使用绝对定位脱离文档流(或使用requestAnimationFrame)</li>
+<li>script标签加上async or defer，或把script标签放底部(js进程和GUI进程互斥，阻塞DOM构建)(async解析完立即执行，defer解析完会在HTML解析完后执行)</li>
+<li>简化DOM和CSSOM树（压缩文件、减少选择器嵌套、在DOM树末端改变class）</li>
+</ul>
+<p>补充：进程与线程<br>进程是 CPU 资源分配的最小单位，线程是 CPU 调度的最小单位，一个进程包含一个或多个线程<br>浏览器的多进程架构：主进程、第三方插件进程、GPU进程、渲染进程<br>渲染进程中：GUI渲染线程、JS引擎线程、事件触发线程、定时触发器线程、异步http请求线程</p>
+<h4 id="盒模型-选择器优先级"><a href="#盒模型-选择器优先级" class="headerlink" title="盒模型&#x2F;选择器优先级"></a>盒模型&#x2F;选择器优先级</h4><p>标准盒模型（box-sizing:content-box）：宽高只包含content<br>IE盒模型（box-sizing:border-box）：包含content padding border<br>选择器优先级：ABCD<br>A 内联<br>B id<br>C class 属性 伪类<br>D 标签 伪元素<br>其他：!important 层叠 继承</p>
+<h4 id="BFC-布局"><a href="#BFC-布局" class="headerlink" title="BFC 布局"></a>BFC 布局</h4><p>BFC：块级格式上下文（说人话就是一个div会在内部创建一个“环境”）<br>创建：绝对定位（absolute&#x2F;fixed）行内块 overflow不为visible 浮动<br>特性：<br>垂直排列<br>外边距折叠（解决：创建新的BFC）<br>内部margin的左侧与外部border左侧接触<br>浮动区域不与BFC重叠</p>
+<p>应用：多栏布局<br>两栏布局（左边固定，右边自适应）</p>
+<ol>
+<li>浮动：左边宽固定float:left 右边的margin-left为左宽度（或右边overflow:hidden，触发BFC）</li>
+<li>左定宽，右flex:1</li>
+<li>左absolute定宽 右margin-left为左宽&#x2F; 左定宽 右absolute,left为左宽</li>
+</ol>
+<p>三栏布局（左右固定，中间自适应）<br>使用float<br>margin负值，使浮动元素移出文档流<br>父元素使用padding,防止中间内容被两侧覆盖</p>
+<pre><code class="HTML">&lt;div id=&quot;container&quot; class=&quot;clearfix&quot;&gt;
+  &lt;p class=&quot;center&quot;&gt;我是中间&lt;/p&gt;
+  &lt;p class=&quot;left&quot;&gt;我是左边&lt;/p&gt;
+  &lt;p class=&quot;right&quot;&gt;我是右边&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="CSS">#container &#123;
+  padding-left: 200px;
+  padding-right: 150px;
+  overflow: auto;
+&#125;
+#container p &#123;
+  float: left;
+&#125;
+.center &#123;
+  width: 100%;
+  background-color: lightcoral;
+&#125;
+.left &#123;
+  width: 200px;
+  position: relative;
+  left: -200px;
+  margin-left: -100%;
+  background-color: lightcyan;
+&#125;
+.right &#123;
+  width: 150px;
+  margin-right: -150px;
+  background-color: lightgreen;
+&#125;
+.clearfix:after &#123;
+  content: &quot;&quot;;
+  display: table;
+  clear: both;
+&#125;
+</code></pre>
+<p>水平垂直居中：</p>
+<ol>
+<li>flex</li>
+<li>绝对定位 l50% t50%，再translate(-50%,-50%)</li>
+<li>margin:0 auto</li>
+</ol>
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><p>主轴（main axis） 交叉轴（cross axis）<br>容器属性：<br>flex-direction<br>flex-wrap(换行)<br>flex-flow(上面两个)<br>justify-content(主轴)<br>align-items(交叉轴)<br>align-content(多轴线)<br>内容属性：<br>order(越小越前，默认0)<br>flex-grow(放大比例，默认0)<br>flex-shrink(缩小比例，默认1)<br>flex-basis(占据的具体空间，默认auto)<br>flex: 上面三个简写（auto: 1 1 auto none: 0 0 auto）<br>align-self: 单独的对齐方式</p>
+
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/7/8</div>
-            <a href="/2024/07/08/js%E5%85%AB%E8%82%A1%E4%B9%8B%E6%89%8B%E5%86%99%E9%A2%98/">
-                <h3>js八股之手写题</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
-                            八股
-                        </a>
-                    </span>
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/js/" style="color: #ff7d73">
-                            js
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
-    </div>
+    
+    
+    
+    
+    
     
 </div>
 
@@ -338,6 +301,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>

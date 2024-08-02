@@ -201,17 +201,7 @@
 三次握手目的是<strong>保证双方都有发送和接收的能力</strong></li>
 <li>发送请求&#x2F;接收响应<br>报文结构：<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image.png" class=""></li>
 </ol>
-<p>二 前端渲染部分 (非计网部分)<br>DOM树 -&gt; CSS规则树 -&gt; 渲染树 -&gt; 布局（Layout&#x2F;reflow）-&gt; 绘制（paint） -&gt;显示（display, GPU进程，合成图层）<br>回流&#x2F;重排：尺寸、位置等变化，代价大于重绘，必然引起重绘<br>重绘：color visibility<br>性能优化策略：</p>
-<ul>
-<li>transform 替代 定位 （减少回流）</li>
-<li>visibility:hidden 替代 display:none(reflow -&gt; repaint)</li>
-<li>减少查询节点的位置属性（会导致回流）、避免频繁操作DOM（使用fragment）</li>
-<li>动画(使用requestAnimationFrame、在absolute上使用动画)</li>
-<li>不使用table布局</li>
-<li>script标签加上async or defer，或把script标签放底部(js进程和GUI进程互斥，阻塞DOM构建)(async解析完立即执行，defer解析完会在HTML解析完后执行)<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image2.png" class=""></li>
-<li>简化DOM和CSSOM树（压缩文件、减少选择器嵌套、在DOM树末端改变class）</li>
-</ul>
-<p>补充：进程与线程<br>进程是 CPU 资源分配的最小单位，线程是 CPU 调度的最小单位，一个进程包含一个或多个线程<br>浏览器的多进程架构：主进程、第三方插件进程、GPU进程、渲染进程<br>渲染进程中：GUI渲染线程、JS引擎线程、事件触发线程、定时触发器线程、异步http请求线程</p>
+<p>二 前端渲染部分 (非计网部分)<br>见HTML&#x2F;CSS</p>
 <h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><p>1xx: 中间状态，较少见<br>2xx: 成功处理（200 OK 204 No Content 206 Partial Content）<br>3xx: 重定向 (301 Moved Permanently 永久重定向 302 Found 临时重定向 304 Not Modified 缓存)<br>4xx: 客户端错误 (400 Bad Request 403 Forbidden 404 Not Found)<br>5xx: 服务器错误 （500 Internal Server Error 501 502 503）</p>
 <h2 id="字段-请求方法"><a href="#字段-请求方法" class="headerlink" title="字段 请求方法"></a>字段 请求方法</h2><p>GET POST （GET 安全且幂等，可以缓存）<br>字段： Host Content-length Connection(keep-alive保持长连接) Content-Type Content-Encoding</p>
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>强缓存和协商缓存</p>
