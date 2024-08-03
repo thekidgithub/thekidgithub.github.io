@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: 项目 | The kid 的小窝</title>
+    <title>Node | The kid 的小窝</title>
     <meta name="author" content="the kid" />
     <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
     <meta name="keywords" content="" />
@@ -37,6 +37,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -150,120 +154,109 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                项目
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/tags/%E5%85%AB%E8%82%A1/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                八股
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/HTML/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                HTML
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/CSS/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                CSS
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/js/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                js
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/vue/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                vue
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E8%AE%A1%E7%BD%91/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                计网
-            </a>
+            <div class="article">
+    <div>
+        <h1>Node</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/3
         </span>
         
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/7/29</div>
-            <a href="/2024/07/29/HR-SSO%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
-                <h3>HR/SSO开发总结/踩坑记录</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #ffa2c4">
-                            项目
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <h2 id="全局对象"><a href="#全局对象" class="headerlink" title="全局对象"></a>全局对象</h2><span id="more"></span>
+<ul>
+<li>global</li>
+<li>Buffer(class)</li>
+<li>process (进程对象)</li>
+<li>console</li>
+<li>set&#x2F;clearInterval</li>
+<li>set&#x2F;clearTimeout</li>
+</ul>
+<p>模块:</p>
+<ul>
+<li>__dirname 当前目录</li>
+<li>__filename 当前文件</li>
+<li>exports module require</li>
+</ul>
+<h2 id="常见模块"><a href="#常见模块" class="headerlink" title="常见模块"></a>常见模块</h2><h3 id="process"><a href="#process" class="headerlink" title="process"></a>process</h3><p>进程对象<br>.cwd() 当前进程目录<br>.argv 命令行参数<br>.env 环境变量<br>.nextTick() 最高优先级的微任务</p>
+<h3 id="fs"><a href="#fs" class="headerlink" title="fs"></a>fs</h3><p>一些方法：（都分为同步和异步，异步方法的参数最后加一个回调函数）<br>readFile<br>writeFile<br>appendFile(后面追加 write直接替换)<br>copyFile<br>mkdir</p>
+<h3 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h3><p>二进制缓冲区 .from .alloc初始化<br>应用：IO操作</p>
+<h3 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h3><p>可写流：fs.createWriteStream()<br>可读流：fs.createReadStream()<br>双工流 转换流<br>应用：</p>
+<pre><code class="js"> if (method === &#39;GET&#39;) &#123; // get 请求
+        const fileName = path.resolve(__dirname, &#39;data.txt&#39;);
+        let stream = fs.createReadStream(fileName);
+        stream.pipe(res); // 将 res 作为 stream 的 dest
+    &#125;
+</code></pre>
+<pre><code class="js">// 两个文件名
+const fileName1 = path.resolve(__dirname, &#39;data.txt&#39;)
+const fileName2 = path.resolve(__dirname, &#39;data-bak.txt&#39;)
+// 读取文件的 stream 对象
+const readStream = fs.createReadStream(fileName1)
+// 写入文件的 stream 对象
+const writeStream = fs.createWriteStream(fileName2)
+// 通过 pipe执行拷贝，数据流转
+readStream.pipe(writeStream)
+// 数据读取完成监听，即拷贝完成
+readStream.on(&#39;end&#39;, function () &#123;
+    console.log(&#39;拷贝完成&#39;)
+&#125;)
+</code></pre>
+<h3 id="require模块查找"><a href="#require模块查找" class="headerlink" title="require模块查找"></a>require模块查找</h3><p>缓存 -&gt; 内置模块（fs http等） -&gt; 其他<br>可查找的：绝对&#x2F;相对路径，无后缀（补上.js等）,目录（决定入口文件，默认index.js），第三方模块（node_modues）</p>
+<h3 id="框架相关（koa-exp）"><a href="#框架相关（koa-exp）" class="headerlink" title="框架相关（koa exp）"></a>框架相关（koa exp）</h3><blockquote>
+<p>koa是基于NodeJS当前比较流行的web框架，本身支持的功能并不多，功能都可以通过中间件拓展实现。通过添加不同的中间件，实现不同的需求，从而构建一个 Koa 应用</p>
+</blockquote>
+<p>中间件参数：<br>ctx: 封装了request response的变量<br>next：进入下一个执行的中间件</p>
+<p>示例：</p>
+<pre><code class="js">const fs = require(&#39;fs&#39;)
+module.exports = (options) =&gt; async (ctx, next) =&gt; &#123;
+  const startTime = Date.now()
+  const requestTime = new Date()
+  await next()
+  const ms = Date.now() - startTime;
+  let logout = `$&#123;ctx.request.ip&#125; -- $&#123;requestTime&#125; -- $&#123;ctx.method&#125; -- $&#123;ctx.url&#125; -- $&#123;ms&#125;ms`;
+  // 输出日志文件
+  fs.appendFileSync(&#39;./log.txt&#39;, logout + &#39;\n&#39;)
+&#125;
+</code></pre>
+<p>内置的中间件： koa-bodyparser(转换post请求，挂载ctx.request上)<br>koa-static(处理静态资源)等</p>
+<h3 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h3><p>JSON Web Token<br>三部分：头部（算法 type）<br>载荷（payload 消息体） 存储具体信息<br>签名对前两个部分进行签名并设置SecretKey<br>生成：<br>使用第三方库</p>
+<pre><code class="js">jwt = require(&quot;jsonwebtoken&quot;);
+ const token = jwt.sign(  
+        &#123;
+          name: result.name//payload
+        &#125;,
+        &quot;test_token&quot;, // secret
+        &#123; expiresIn: 60 * 60 &#125; // 过期时间：60 * 60 s
+      );
+</code></pre>
+<p>校验：<br>koa-jwt</p>
+<pre><code class="js">app.use(koajwt(&#123;
+  secret: &#39;test_token&#39;
+&#125;).unless(&#123; // 配置白名单
+  path: [/\/api\/register/, /\/api\/login/]
+&#125;))
+</code></pre>
+<p>流程：</p>
+<blockquote>
+<p>服务器当验证用户账号和密码正确的时候，给用户颁发一个令牌，这个令牌作为后续用户访问一些接口的凭证<br>后续访问会根据这个令牌判断用户是否有权限进行访问<br>在前端接收到token后，一般情况会通过localStorage进行缓存，然后将token放到HTTP请求头Authorization 中</p>
+</blockquote>
+<p>应用：单点登录 预防CSRF</p>
+
     </div>
+    
+    
+    
+    
+    
+    
     
 </div>
 
@@ -295,6 +288,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>

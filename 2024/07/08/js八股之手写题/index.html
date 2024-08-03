@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ffa2c4">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #00a596">
+                <a href="/tags/js/" style="color: #03a9f4">
                     js
                 </a>
             </span>
@@ -343,7 +343,7 @@
   return typeof res === &#39;object&#39; &amp;&amp; res ? res : newObj;//返回值判断
 &#125;
 </code></pre>
-<h2 id="发布订阅"><a href="#发布订阅" class="headerlink" title="发布订阅"></a>发布订阅</h2><p>何为发布订阅模式？<br>publisher -&gt; eventEmitter(中间处理) -&gt; subscriber</p>
+<h2 id="EventEmitter"><a href="#EventEmitter" class="headerlink" title="EventEmitter"></a>EventEmitter</h2><p>publisher -&gt; eventEmitter(中间处理) -&gt; subscriber</p>
 <pre><code class="js">class eventEmitter &#123;
   constructor() &#123;
     this.events = &#123;&#125;;//存储事件的回调函数
@@ -385,6 +385,7 @@ events.emit(&#39;hello&#39;);
 events.off(&#39;hello&#39;, hl);
 events.once(&#39;hello&#39;, hl);
 </code></pre>
+<p>应用： 观察者模式 发布订阅模式</p>
 
     </div>
     

@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #00bcd4">
+                <a href="/tags/js/" style="color: #03a9f4">
                     js
                 </a>
             </span>
@@ -289,6 +289,16 @@ console.log(&#39;end&#39;)
 //start=&gt;end=&gt;promise3=&gt;timer1=&gt;timer2=&gt;promise1=&gt;promise2
 </code></pre>
 <p>注意：浏览器和node区别： Node在所有timer执行完后才清空微队列，因此上面代码在浏览器执行，是 t1 -&gt; p1 -&gt; t2 -&gt; p2</p>
+<p>关于sett和seti的顺序：</p>
+<pre><code class="js">setTimeout(() =&gt; &#123;
+  console.log(&quot;setTimeout&quot;);
+&#125;, 0);
+
+setImmediate(() =&gt; &#123;
+  console.log(&quot;setImmediate&quot;);
+&#125;);
+</code></pre>
+<p>答：都有可能，一个在timer 一个在check，sett虽然是0ms，但实际上有短暂的时间。取决于下一次事件循环中同步代码的执行时间，如果较长，就先执行sett，否则反之</p>
 <p>关于async await promise</p>
 <pre><code class="js">async function async1() &#123;
     console.log(&#39;async1 start&#39;);
