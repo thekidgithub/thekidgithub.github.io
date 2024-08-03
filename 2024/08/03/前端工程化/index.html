@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>HTML &amp; CSS | The kid 的小窝</title>
+    <title>前端工程化 | The kid 的小窝</title>
     <meta name="author" content="the kid" />
     <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
     <meta name="keywords" content="" />
@@ -156,14 +156,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>HTML &amp; CSS</h1>
+        <h1>前端工程化</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2024/8/2
+            2024/8/3
         </span>
         
         
@@ -180,88 +180,139 @@
                 </a>
             </span>
             
-            <span class="tag">
-                
-                <a href="/tags/HTML/" style="color: #00a596">
-                    HTML
-                </a>
-            </span>
-            
-            <span class="tag">
-                
-                <a href="/tags/CSS/" style="color: #ffa2c4">
-                    CSS
-                </a>
-            </span>
-            
         </span>
         
     </div>
     
     <div class="content" v-pre>
-        <h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><span id="more"></span>
-<h4 id="前端渲染"><a href="#前端渲染" class="headerlink" title="前端渲染"></a>前端渲染</h4><p>DOM树 -&gt; CSS规则树 -&gt; 渲染树 -&gt; 布局（Layout&#x2F;reflow）-&gt; 绘制（paint） -&gt;显示（display, GPU进程，合成图层）<br>回流&#x2F;重排：尺寸、位置等变化，代价大于重绘，必然引起重绘<br>重绘：color visibility<br>性能优化策略：</p>
+        <h2 id="Webpack"><a href="#Webpack" class="headerlink" title="Webpack"></a>Webpack</h2><span id="more"></span>
+<p>是什么： </p>
+<blockquote>
+<p>webpack 是一个用于现代JavaScript应用程序的静态模块打包工具</p>
+</blockquote>
+<p>模块整合能力（.js -&gt; bundle）&#x2F;万物皆可模块&#x2F;编译代码(如ES6 -&gt; ES5)</p>
+<h3 id="构建流程"><a href="#构建流程" class="headerlink" title="构建流程"></a>构建流程</h3><ol>
+<li>初始化：从配置文件（webpack.config.js）和shell中读取参数，初始化compiler编译对象</li>
+<li>编译构建： compile(开始编译，构建Compilation对象) -&gt; make编译模块（从entry出发，调用loader编译模块，解析输出抽象语法树，再找出依赖的模块递归进行） -&gt; build module(完成模块编译)</li>
+<li>输出： seal输出资源（生成chunks） -&gt; emit输出完成（通过配置的出口）</li>
+</ol>
+<h3 id="loader"><a href="#loader" class="headerlink" title="loader"></a>loader</h3><p>loader 用于对模块的”源代码”进行转换，在 import 或”加载”模块时预处理文件<br>配置：</p>
+<pre><code class="js">module.exports = &#123;
+  module: &#123;
+    rules: [
+      &#123;
+        test: /\.css$/,
+        use: [
+          &#123; loader: &#39;style-loader&#39; &#125;,
+          &#123;
+            loader: &#39;css-loader&#39;,
+            options: &#123;
+              modules: true
+            &#125;
+          &#125;,
+          &#123; loader: &#39;sass-loader&#39; &#125;//解析：从后往前
+        ]
+      &#125;
+    ]
+  &#125;
+&#125;;
+</code></pre>
+<p>常见: style- css-（一起用） less&#x2F;sass- postcss- file&#x2F;url-(静态资源) babel-(es6 to es5)<br>特性：同步&#x2F;异步，链式调用<br>编写：</p>
+<pre><code class="js">// 导出一个函数，source为webpack传递给loader的文件源内容
+module.exports = function(source) &#123;
+    const content = doSomeThing2JsString(source);
+    
+    // 如果 loader 配置了 options 对象，那么this.query将指向 options
+    const options = this.query;
+    
+    // 可以用作解析其他模块路径的上下文
+    console.log(&#39;this.context&#39;);
+    
+    /*
+     * this.callback 参数：
+     * error：Error | null，当 loader 出错时向外抛出一个 error
+     * content：String | Buffer，经过 loader 编译后需要导出的内容
+     * sourceMap：为方便调试生成的编译后内容的 source map
+     * ast：本次编译生成的 AST 静态语法树，之后执行的 loader 可以直接使用这个 AST，进而省去重复生成 AST 的过程
+     */
+    this.callback(null, content); // 异步
+    return content; // 同步
+&#125;
+</code></pre>
+<h3 id="plugin"><a href="#plugin" class="headerlink" title="plugin"></a>plugin</h3><p>插件<br>配置：</p>
+<pre><code class="js">module.exports = &#123;
+  ...
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new HtmlWebpackPlugin(&#123; template: &#39;./src/index.html&#39; &#125;),
+  ],
+&#125;;
+</code></pre>
+<p>本质是具有apply方法的js对象<br>常见：</p>
 <ul>
-<li>transform 替代 定位 （CSS3硬件加速，类似的属性还有opacity）</li>
-<li>批量修改DOM: 1. fragment 2. 先display:none再修改 3. 元素脱离文档流</li>
-<li>减少查询节点的位置属性，可以查询后缓存（会导致回流，尤其是在循环内）<br>(现代浏览器会通过队列批量执行优化重排过程，但是获取布局信息时，会强制队列刷新)</li>
-<li>动画，使用绝对定位脱离文档流(或使用requestAnimationFrame)</li>
-<li>script标签加上async or defer，或把script标签放底部(js进程和GUI进程互斥，阻塞DOM构建)(async解析完立即执行，defer解析完会在HTML解析完后执行)</li>
-<li>简化DOM和CSSOM树（压缩文件、减少选择器嵌套、在DOM树末端改变class）</li>
+<li>HtmlWebpackPlugin 自动生成html，引入js模块</li>
+<li>clean-webpack-plugin 清理构建目录</li>
+<li>mini-css-extract-plugin 提取css到单独文件</li>
+<li>copy-webpack-plugin 复制文件或目录（如public）到执行区域<br>编写：</li>
 </ul>
-<p>补充：进程与线程<br>进程是 CPU 资源分配的最小单位，线程是 CPU 调度的最小单位，一个进程包含一个或多个线程<br>浏览器的多进程架构：主进程、第三方插件进程、GPU进程、渲染进程<br>渲染进程中：GUI渲染线程、JS引擎线程、事件触发线程、定时触发器线程、异步http请求线程</p>
-<h4 id="盒模型-选择器优先级"><a href="#盒模型-选择器优先级" class="headerlink" title="盒模型&#x2F;选择器优先级"></a>盒模型&#x2F;选择器优先级</h4><p>标准盒模型（box-sizing:content-box）：宽高只包含content<br>IE盒模型（box-sizing:border-box）：包含content padding border<br>选择器优先级：ABCD<br>A 内联<br>B id<br>C class 属性 伪类<br>D 标签 伪元素<br>其他：!important 层叠 继承</p>
-<h4 id="BFC-布局"><a href="#BFC-布局" class="headerlink" title="BFC 布局"></a>BFC 布局</h4><p>BFC：块级格式上下文（说人话就是一个div会在内部创建一个“环境”）<br>创建：绝对定位（absolute&#x2F;fixed）行内块 overflow不为visible 浮动<br>特性：<br>垂直排列<br>外边距折叠（解决：创建新的BFC）<br>内部margin的左侧与外部border左侧接触<br>浮动区域不与BFC重叠</p>
-<p>应用：多栏布局<br>两栏布局（左边固定，右边自适应）</p>
-<ol>
-<li>浮动：左边宽固定float:left 右边的margin-left为左宽度（或右边overflow:hidden，触发BFC）</li>
-<li>左定宽，右flex:1</li>
-<li>左absolute定宽 右margin-left为左宽&#x2F; 左定宽 右absolute,left为左宽</li>
-</ol>
-<p>三栏布局（左右固定，中间自适应）<br>使用float<br>margin负值，使浮动元素移出文档流<br>父元素使用padding,防止中间内容被两侧覆盖</p>
-<pre><code class="HTML">&lt;div id=&quot;container&quot; class=&quot;clearfix&quot;&gt;
-  &lt;p class=&quot;center&quot;&gt;我是中间&lt;/p&gt;
-  &lt;p class=&quot;left&quot;&gt;我是左边&lt;/p&gt;
-  &lt;p class=&quot;right&quot;&gt;我是右边&lt;/p&gt;
-&lt;/div&gt;
-</code></pre>
-<pre><code class="CSS">#container &#123;
-  padding-left: 200px;
-  padding-right: 150px;
-  overflow: auto;
-&#125;
-#container p &#123;
-  float: left;
-&#125;
-.center &#123;
-  width: 100%;
-  background-color: lightcoral;
-&#125;
-.left &#123;
-  width: 200px;
-  position: relative;
-  left: -200px;
-  margin-left: -100%;
-  background-color: lightcyan;
-&#125;
-.right &#123;
-  width: 150px;
-  margin-right: -150px;
-  background-color: lightgreen;
-&#125;
-.clearfix:after &#123;
-  content: &quot;&quot;;
-  display: table;
-  clear: both;
+<pre><code class="js">class MyPlugin &#123;
+    // Webpack 会调用 MyPlugin 实例的 apply 方法给插件实例传入 compiler 对象
+  apply (compiler) &#123;
+    // 找到合适的事件钩子，实现自己的插件功能
+    compiler.hooks.emit.tap(&#39;MyPlugin&#39;, compilation =&gt; &#123;
+        // compilation: 当前打包构建流程的上下文
+        console.log(compilation);
+        
+        // do something...
+    &#125;)
+  &#125;
 &#125;
 </code></pre>
-<p>水平垂直居中：</p>
-<ol>
-<li>flex</li>
-<li>绝对定位 l50% t50%，再translate(-50%,-50%)</li>
-<li>margin:0 auto</li>
+<p>与loader区别：<br>概念上； 运行时机：loader在打包前，plugin在整个编译周期</p>
+<h3 id="热更新-HMR"><a href="#热更新-HMR" class="headerlink" title="热更新(HMR)"></a>热更新(HMR)</h3><p>开启： devServer: {hot: true}<br>原理：</p>
+<img src="/2024/08/03/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/image.png" class="">
+<p>当文件变化时，webpack监听到并重新编译打包，生成唯一的hash值 -&gt; devServer向浏览器发送改动信息（包含hash值）（两者通过webSocket连接）<br>-&gt;浏览器获取模块变化，触发render<br>两个服务端： express server 静态资源服务（初次构建时） socket server (通信服务)</p>
+<h3 id="proxy"><a href="#proxy" class="headerlink" title="proxy"></a>proxy</h3><p>使用dev-server配置：</p>
+<pre><code class="js">module.exports = &#123;
+    // ...
+    devServer: &#123;
+        contentBase: path.join(__dirname, &#39;dist&#39;),
+        compress: true,
+        port: 9000,
+        proxy: &#123;
+            &#39;/api&#39;: &#123;
+                target: &#39;https://api.github.com&#39;//目标地址
+                pathRewrite: ...//重写路径，如删除/api
+                changeOrigin: ...//是否更新代理后请求的 headers 中host地址
+            &#125;
+        &#125;
+        // ...
+    &#125;
+&#125;
+</code></pre>
+<p>工作原理： 使用代理服务器解决跨域问题</p>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><ol>
+<li>性能</li>
 </ol>
-<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><p>主轴（main axis） 交叉轴（cross axis）<br>容器属性：<br>flex-direction<br>flex-wrap(换行)<br>flex-flow(上面两个)<br>justify-content(主轴)<br>align-items(交叉轴)<br>align-content(多轴线)<br>内容属性：<br>order(越小越前，默认0)<br>flex-grow(放大比例，默认0)<br>flex-shrink(缩小比例，默认1)<br>flex-basis(占据的具体空间，默认auto)<br>flex: 上面三个简写（auto: 1 1 auto none: 0 0 auto）<br>align-self: 单独的对齐方式</p>
+<ul>
+<li>压缩JS&#x2F;CSS&#x2F;HTML&#x2F;文件&#x2F;图片<br>terser&#x2F;css-minimizer-webpack-plugin&#x2F;minify&#x2F;compression-webpack-plugin</li>
+<li>tree-shaking (usedExports&#x2F;sideEffects)</li>
+<li>代码分离，按需加载(splitChunks)</li>
+<li>内联chunk</li>
+</ul>
+<ol start="2">
+<li>构建速度</li>
+</ol>
+<ul>
+<li>loader 配置include&#x2F;exclude</li>
+<li>resolve.extensions(自动添加扩展名)</li>
+<li>resolve.modules(从哪里寻找第三方模块。如node_modules)</li>
+<li>resolve.alias(别名，如@ -&gt; .&#x2F;src)</li>
+<li>cache-loader(缓存打包结果)</li>
+<li>terser启动多线程</li>
+<li>sourceMap(开发环境和生产环境分开)</li>
+</ul>
+<h2 id="Vite"><a href="#Vite" class="headerlink" title="Vite"></a>Vite</h2><p>vite开发环境依赖esbuild进行预构建，生产环境则依赖rollup进行打包<br>vite支持原生ESMoudle，使用esbuild预构建，先启动开发服务器再按需编译，效率高于wp，提高冷启动速度<br>vite利用了http2并发请求的优势加速<br>vite监听到文件变更后，会用websocket通知浏览器，重新发起新的请求，只对该模块进行重新编译，然后进行替换，而wp会对整个项目重新进行打包（使用缓存机制解决）<br>生产环境下，vite使用rollup进行打包（rollup优势：体积小，支持tree-shaking，适用于js库的打包）</p>
 
     </div>
     
