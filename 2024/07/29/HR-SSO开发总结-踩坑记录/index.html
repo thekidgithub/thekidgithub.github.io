@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #00a596">
+                <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #ffa2c4">
                     项目
                 </a>
             </span>
@@ -327,6 +327,7 @@
   &#125;);
 &#125;
 </code></pre>
+<p>关于axios:<br>&#x2F;&#x2F;todo</p>
 <h4 id="router和store"><a href="#router和store" class="headerlink" title="router和store"></a>router和store</h4><p>router</p>
 <ol>
 <li>应用了全局路由守卫guard</li>
@@ -439,6 +440,13 @@ export const appRoutes: RouteRecordNormalized[] = formatModules(modules, []);
 <p>router部分，在login处加入了beforeEnter守卫，判断是否是logout。user路由内也有beforeEnter，用于鉴权，预获取个人信息，如果失败说明处于未登录状态</p>
 <p>登录注册分别用两个store存储表单信息和请求逻辑等，例如，useLogin里使用loginFormInfo对象state存储登录表单信息（在组件内，使用storeToRef保持其响应性），将handleLogin这样处理请求的逻辑写在action内（好处：保持组件纯粹）处理过程：validate验证（arco组件自带） -&gt; 生成postData并使用api的函数发请求 -&gt; 处理响应和跳转逻辑</p>
 <p>user部分主要是查看和编辑用户信息，逻辑与结构类似</p>
+<p>权限管理：<br>&#x2F;&#x2F;todo</p>
+<p>部署：<br>使用vercel部署时，刷新页面404。<br>原因：history模式，跳转逻辑由js判断，服务端只返回index.html，故加上：</p>
+<pre><code class="js">//vercel.json
+&#123;
+  &quot;rewrites&quot;: [&#123; &quot;source&quot;: &quot;/:path*&quot;, &quot;destination&quot;: &quot;/index.html&quot; &#125;]
+&#125;
+</code></pre>
 
     </div>
     

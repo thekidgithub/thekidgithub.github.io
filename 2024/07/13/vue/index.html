@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
                     八股
                 </a>
             </span>
@@ -209,7 +209,7 @@
   &#125;)
 &#125;
 </code></pre>
-<p>缺点：只能侦听对象的已有属性，对新增的属性无效</p>
+<p>缺点：只能侦听对象的已有属性，对新增的属性无效<br>可以使用Vue.set解决</p>
 <p>Vue3改为Proxy + Reflect</p>
 <pre><code class="js">function reactive(target) &#123;
     const handler = &#123;
@@ -285,8 +285,25 @@ function computed(fn) &#123;//内部是一个effect
 <li>props&#x2F;$emit(父子) prop 父对子传属性 emit 子对父传事件</li>
 <li>provide&#x2F;inject 类react的useContext，只要有祖先关系，可跨级</li>
 <li>$attrs&#x2F;$listeners（透传），没有声明为props的属性（class style等）</li>
-<li>$parent&#x2F;$children</li>
-<li>eventBus 事件总线</li>
+<li>$parent（兄弟）</li>
+<li>eventBus 事件总线<br>应用：发布订阅</li>
+</ul>
+<pre><code class="js">class Bus &#123;  
+  constructor() &#123;  
+    this.callbacks = &#123;&#125;;   
+  &#125;  
+  $on(name, fn) &#123;  
+    this.callbacks[name] = this.callbacks[name] || [];  
+    this.callbacks[name].push(fn);  
+  &#125;  
+  $emit(name, args) &#123;  
+    if (this.callbacks[name]) &#123;  
+      this.callbacks[name].forEach((cb) =&gt; cb(args));  
+    &#125;  
+  &#125;  
+&#125;  
+</code></pre>
+<ul>
 <li>状态管理库（Vuex pinia, state getters mutation action）</li>
 <li>$ref</li>
 </ul>
@@ -297,7 +314,7 @@ function computed(fn) &#123;//内部是一个effect
 <li>父beU -&gt; 子beU U -&gt; 父U</li>
 <li>父beD -&gt; 子beD D -&gt; 父D</li>
 </ul>
-<p>父监听子：@hook<br>&lt;Child @hook:mounted&#x3D;”doSomething” &gt;</Child></p>
+<p>数据请求最好放在created，更早，如果放在mounted可能会导致页面闪动</p>
 <h2 id="Vue3-与-Vue2"><a href="#Vue3-与-Vue2" class="headerlink" title="Vue3 与 Vue2"></a>Vue3 与 Vue2</h2><ul>
 <li>diff优化</li>
 <li>响应式优化</li>
@@ -305,9 +322,59 @@ function computed(fn) &#123;//内部是一个effect
 <li>多根节点</li>
 <li>Teleport Suspend 组件</li>
 <li>生命周期（create -&gt; setup）</li>
-<li>虚拟DOM（静态节点，事件缓存）</li>
+<li>虚拟DOM（静态标记，静态节点，事件缓存）</li>
 <li>打包优化（tree-shaking） ts支持</li>
 </ul>
+<h2 id="nextTick"><a href="#nextTick" class="headerlink" title="nextTick"></a>nextTick</h2><p>异步化，数据更新之后不会立即改变DOM，而是加入一个异步更新队列，当队列所有数据变化完成才更新</p>
+<pre><code class="js">this.message = &#39;修改后的值&#39;
+console.log(this.$el.textContent) // =&gt; &#39;原始的值&#39;
+this.$nextTick(function () &#123;
+    console.log(this.$el.textContent) // =&gt; &#39;修改后的值&#39;
+&#125;)
+</code></pre>
+<p>实现：</p>
+<ol>
+<li>回调函数放入callbacks</li>
+</ol>
+<pre><code class="js">export function nextTick(cb?: Function, ctx?: Object) &#123;
+  let _resolve;
+
+  // cb 回调函数会经统一处理压入 callbacks 数组
+  callbacks.push(() =&gt; &#123;
+    if (cb) &#123;
+      // 给 cb 回调函数执行加上了 try-catch 错误处理
+      try &#123;
+        cb.call(ctx);
+      &#125; catch (e) &#123;
+        handleError(e, ctx, &#39;nextTick&#39;);
+      &#125;
+    &#125; else if (_resolve) &#123;
+      _resolve(ctx);
+    &#125;
+  &#125;);
+
+   // 执行异步延迟函数 timerFunc
+  if (!pending) &#123;
+    pending = true;
+    timerFunc();
+  &#125;
+&#125;
+</code></pre>
+<ol start="2">
+<li><p>timerFunc:<br>降级操作，当前环境支持什么就调用什么：<br>Promise.then -&gt; MutationObserver -&gt; setImmediate -&gt; setTimeout<br>把执行函数flushCallbacks放到里面</p>
+</li>
+<li><p>flushCallbacks</p>
+</li>
+</ol>
+<pre><code class="js">function flushCallbacks () &#123;
+  pending = false
+  const copies = callbacks.slice(0)
+  callbacks.length = 0
+  for (let i = 0; i &lt; copies.length; i++) &#123;
+    copies[i]()
+  &#125;
+&#125;
+</code></pre>
 <h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><ul>
 <li>MVVM<br>模型（Model）-视图(view)-视图模型（VM）<br>（双向数据绑定、响应式等）</li>
 <li>SSR SPA<br>SSR：服务端渲染，在客户端把标签渲染成HTML的工作放在服务端完成，然后再把html直接返回给客户端<br>优点：SEO 首屏加载快<br>缺点：开发受限（生命周期钩子只支持bC C），只Node.js，负载压力<br>SPA: 单页面应用，使用路由机制实现页面切换而不是请求服务端，首次加载所有资源<br>优点：快 前后端分离 服务器压力小<br>缺点：SEO 首屏慢</li>
@@ -325,7 +392,12 @@ function computed(fn) &#123;//内部是一个effect
 &lt;input :value=&quot;something&quot; @input=&quot;something = $event.target.value&quot;&gt;
 </code></pre>
 <ul>
-<li>性能优化（SSR 路由&#x2F;图片懒加载 虚拟列表 keep-alive 子组件分割&#x2F;hook）</li>
+<li><p>首屏加速：<br>路由懒加载减小体积；缓存静态资源；组件库按需加载；组件重复打包（webpack, minChunks）；压缩图片</p>
+</li>
+<li><p>为什么data是函数不是对象：防止多个实例对象共用data，造成数据污染</p>
+</li>
+<li><p>组合式函数（旧mixin）&#x2F; 自定义指令 &#x2F; 插件 实现逻辑复用</p>
+</li>
 </ul>
 
     </div>
