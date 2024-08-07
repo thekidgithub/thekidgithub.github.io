@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #ffa2c4">
+                <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #ff7d73">
                     项目
                 </a>
             </span>
@@ -260,15 +260,15 @@
 └── tsconfig.node.json
 </code></pre>
 <h2 id="项目简述"><a href="#项目简述" class="headerlink" title="项目简述"></a>项目简述</h2><p>联创团队招新的新HR系统，目前已上线，主要功能包括查看报名数据总览、查看选手信息、查看面试日程、分配面试时间。<br>技术栈：vue3 + typescript + vite + pinia<br>arcodesign + tailwindcss</p>
-<h2 id="个人认为的学习点"><a href="#个人认为的学习点" class="headerlink" title="个人认为的学习点"></a>个人认为的学习点</h2><h4 id="api"><a href="#api" class="headerlink" title="api"></a>api</h4><p>与后端交互的终端，封装调用request的函数，实际是使用_request.ts的axios发请求，请求的类型放在constant里(HttpRes)</p>
+<h2 id="个人认为的学习点"><a href="#个人认为的学习点" class="headerlink" title="个人认为的学习点"></a>个人认为的学习点</h2><h4 id="api"><a href="#api" class="headerlink" title="api"></a>api</h4><p>与后端交互的终端，封装调用request的函数（axios的二次封装），实际是使用_request.ts的axios发请求，请求的类型放在constant里(HttpRes)</p>
 <pre><code class="js">export default function request&lt;T = object&gt;(config: AxiosRequestConfig) &#123;//使用axios发请求
   const instance: AxiosInstance = axios.create(&#123;
     baseURL: HR_BASE_URL,
     timeout: 60000,
     withCredentials: true,
-  &#125;);//创建实例
+  &#125;);//创建实例,设置baseURL 超时时间 跨域时是否携带凭证
 
-  instance.interceptors.request.use(//请求拦截器，发请求前使用config
+  instance.interceptors.request.use(//请求拦截器，发请求前使用config(这里没做什么直接返回)
     (
       internalConfig: InternalAxiosRequestConfig,
     ): InternalAxiosRequestConfig =&gt; &#123;
@@ -296,7 +296,7 @@
       &#125;
       return null;
     &#125;,
-    (err: AxiosError&lt;&#123; msg: string &#125;&gt;) =&gt; &#123;
+    (err: AxiosError&lt;&#123; msg: string &#125;&gt;) =&gt; &#123;//把登录和鉴权状态等放到error里处理
       const &#123; msg = &#39;&#39; &#125; = err.response!.data!;
       if (msg.includes(&#39;authentication failed&#39;)) &#123;
         // 非登录态跳转SSO登录
@@ -316,7 +316,7 @@
 
   return new Promise&lt;HttpRes&lt;T&gt;&gt;((resolve, reject) =&gt; &#123;
     // 这里的res的类型为 data ｜ null ，在请求的时候记得判断是否为null
-    instance(config).then(
+    instance(config).then(//这里是发请求的部分
       (res) =&gt; &#123;
         resolve(res as unknown as HttpRes&lt;T&gt;);
       &#125;,
@@ -327,7 +327,41 @@
   &#125;);
 &#125;
 </code></pre>
-<p>关于axios:<br>&#x2F;&#x2F;todo</p>
+<p>关于axios:<br>一般的用法是</p>
+<pre><code class="js">axios(config) // 直接传入配置
+axios(url[, config]) // 传入url和配置
+axios[method](url[, option]) // 直接调用请求方式方法，传入url和配置
+axios[method](url[, data[, option]]) // 直接调用请求方式方法，传入data、url和配置
+</code></pre>
+<p>请求，响应拦截器：</p>
+<pre><code class="js">axios.interceptors.request.use(function (config) &#123;
+    // 这里写发送请求前处理的代码
+    //如：发请求前判断是否有token，有则在config里加入
+    return config;
+&#125;, function (error) &#123;
+    // 这里写发送请求错误相关的代码
+    return Promise.reject(error);
+&#125;);
+
+axios.interceptors.response.use(function (response) &#123;
+    // 这里写得到响应数据后处理的代码
+    return response;
+&#125;, function (error) &#123;
+    // 这里写得到错误响应处理的代码
+    return Promise.reject(error);
+&#125;);
+</code></pre>
+<p>创建实例（封装用）</p>
+<pre><code class="js">const instance = axios.create(&#123;
+  baseURL: &#39;https://some-domain.com/api/&#39;,
+  timeout: 1000,
+  headers: &#123;&#39;X-Custom-Header&#39;: &#39;foobar&#39;&#125;
+&#125;);
+</code></pre>
+<p>为什么要封装：</p>
+<blockquote>
+<p> 随着项目规模增大，如果每发起一次HTTP请求，就要把这些比如设置超时时间、设置请求头、根据项目环境判断使用哪个请求地址、错误处理等等操作，都需要写一遍。这种重复劳动不仅浪费时间，而且让代码变得冗余不堪，难以维护。 </p>
+</blockquote>
 <h4 id="router和store"><a href="#router和store" class="headerlink" title="router和store"></a>router和store</h4><p>router</p>
 <ol>
 <li>应用了全局路由守卫guard</li>
@@ -427,8 +461,62 @@ export const appRoutes: RouteRecordNormalized[] = formatModules(modules, []);
       &#125;,
     &#125;,
 </code></pre>
+<p>还可以设置whistle配置解决<br>这里主要是获取后端域名，然后在响应头加上access-control-allow-origin为5173</p>
+<pre><code>5173.hustunique.com 127.0.0.1:5173
+dev.back.recruitment2023.hustunique.com resHeaders://(access-control-allow-origin=https://5173.hustunique.com)
+</code></pre>
 <p>src中各个目录：api assets（静态资源）components(公共组件) config constants(常量 HttpRes，放请求和响应类型) hooks utils（二者区别:hooks保留响应式和组件的生命周期等，utils只是简单的逻辑复用）layout (总体布局) locale（多语言） router store styles views</p>
 <p>用 ESLint 来检查代码质量，用stylelint，用 Prettier 来格式化代码<br>使用vercel.json在部署时解决404问题</p>
+<h4 id="i18n"><a href="#i18n" class="headerlink" title="i18n"></a>i18n</h4><p>设置locale目录(关键是locale和messages)<br>messages的值在zh-CN 和 en-US目录的语言包里设置<br>（导出后，在main.ts里挂载<br>app.use(i18n)）</p>
+<pre><code class="js">const defaultLocale = localStorage.getItem(&#39;arco-locale&#39;) || &#39;zh-CN&#39;;
+const i18n = createI18n(&#123;
+  locale: defaultLocale,
+  fallbackLocale: &#39;en-US&#39;,
+  legacy: false,
+  allowComposition: true,
+  messages: &#123;
+    &#39;en-US&#39;: en,
+    &#39;zh-CN&#39;: cn,
+  &#125;,
+&#125;);
+</code></pre>
+<pre><code class="js">//App.vue
+&lt;a-config-provider :locale=&quot;locale&quot;&gt;
+    &lt;router-view /&gt;
+&lt;/a-config-provider&gt;
+
+import useLocale from &#39;@/hooks/locale&#39;;
+const &#123; currentLocale &#125; = useLocale();
+const locale = computed(() =&gt; &#123;
+  switch (currentLocale.value) &#123;
+    case &#39;zh-CN&#39;:
+      return zhCN;
+    case &#39;en-US&#39;:
+      return enUS;
+    default:
+      return enUS;
+  &#125;
+&#125;);
+</code></pre>
+<p>useLocale在hook里<br>（作用：读和写locale）</p>
+<pre><code class="js">export default function useLocale() &#123;
+  const i18 = useI18n();
+  const currentLocale = computed(() =&gt; &#123;
+    return i18.locale.value;
+  &#125;);
+  const changeLocale = (value: string) =&gt; &#123;
+    if (i18.locale.value === value) &#123;
+      return;
+    &#125;
+    i18.locale.value = value;
+    localStorage.setItem(&#39;arco-locale&#39;, value);
+  &#125;;
+  return &#123;
+    currentLocale,
+    changeLocale,
+  &#125;;
+&#125;
+</code></pre>
 <h2 id="个人负责"><a href="#个人负责" class="headerlink" title="个人负责"></a>个人负责</h2><p>数据总览部分，主要包含三个模块：数据总览 选手阶段分布和近期日程，逻辑部分不是很难，主要就是获取数据写UI，但是在渲染图表上费了不少精力（沟槽的Echarts）</p>
 <h4 id="难点与个人经验"><a href="#难点与个人经验" class="headerlink" title="难点与个人经验"></a>难点与个人经验</h4><p>自然就是这个沟槽的Echarts了（感觉根本原因是这类工具库和Vue Vite之类的生态链没有兼容，也不是什么组件库，所以很多问题难有现成的解决方案）<br>一是首先图表如何正常渲染：发现只有在组件挂载之后才可以进行图表init（借由生命周期钩子Mounted实现）<br>二是数据的响应式，一个是侦测变化，这里使用watch（而不是computed，因为这里要执行副作用） 一个是数据的响应式，用computed把所有依赖于store的数据封装了，一个是对图表实例也使用ref<br>三是性能优化：最初设置了resize监听器，但是没有及时回收，于是在unmounted里销毁了监听器和图表实例，解决了内存泄漏问题。<br>最后再把代码整理了下，改善了可读性</p>
 <p>关于样式冲突问题：用的是tailwindcss，发现写在arco上的样式有些无法生效，查阅文档后发现存在样式优先级问题，解决方案是在style里对arco组件使用:deep</p>
@@ -447,6 +535,7 @@ export const appRoutes: RouteRecordNormalized[] = formatModules(modules, []);
   &quot;rewrites&quot;: [&#123; &quot;source&quot;: &quot;/:path*&quot;, &quot;destination&quot;: &quot;/index.html&quot; &#125;]
 &#125;
 </code></pre>
+<p>关于SSO：<br>同域：<br>将cookie的domain设置为父域域名，path设为根路径，此时子域的cookie可以共享<br>异域：<br>部署一个认证中心，登录后把token写入cookie。<br>进入应用时，检查token，若没有则跳转到认证中心，让认证中心根据cookie判断是否登录，若登录过，跳回应用并在URL后生成token，最后应用校验token合法性，最后将token写入cookie</p>
 
     </div>
     

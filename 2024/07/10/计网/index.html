@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
                     八股
                 </a>
             </span>
@@ -194,15 +194,20 @@
     <div class="content" v-pre>
         <h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><span id="more"></span>
 <p>TCP&#x2F;IP模型：<br>应用层（仅负责应用，不负责传输 HTTP DNS）<br>传输层（TCP UDP 传输 分块）<br>网络层（IP）<br>网络接口层（五层模型又分为数据链路层和物理层）</p>
+<p>TCP和UDP<br>TCP更可靠，传输较慢，面向字节流，有流量控制和拥塞控制<br>UDP面向报文，传输快，无xx控制</p>
+<p>OSI七层模型：<br>应用层 表示层 会话层 传输层 网络层 数据链路层 物理层</p>
 <h2 id="经典之输入URL后发生什么"><a href="#经典之输入URL后发生什么" class="headerlink" title="经典之输入URL后发生什么"></a>经典之输入URL后发生什么</h2><p>一 网络请求部分</p>
 <ol>
 <li>DNS解析<br>首先看有无缓存，若没有，通过本地DNS服务器递归查询(根-&gt;顶级域-&gt;权威)</li>
 <li>TCP建立连接：三次握手<br>client发SYN,close -&gt; SYN_SENT<br>server收到后发SYN + ACK, LISTEN -&gt; SYN_RCVD<br>client收到后发ACK, SYN_SENT -&gt; ESTABLISHED<br>server收到后， SYN_RCVD -&gt; ESTAVLISHED<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image1.png" class="">
 三次握手目的是<strong>保证双方都有发送和接收的能力</strong></li>
-<li>发送请求&#x2F;接收响应<br>报文结构：<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image.png" class=""></li>
 </ol>
+<p>四次挥手断开：<br>client发FIN server发ACK<br>server发FIN client发ACK<br>3. 发送请求&#x2F;接收响应<br>报文结构：</p>
+<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image.png" class="">
+
 <p>二 前端渲染部分 (非计网部分)<br>见HTML&#x2F;CSS</p>
 <h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><p>1xx: 中间状态，较少见<br>2xx: 成功处理（200 OK 204 No Content 206 Partial Content）<br>3xx: 重定向 (301 Moved Permanently 永久重定向 302 Found 临时重定向 304 Not Modified 缓存)<br>4xx: 客户端错误 (400 Bad Request 403 Forbidden 404 Not Found)<br>5xx: 服务器错误 （500 Internal Server Error 501 502 503）</p>
+<p>301用于新域名替换旧域名 302常用于未登录的重定向</p>
 <h2 id="字段-请求方法"><a href="#字段-请求方法" class="headerlink" title="字段 请求方法"></a>字段 请求方法</h2><p>GET POST （GET 安全且幂等，可以缓存）<br>字段： Host Content-length Connection(keep-alive保持长连接) Content-Type Content-Encoding</p>
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>强缓存和协商缓存</p>
 <img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image3.png" class="">
@@ -213,7 +218,13 @@
 <li>时间检测的粒度是秒级</li>
 <li>一些服务器不能正确获取最后修改时间</li>
 </ul>
-<h2 id="HTTP版本"><a href="#HTTP版本" class="headerlink" title="HTTP版本"></a>HTTP版本</h2><p>1.1 优点：简单、易扩展、应用广泛 长连接与管道化<br>缺点：无状态（解决：cookie） 队头堵塞（管道化，但是只能解决请求的堵塞，无法解决响应堵塞） 明文传输<br>2.0 头部压缩 二进制格式 并发传输 服务器推送 问题：TCP队头堵塞<br>3.0 无队头阻塞 更快的连接建立 连接迁移<br>HTTPS 在HTTP层和TCP层间加入SSL&#x2F;TLS层，TCP三次握手后还要SSL&#x2F;TLS握手（信息加密、校验机制、数字证书）</p>
+<h2 id="HTTP版本"><a href="#HTTP版本" class="headerlink" title="HTTP版本"></a>HTTP版本</h2><p>1.1 优点：简单、易扩展、应用广泛 长连接与管道化<br>缺点：无状态（解决：cookie） 队头堵塞（管道化，但是只能解决请求的堵塞，无法解决响应堵塞） 明文传输<br>2.0 头部压缩 二进制格式 并发传输 服务器推送 问题：TCP队头堵塞<br>3.0 无队头阻塞 更快的连接建立 连接迁移<br>HTTPS 在HTTP层和TCP层间加入SSL&#x2F;TLS层，TCP三次握手后还要SSL&#x2F;TLS握手</p>
+<p>HTTPS:</p>
+<ol>
+<li>加密<br>对称加密：加密和解密的密钥相同<br>非对称： 公钥私钥<br>混合加密： 对称 + 非对称</li>
+<li>完整性<br>摘要算法（一种特殊的压缩算法，“数据指纹”）</li>
+<li>身份验证<br>数字签名，数字证书</li>
+</ol>
 <h2 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h2><p>关于同源策略：必须协议、端口、域名均相同（域名和其对应IP不行，子域不同不行）<br>跨域时，请求仍能正常发出，但是受浏览器同源策略限制而被拦截</p>
 <p>解决</p>
 <ol>
@@ -248,6 +259,12 @@
 <li>CSRF Token(session, 服务器端，分布式校验。缺点：服务端开销大)</li>
 <li>双重cookie SameSite Cookie(缺点：无法防御XSS，不支持子域)</li>
 </ul>
+<h2 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h2><p>内容分发网络，根据用户位置分配最近的资源</p>
+<ol>
+<li>负载均衡系统<br>DNS不再返回IP，而是CNAME，指向CDN的全局负载均衡，综合地理位置等因素得到最合适的边缘节点返回</li>
+<li>缓存代理<br>选择性缓存常用资源</li>
+</ol>
+<h2 id="webSocket"><a href="#webSocket" class="headerlink" title="webSocket"></a>webSocket</h2><p>应用于实时通信<br>特点：头部小 实时性强（快） 保持连接 二进制帧 压缩率高 全双工 单次握手</p>
 
     </div>
     
