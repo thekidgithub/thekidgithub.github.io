@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #03a9f4">
+                <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #ff7d73">
                     项目
                 </a>
             </span>
@@ -517,6 +517,139 @@ const locale = computed(() =&gt; &#123;
   &#125;;
 &#125;
 </code></pre>
+<h4 id="menu处理"><a href="#menu处理" class="headerlink" title="menu处理"></a>menu处理</h4><p>useMenuTree.ts:<br>从appMenu拿到路由列表，生成menuTree，用于展示菜单数据</p>
+<pre><code class="js">const menuTree = computed(() =&gt; &#123;
+    const copyRouter = cloneDeep(appRoute.value) as RouteRecordNormalized[]; 
+    copyRouter.sort((a: RouteRecordNormalized, b: RouteRecordNormalized) =&gt; &#123;
+      return ((a.meta.order as number) || 0) - ((b.meta.order as number) || 0);
+    &#125;);//先拷贝一份，按meta.order排序
+    function travel(_routes: RouteRecordRaw[], layer: number) &#123;//递归，layer:层数
+      if (!_routes) return null;
+      const collector: any = _routes.map((element) =&gt; &#123;
+        if (element.meta?.hideChildrenInMenu || !element.children) &#123;
+          element.children = [];
+          return element; //检查是否有子/子是否需要隐藏
+        &#125;
+
+        // route filter hideInMenu true
+        element.children = element.children.filter(
+          (x) =&gt; x.meta?.hideInMenu !== true,
+        );//过滤隐藏的子列表
+
+        // Associated child node
+        const subItem = travel(element.children, layer + 1);//递归，层+1
+
+        if (subItem.length) &#123;
+          element.children = subItem;
+          return element;
+        &#125;
+
+        if (element.meta?.hideInMenu === false) &#123;
+          return element;
+        &#125;//最后return原来的ele
+
+        return null;
+      &#125;);
+      return collector.filter(Boolean); //把null过滤掉
+    &#125;
+    return travel(copyRouter, 0);
+  &#125;);
+</code></pre>
+<p>返回这个a-menu:</p>
+<pre><code class="js">        &lt;a-menu
+        mode=&#123;topMenu.value ? &#39;horizontal&#39; : &#39;vertical&#39;&#125;
+        v-model:collapsed=&#123;collapsed.value&#125;
+        v-model:open-keys=&#123;openKeys.value&#125;
+        show-collapse-button=&#123;appStore.device !== &#39;mobile&#39;&#125;
+        auto-open=&#123;false&#125;
+        selected-keys=&#123;selectedKey.value&#125;
+        auto-open-selected=&#123;true&#125;
+        level-indent=&#123;34&#125;
+        style=&quot;height: 100%;width:100%;&quot;
+        onCollapse=&#123;setCollapse&#125;
+      &gt;
+        &#123;renderSubMenu()&#125;
+      &lt;/a-menu&gt;
+</code></pre>
+<p>一些函数：</p>
+<pre><code class="js">    const renderSubMenu = () =&gt; &#123;//递归渲染
+      function travel(_route: RouteRecordRaw[], nodes = []) &#123;
+        if (_route) &#123;
+          _route.forEach((element) =&gt; &#123;
+            const icon = element?.meta?.icon
+              ? () =&gt; h(compile(`&lt;$&#123;element?.meta?.icon&#125;/&gt;`))
+              : null;//图标
+            const node =// node 判断是否有子节点
+              element?.children &amp;&amp; element?.children.length !== 0 ? (
+                &lt;a-sub-menu
+                  key=&#123;element?.name&#125;
+                  v-slots=&#123;&#123;
+                    icon,
+                    title: () =>
+                      h(compile(t((element?.meta?.locale as string) || ''))),
+                  &#125;&#125;
+                &gt;
+                  &#123;travel(element?.children)&#125;
+                &lt;/a-sub-menu&gt;
+              ) : (
+                &lt;a-menu-item
+                  key=&#123;element?.name&#125;
+                  v-slots=&#123;&#123;
+                    icon,
+                  &#125;&#125;
+                  onClick=&#123;() =&gt; goto(element)&#125;
+                &gt;
+                  &#123;t((element?.meta?.locale as string) || &#39;&#39;)&#125;
+                &lt;/a-menu-item&gt;
+              );
+            nodes.push(node as never);
+          &#125;);
+        &#125;
+        return nodes;
+      &#125;
+      return travel(menuTree.value);
+    &#125;;
+</code></pre>
+<pre><code class="js">    listenerRouteChange((newRoute) =&gt; &#123; //监听路由变化，从utils引入
+      const &#123; requiresAuth, activeMenu, hideInMenu &#125; = newRoute.meta;
+      if (requiresAuth &amp;&amp; (!hideInMenu || activeMenu)) &#123;
+        const menuOpenKeys = findMenuOpenKeys(
+          (activeMenu || newRoute.name) as string,
+        );
+
+        const keySet = new Set([...menuOpenKeys, ...openKeys.value]);
+        openKeys.value = [...keySet];
+
+        selectedKey.value = [
+          (activeMenu || menuOpenKeys[menuOpenKeys.length - 1]) as string,
+        ];//设置当前打开的标签和选中的标签
+      &#125;
+    &#125;, true);
+</code></pre>
+<pre><code class="js">// menu的open-keys是展开子菜单的key数组，包含menu和sub-menu
+    const findMenuOpenKeys = (target: string) =&gt; &#123;
+      const result: string[] = []; //思路：通过一个数据记录路径，即已经打开的标签
+      let isFind = false; 
+      const backtrack = (item: RouteRecordRaw, keys: string[]) =&gt; &#123;
+        if (item.name === target) &#123;
+          isFind = true;
+          result.push(...keys);
+          return;
+        &#125;
+        if (item.children?.length) &#123;
+          item.children.forEach((el) =&gt; &#123;
+            backtrack(el, [...keys, el.name as string]);
+          &#125;);
+        &#125;
+      &#125;;
+      menuTree.value.forEach((el: RouteRecordRaw) =&gt; &#123;
+        if (isFind) return;
+        backtrack(el, [el.name as string]);
+      &#125;);
+      return result;
+    &#125;;
+</code></pre>
+<p>其他：用appStore存储一些元信息，比如是否折叠，desktop or mobile等<br>goto函数打开链接，做了：封装openWindow方法，设置seletedKey, router.push</p>
 <h2 id="个人负责"><a href="#个人负责" class="headerlink" title="个人负责"></a>个人负责</h2><p>数据总览部分，主要包含三个模块：数据总览 选手阶段分布和近期日程，逻辑部分不是很难，主要就是获取数据写UI，但是在渲染图表上费了不少精力（沟槽的Echarts）</p>
 <h4 id="难点与个人经验"><a href="#难点与个人经验" class="headerlink" title="难点与个人经验"></a>难点与个人经验</h4><p>自然就是这个沟槽的Echarts了（感觉根本原因是这类工具库和Vue Vite之类的生态链没有兼容，也不是什么组件库，所以很多问题难有现成的解决方案）<br>一是首先图表如何正常渲染：发现只有在组件挂载之后才可以进行图表init（借由生命周期钩子Mounted实现）<br>二是数据的响应式，一个是侦测变化，这里使用watch（而不是computed，因为这里要执行副作用） 一个是数据的响应式，用computed把所有依赖于store的数据封装了，一个是对图表实例也使用ref<br>三是性能优化：最初设置了resize监听器，但是没有及时回收，于是在unmounted里销毁了监听器和图表实例，解决了内存泄漏问题。<br>最后再把代码整理了下，改善了可读性</p>
 <p>关于样式冲突问题：用的是tailwindcss，发现写在arco上的样式有些无法生效，查阅文档后发现存在样式优先级问题，解决方案是在style里对arco组件使用:deep</p>
