@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>better-chat | The kid 的小窝</title>
+    <meta name="author" content="the kid" />
+    <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>THE KID 的小窝</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;THE KID 的小窝</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>better-chat</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/18
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><span id="more"></span>
+<p>&#x2F;&#x2F;todo</p>
+<h2 id="React-Router"><a href="#React-Router" class="headerlink" title="React Router"></a>React Router</h2><pre><code>- router
+ - config.ts
+ - index.tsx
+ - private.tsx
+</code></pre>
+<p>config存放路由</p>
+<pre><code class="js">export const router: Array&lt;IRouter&gt; = [
+    &#123;
+        path: &#39;/&#39;,
+        component: withPrivateRoute(lazy(() =&gt; import(&#39;@/pages/home&#39;))), // 需要登录才能访问的页面
+        children: [
+            &#123;
+                path: &#39;chat&#39;,
+                component: withPrivateRoute(lazy(() =&gt; import(&#39;@/pages/home&#39;)))
+            &#125;,
+      ...
+        ]
+    &#125;,
+    &#123;
+        path: &#39;/login&#39;,
+        component: Login
+    &#125;,
+    ...
+    &#123;
+        path: &#39;*&#39;,
+        component: lazy(() =&gt; import(&#39;@/pages/error&#39;)),
+        redirect: &#39;/&#39;
+    &#125;
+];
+</code></pre>
+<p>withPrivateRoute 在private.tsx里</p>
+<p>index返回路由对象</p>
+<pre><code class="js">const RouteRender = () =&gt; &#123;
+    // 递归地渲染路由
+    const routeRender = (router: Array&lt;IRouter&gt;) =&gt; &#123;
+        return router.map(item =&gt; &#123;
+            return (
+                &lt;Route
+                    key=&#123;item.name || item.path&#125;
+                    path=&#123;item.path&#125;
+                    element=&#123;
+                        item.redirect ? (
+                            &lt;Navigate to=&#123;item.redirect&#125; /&gt; //判断重定向
+                        ) : (
+                            &lt;Suspense fallback=&#123;&lt;CenteredSpin /&gt;&#125;&gt;
+                                &lt;item.component /&gt;
+                            &lt;/Suspense&gt;
+                        )
+                    &#125;
+                &gt;
+                    &#123;item.children &amp;&amp; routeRender(item.children)&#125; //递归
+                &lt;/Route&gt;
+            );
+        &#125;);
+    &#125;;
+
+    // 使用 useMemo 来记忆化 router 映射的结果，避免每次渲染都重新计算
+    const routes = useMemo(() =&gt; &#123;
+        return routeRender(router);
+    &#125;, [router]);
+
+    return &lt;Routes&gt;&#123;routes&#125;&lt;/Routes&gt;;
+&#125;;
+</code></pre>
+<p>private: </p>
+<pre><code class="js">const PrivateRoute = (props: IPrivateRouteProps) =&gt; &#123;
+    const &#123; element &#125; = props;
+    const authToken = tokenStorage.getItem(); //判断token，有继续，没有跳转登录
+    if (authToken) &#123;
+        return &lt;&gt;&#123;element&#125;&lt;/&gt;;
+    &#125;
+    return (
+        &lt;&gt;
+            &lt;Navigate to=&quot;/login&quot; /&gt;;
+        &lt;/&gt;
+    );
+&#125;;
+// 高阶组件HOC，用于给需要登录才能访问的页面添加路由守卫
+export const withPrivateRoute = (Component: React.ElementType) =&gt; &#123;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const WrappedComponent = (props: any) =&gt; &#123;
+        return &lt;PrivateRoute element=&#123;&lt;Component &#123;...props&#125; /&gt;&#125; /&gt;;
+    &#125;;
+    return WrappedComponent;
+&#125;;
+</code></pre>
+<h2 id="JWT鉴权"><a href="#JWT鉴权" class="headerlink" title="JWT鉴权"></a>JWT鉴权</h2><p>后端：登录成功后设置token给前端</p>
+<pre><code class="js">//登录成功后
+const token = jwt.sign(payload, secretKey);
+            const data = &#123;
+                token: token,
+                info: &#123;
+                    //...
+                &#125;
+            &#125;;
+// 4. 检查 Redis 缓存中的 Token，判断是否已经登录
+// const better_chat = new Redis();
+const redisToken = await better_chat.get(`token:$&#123;payload.username&#125;`);
+if (redisToken) &#123;
+        return RespError(res, AuthErrStatus.USER_ALREADY_LOGGEDIN);
+&#125;
+await better_chat.set(`token:$&#123;payload.username&#125;`, token, &#39;EX&#39;, 60 * 60 * 24 * 14); // 有效期为 14 天
+return RespData(res, data);
+</code></pre>
+<p>前端：先判断本地有无token，有则不用发请求，无才请求，之后把token存入tokenStorage里(tokenStorage是封装的localStorage)</p>
+<h2 id="webRtc-webSocket实现音视频通信"><a href="#webRtc-webSocket实现音视频通信" class="headerlink" title="webRtc + webSocket实现音视频通信"></a>webRtc + webSocket实现音视频通信</h2><p>基本流程：</p>
+<ol>
+<li>首先采集音视频数据：</li>
+</ol>
+<pre><code class="js">async function createLocalMediaStream() &#123;
+  // (非https/localhost）下 navigator.mediaDevices 会返回 undefined
+  const localStream = await navigator.mediaDevices.getUserMedia(&#123;
+    video: true,
+    audio: true,
+  &#125;)
+  document.getElementById(&#39;local&#39;).srcObject = localStream
+&#125;
+</code></pre>
+<p>2.<br>媒体协商（SDP交换）</p>
+<img src="/2024/08/18/better-chat/image.png" class="">
+<p>发送端发offer,调用setLocalDescription -&gt; 接收端收到offer,调用setRemoteDescription -&gt; 接收端发answer, 调用setLocalDescription -&gt; 发送端收到answer, 调用setRemoteDescription<br>offer 和 answer 本质就是存有 SDP 信息的对象<br>信令服务器：一般用webSocket<br>3.<br>ICE（建立连接）<br>收集 Candidate -&gt; 交换 Candidate -&gt; 按优先级尝试连接<br>Candidate:WebRTC用来描述它可以连接的远端服务器的基本信息</p>
+<p>项目实现：<br>前端<br>首先useEffect，初始化socket和初始化房间内所有人的pc<br>initSocket:<br>如果socket存在，重新建立<br>const ws &#x3D; new WebSocket(url, …) url包含roomid username type<br>ws.onopen:<br>如果是发起人（判断：state &#x3D; initiate），init视频流，send”create-room”信息<br>ws.onmessage:<br>分为许多message,<br>‘connent-fail’ 关闭连接<br>‘new-peer’ 接收到新人进入房间，添加自己的音视频流到pc通道，并发送自己 offer 信息给该新人（send’offer’） setLocalDescription<br>‘offer’ 添加音视频流到pc通道,send’answer’ setLocalDescription&#x2F;setRemoteDescription<br>‘answer’ setRemoteDescription<br>‘ice_candidate’ 设置对方的candidate<br>‘reject’ 对方拒绝通话，关闭连接</p>
+<p>initStream:即上面的第一步建立音视频流<br>initPC:<br>new RTCPeerConnection()<br>给pc绑定oncandidate事件，在双方SDP设置完成后触发，send ‘ice_candidate’<br>绑定ontrack事件，用于接收远程视频流并播放</p>
+<p>后端：<br>connectRTC函数，首先从url里获取相关信息<br>然后onmessage:<br>‘create-room’ 邀请人发送邀请，被邀请人接收邀请 ———— 由邀请人向被邀请人通知<br>首先判断好友&#x2F;群友是否在线，是否在通话中<br>利用 LoginRooms 存储的 ws 连接实例向在线且空闲的被邀请人发送邀请：</p>
+<pre><code class="js">msg = 
+&#123;
+    name: &#39;create_room&#39;,	
+  room: room,
+    mode: message.mode,
+    callReceiverList: newCallReceiverList
+&#125;;
+LoginRooms[receiver_username].ws.send(JSON.stringify(msg));
+</code></pre>
+<p>new_peer：告诉房间内其他人自己要进入房间<br>offer：发送自己 offer 信息给进入房间的新人<br>answer：此时已收到并设置对方发送过来的 SDP 后，也发送自己的 SDP 给对方<br>ice_candidate：设置对方的 candidate ———— 双方都可能收到，此时双方的 ICE 设置完毕，可以进行音视频通话<br>reject: 挂断</p>
+<h2 id="webSocket-建立聊天"><a href="#webSocket-建立聊天" class="headerlink" title="webSocket 建立聊天"></a>webSocket 建立聊天</h2><p>有关webSocket:<br>WebSocket 是一种在单个TCP连接上进行全双工通信的协议，应用层<br>双工：服务器可以主动向客户端推送信息，客户端也可以主动向服务器发送信息<br>只需一次握手<br>数据格式轻量<br>好处：用于实时通信，避免了HTTP没有长连接造成的轮询问题<br>连接过程：</p>
+<ol>
+<li>客户端发起http请求，经过3次握手后，建立起TCP连接；http请求里存放WebSocket支持的版本号等信息，如：Upgrade、Connection、WebSocket-Version等；</li>
+<li>服务器收到客户端的握手请求后，同样采用HTTP协议回馈数据；</li>
+<li>客户端收到连接成功的消息后，开始借助于TCP传输信道进行全双工通信。<br>断线重连，心跳包<br>&#x2F;&#x2F;todo</li>
+</ol>
+<p>应用：<br>聊天页面initSocket:<br>收到’create-room’，打开音视频组件<br>message的发送和接收也通过ws完成</p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 The kid 的小窝
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;the kid
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

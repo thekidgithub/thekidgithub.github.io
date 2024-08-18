@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: HTML | The kid 的小窝</title>
+    <title>react | The kid 的小窝</title>
     <meta name="author" content="the kid" />
     <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
     <meta name="keywords" content="" />
@@ -37,6 +37,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -150,134 +154,50 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                项目
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E5%85%AB%E8%82%A1/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                八股
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/HTML/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                HTML
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/tags/CSS/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                CSS
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/js/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                js
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E8%AE%A1%E7%BD%91/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                计网
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/vue/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                vue
-            </a>
+            <div class="article">
+    <div>
+        <h1>react</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/13
         </span>
         
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/8/2</div>
-            <a href="/2024/08/02/HTML-CSS/">
-                <h3>HTML &amp; CSS</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
-                            八股
-                        </a>
-                    </span>
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/HTML/" style="color: #00bcd4">
-                            HTML
-                        </a>
-                    </span>
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/CSS/" style="color: #00a596">
-                            CSS
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><span id="more"></span>
+<p>(这些生命周期方法是类组件的方法，在函数组件上没有，但是仍会经历这些生命周期)<br>创建时：<br>constructor(初始化state等) -&gt; getDerivedStateFromProps(比较props 和 state来加一些限制条件，防止无用的state更新) -&gt; render -&gt; componentDidMount(已挂载，可以获取DOM)<br>更新时：<br>getDerivedStateFromProps -&gt; shouldComponentUpdate(判断是否需要重新渲染组件) -&gt; render -&gt; getSnapshotBeforeUpdate(获取更新前的状态，如滚动位置等，更新后回复状态) -&gt; componentDidUpdate<br>卸载:<br>componentWillUnmount</p>
+<img src="/2024/08/13/react/image.png" class="">
+
+<h2 id="事件模型"><a href="#事件模型" class="headerlink" title="事件模型"></a>事件模型</h2><p>react自身实现了一套事件机制，称为合成事件(一个合成事件可能由多个原生事件合成，比如blur , change , input , keydown , keyup等 , 合成为onChange)<br>所有的事件都应用事件委托，绑定在上层的react的root element上（而不是DOM自身，减少内存开销）（react16以前是绑定到document上）<br>真实的dom上的事件被单独处理,已经被react底层替换成空函数<br>执行顺序：先执行原生事件，然后冒泡到上层执行react事件<br>流程：事件合成（事件插件） -&gt; 事件绑定 -&gt; 事件触发</p>
+<h2 id="fiber架构"><a href="#fiber架构" class="headerlink" title="fiber架构"></a>fiber架构</h2><p>js线程和GUI渲染线程是互斥的，过去的渲染过程不可中断，造成性能问题<br>fiber: 一种react定义的数据结构，是fiber树结构的基本单位，是一个js对象，包含元素信息<br>特性：可以中断和恢复，分解渲染任务，增量渲染，如果有优先级更高的任务就先挂起<br>实现：链表，记录父子 nextSibling</p>
+<h2 id="组件相关"><a href="#组件相关" class="headerlink" title="组件相关"></a>组件相关</h2><p>类组件 -&gt; 函数组件<br>过去函数组件是无状态的，但是通过引入hook，函数组件也可以有状态<br>受控组件和非受控组件<br>高阶组件</p>
+<p>props和state<br>props由外部传来（单向数据流） state在组件内部管理<br>props不可变，state可变</p>
+<p>组件通信</p>
+<ul>
+<li>父子 prop</li>
+<li>子父，父向子传函数，通过回调得到值</li>
+<li>兄弟，父组件中间层</li>
+<li>context</li>
+<li>状态管理库</li>
+</ul>
+<h2 id="JSX"><a href="#JSX" class="headerlink" title="JSX"></a>JSX</h2><p>jsx -&gt; 通过babel转换为react.createElement<br>babel会判断组件的首字母，小写为原生标签，大写为组件<br>为什么不能返回多个根：组件最后会被转换为render函数，函数的返回值只能有一个</p>
+<h2 id="diff-key"><a href="#diff-key" class="headerlink" title="diff key"></a>diff key</h2><p>diff过程（子节点数组）<br>先建立索引表，然后遍历新节点<br>oldIndex：当前节点在老集合中的下标<br>maxIndex：在新集合访问过的节点中，其在老集合的最大下标（maxIndex &#x3D; max(oldIndex)）<br>当oldIndex&gt;maxIndex时，将oldIndex的值赋值给maxIndex<br>当oldIndex&#x3D;maxIndex时，不操作<br>当oldIndex &lt; maxIndex时，将当前节点移动到index的位置</p>
+<p>key:diff算法用，确定唯一标识<br>（不能用index，可能造成错误复用，不能用random,每次渲染都会变）</p>
+<h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><p>渲染时：shouldComponentUpdate、PureComponent、React.memo</p>
+
     </div>
+    
+    
+    
+    
+    
+    
     
 </div>
 
@@ -309,6 +229,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>
