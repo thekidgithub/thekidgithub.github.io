@@ -313,6 +313,95 @@ LoginRooms[receiver_username].ws.send(JSON.stringify(msg));
 <li>客户端收到连接成功的消息后，开始借助于TCP传输信道进行全双工通信。<br>断线重连，心跳包<br>&#x2F;&#x2F;todo</li>
 </ol>
 <p>应用：<br>聊天页面initSocket:<br>收到’create-room’，打开音视频组件<br>message的发送和接收也通过ws完成</p>
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>后端：<br>ws.on(‘message’) ，判断文件类型为file<br>判断上传状态：</p>
+<ol>
+<li>start: 创建writeStream，设置断点续传（判断:existsSync，如果有，把transmittedSize传到客户端）</li>
+</ol>
+<pre><code class="js">if (message.fileTraStatus === &#39;start&#39;) &#123;
+                        receivedSize = 0;
+                        fileInfo = JSON.parse(message.fileInfo);
+                        // 判断文件是否已经有过传输，如果有则断点续传（TODO：由于不准确，待完善）
+                        if (fs.existsSync(path.join(filePath,filename))) &#123;
+                            // 这个是已经传输的文件大小，应该传回给客户端，让客户端从这个大小开始传输
+                            const transmittedSize = fs.statSync(path.join(filePath, filename)).size;
+                        &#125;
+                        notExitCreate(path.join(process.cwd(), mkdir));
+                        writeStream = fs.createWriteStream(path.join(process.cwd(), `$&#123;mkdir&#125;/$&#123;filename&#125;`));
+                        return;
+                    &#125;
+</code></pre>
+<ol start="2">
+<li>upload:</li>
+</ol>
+<pre><code class="js">else if (message.fileTraStatus === &#39;upload&#39;) &#123;
+                        fileContent = Buffer.from(message.content);
+                        // 接收文件块并写入文件
+                        writeStream.write(fileContent);
+                        receivedSize += fileContent.length;
+                        // 如果接收完整个文件，则关闭文件流并发送上传成功消息
+                        if (receivedSize === fileInfo.fileSize) &#123;
+                            writeStream.end(async () =&gt; &#123;
+                                // file 类型的消息写入和发送
+                                msg.file_size = receivedSize;
+                                msg.content = `$&#123;mkdir&#125;/$&#123;filename&#125;`;
+                                message.content = `$&#123;mkdir&#125;/$&#123;filename&#125;`;
+                                await writeAndSend(type, room, msg, message);
+                                return;
+                            &#125;);
+                        &#125;
+                        return;
+                    &#125;
+</code></pre>
+<p>stream写入 -&gt; receviedSize增加 -&gt; 判断是否接收完毕，是就发送</p>
+<p>前端：</p>
+<pre><code class="js">        // 发送文件下载指令（多了 fileType 字段和 fileInfo 字段）
+        const newmessage: ISendMessage = &#123;
+        sender_id: user.id,
+        receiver_id: curChatInfo.receiver_id,
+        type: &#39;file&#39;,
+        content: &#39;&#39;,
+        avatar: user.avatar,
+        filename: file.name,
+        fileTraStatus: &#39;start&#39;,
+        fileInfo: JSON.stringify(fileInfo)
+    &#125;;
+    sendMessage(newmessage);
+    //...
+setTimeout(async () =&gt; &#123;
+        const reader = file.stream().getReader();
+        let shouldExit = false;
+        let chunk;
+        
+        let transmittedSize = 0; // 获取服务端已传输的文件大小 TODO
+        while (!shouldExit) &#123;
+            chunk = await reader.read();
+            if (chunk.done) &#123;
+                setLoading(false);
+                shouldExit = true;
+                fileRef.current!.value = &#39;&#39;;
+            &#125;
+
+            if (!chunk.done) &#123;
+                transmittedSize -= chunk.value!.byteLength; // 减去当前块的字节长度来更新已传输的大小，支持断点续传（TODO：由于不准确，待完善）
+                if (transmittedSize &lt;= 0) &#123;
+                    const newmessage: ISendMessage = &#123;
+                        sender_id: user.id,
+                        receiver_id: curChatInfo.receiver_id,
+                        type: &#39;file&#39;,
+                        content: Array.from(new Uint8Array(chunk.value as ArrayBufferLike)),
+                        avatar: user.avatar,
+                        filename: file.name,
+                        fileTraStatus: &#39;upload&#39;
+                    &#125;;
+                    sendMessage(newmessage);
+                &#125;	
+            &#125;
+        &#125;
+    &#125;, 50);
+</code></pre>
+<p>首先发送start,之后分块传输，根据chunk.done（是否传输完毕）和transmittedSize(小于0，之前的已经传完了，需要继续发upload)</p>
+<h2 id="总体架构-一些细节"><a href="#总体架构-一些细节" class="headerlink" title="总体架构 + 一些细节"></a>总体架构 + 一些细节</h2><p>前端：</p>
+<img src="/2024/08/18/better-chat/image1.png" class="">
 
     </div>
     
