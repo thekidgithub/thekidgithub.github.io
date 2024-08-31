@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ffa2c4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #ff7d73">
+                <a href="/tags/js/" style="color: #03a9f4">
                     js
                 </a>
             </span>
@@ -454,6 +454,58 @@ const callback = (entries, observer) =&gt; &#123; ....&#125;
 const observer = new IntersectionObserver(callback, options);
 
 observer.observe(target);
+</code></pre>
+<h2 id="手写promise方法"><a href="#手写promise方法" class="headerlink" title="手写promise方法"></a>手写promise方法</h2><p>all方法接收一个pro数组，返回一个结果数组，只要有一个reject就reject</p>
+<pre><code class="js">static all(promises) &#123;
+  return new MyPromise((resolve, reject) =&gt; &#123;
+    let resolvedCount = 0;
+    const values = new Array(promises.length);
+    for (let i = 0; i &lt; promises.length; i++) &#123;
+      if (!MyPromise.isPromise(promises[i])) &#123;
+        reject(new TypeError(&quot;Expected a Promise&quot;));
+        break;
+      &#125;
+
+      // 处理每个Promise
+      promises[i].then(
+        (value) =&gt; &#123;
+          resolvedCount++;
+          values[i] = value;
+
+          // 当所有Promise都成功时，resolve结果数组
+          if (resolvedCount === promises.length) &#123;
+            resolve(values);
+          &#125;
+        &#125;,
+        (reason) =&gt; &#123;
+          // 只要有一个Promise失败，就reject整个Promise.all的结果
+          reject(reason);
+        &#125;
+      );
+    &#125;
+  &#125;);
+&#125;
+
+static race(promises) &#123;
+  return new MyPromise((resolve, reject) =&gt; &#123;
+    for (let i = 0; i &lt; promises.length; i++) &#123;
+      if (!MyPromise.isPromise(promises[i])) &#123;
+        reject(new TypeError(&quot;Expected a Promise&quot;));
+        break;
+      &#125;
+
+      // 当任何一个Promise resolve或reject时，立即结束新Promise的状态
+      promises[i].then(
+        (value) =&gt; &#123;
+          resolve(value);
+        &#125;,
+        (reason) =&gt; &#123;
+          reject(reason);
+        &#125;
+      );
+    &#125;
+  &#125;);
+&#125;
 </code></pre>
 
     </div>

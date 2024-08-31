@@ -176,7 +176,30 @@
 
 <h2 id="事件模型"><a href="#事件模型" class="headerlink" title="事件模型"></a>事件模型</h2><p>react自身实现了一套事件机制，称为合成事件(一个合成事件可能由多个原生事件合成，比如blur , change , input , keydown , keyup等 , 合成为onChange)<br>所有的事件都应用事件委托，绑定在上层的react的root element上（而不是DOM自身，减少内存开销）（react16以前是绑定到document上）<br>真实的dom上的事件被单独处理,已经被react底层替换成空函数<br>执行顺序：先执行原生事件，然后冒泡到上层执行react事件<br>流程：事件合成（事件插件） -&gt; 事件绑定 -&gt; 事件触发</p>
 <h2 id="fiber架构"><a href="#fiber架构" class="headerlink" title="fiber架构"></a>fiber架构</h2><p>js线程和GUI渲染线程是互斥的，过去的渲染过程不可中断，造成性能问题<br>fiber: 一种react定义的数据结构，是fiber树结构的基本单位，是一个js对象，包含元素信息<br>特性：可以中断和恢复，分解渲染任务，增量渲染，如果有优先级更高的任务就先挂起<br>实现：链表，记录父子 nextSibling</p>
-<h2 id="组件相关"><a href="#组件相关" class="headerlink" title="组件相关"></a>组件相关</h2><p>类组件 -&gt; 函数组件<br>过去函数组件是无状态的，但是通过引入hook，函数组件也可以有状态<br>受控组件和非受控组件<br>高阶组件</p>
+<h2 id="组件相关"><a href="#组件相关" class="headerlink" title="组件相关"></a>组件相关</h2><p>类组件 -&gt; 函数组件<br>过去函数组件是无状态的，但是通过引入hook，函数组件也可以有状态</p>
+<p>受控组件和非受控组件：<br>受控组件就是一般的react组件<br>非受控组件比如原生的input之类的，自身可以变更数据而react不知道<br>非受控改为受控：绑定value,onchange</p>
+<p>高阶组件</p>
+<pre><code class="js">const PrivateRoute = (props: IPrivateRouteProps) =&gt; &#123;
+    const &#123; element &#125; = props;
+    const authToken = tokenStorage.getItem(); //判断token，有继续，没有跳转登录
+    if (authToken) &#123;
+        return &lt;&gt;&#123;element&#125;&lt;/&gt;;
+    &#125;
+    return (
+        &lt;&gt;
+            &lt;Navigate to=&quot;/login&quot; /&gt;;
+        &lt;/&gt;
+    );
+&#125;;
+// 高阶组件HOC，用于给需要登录才能访问的页面添加路由守卫
+export const withPrivateRoute = (Component: React.ElementType) =&gt; &#123;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const WrappedComponent = (props: any) =&gt; &#123;
+        return &lt;PrivateRoute element=&#123;&lt;Component &#123;...props&#125; /&gt;&#125; /&gt;;
+    &#125;;
+    return WrappedComponent;
+&#125;;
+</code></pre>
 <p>props和state<br>props由外部传来（单向数据流） state在组件内部管理<br>props不可变，state可变</p>
 <p>组件通信</p>
 <ul>
@@ -186,10 +209,36 @@
 <li>context</li>
 <li>状态管理库</li>
 </ul>
+<p>关于useState:<br>更新方式：直接复制和回调函数<br>直接赋值不能重复操作，回调函数可以<br>附：定时器<br>错误</p>
+<pre><code class="js">useEffect(() =&gt; &#123;
+  const timer = setInterval(() =&gt; &#123;
+    setCount(count + 1);
+  &#125;, 1000);
+  return () =&gt; clearInterval(timer);
+&#125;, []);
+</code></pre>
+<p>正确</p>
+<pre><code class="js">useEffect(() =&gt; &#123;
+  const timer = setTimeout(() =&gt; &#123;
+    setCount(count + 1);
+  &#125;, 1000);
+  return () =&gt; clearInterval(timer);
+&#125;, [count]);//添加依赖项
+
+useEffect(() =&gt; &#123;
+  const timer = setInterval(() =&gt; &#123;
+    setCount(count =&gt; count + 1);
+  &#125;, 1000);
+  return () =&gt; clearInterval(timer);
+&#125;, []);//使用回调函数
+</code></pre>
+<p>useState具有批量更新机制</p>
 <h2 id="JSX"><a href="#JSX" class="headerlink" title="JSX"></a>JSX</h2><p>jsx -&gt; 通过babel转换为react.createElement<br>babel会判断组件的首字母，小写为原生标签，大写为组件<br>为什么不能返回多个根：组件最后会被转换为render函数，函数的返回值只能有一个</p>
 <h2 id="diff-key"><a href="#diff-key" class="headerlink" title="diff key"></a>diff key</h2><p>diff过程（子节点数组）<br>先建立索引表，然后遍历新节点<br>oldIndex：当前节点在老集合中的下标<br>maxIndex：在新集合访问过的节点中，其在老集合的最大下标（maxIndex &#x3D; max(oldIndex)）<br>当oldIndex&gt;maxIndex时，将oldIndex的值赋值给maxIndex<br>当oldIndex&#x3D;maxIndex时，不操作<br>当oldIndex &lt; maxIndex时，将当前节点移动到index的位置</p>
 <p>key:diff算法用，确定唯一标识<br>（不能用index，可能造成错误复用，不能用random,每次渲染都会变）</p>
 <h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><p>渲染时：shouldComponentUpdate、PureComponent、React.memo</p>
+<p>useCallback和useMemo:<br>cb是缓存函数体的，函数只有在props更新才更新<br>用法：函数作为依赖项（useEffect）；函数作为React.memo的组件props<br>memo缓存函数执行的结果<br>（useMemo !&#x3D;&#x3D; React.memo，后者用来包装一个组件，只有props更新才重新渲染）</p>
+<p>懒加载：lazy函数 or Suspense组件</p>
 
     </div>
     

@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: 项目 | The kid 的小窝</title>
+    <title>ts | The kid 的小窝</title>
     <meta name="author" content="the kid" />
     <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
     <meta name="keywords" content="" />
@@ -37,6 +37,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -150,120 +154,153 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/tags/%E5%85%AB%E8%82%A1/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                八股
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/HTML/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                HTML
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/CSS/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                CSS
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                项目
-            </a>
-        </span>
-        
-        
-        
-        
-        
-        <span>
-            <a href="/tags/js/" style="background: #03a9f4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                js
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/vue/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                vue
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E8%AE%A1%E7%BD%91/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                计网
-            </a>
+            <div class="article">
+    <div>
+        <h1>ts</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/22
         </span>
         
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2024/7/29</div>
-            <a href="/2024/07/29/HR-SSO%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93-%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
-                <h3>HR/SSO开发总结/踩坑记录</h3>
-            </a>
-            <div class="info">
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #00bcd4">
-                            项目
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><span id="more"></span>
+<p>函数<br>函数重载：</p>
+<pre><code class="ts">type Types = number | string
+function add(a:number,b:number):number;
+function add(a: string, b: string): string;
+function add(a: string, b: number): string;
+function add(a: number, b: string): string;
+function add(a:Types, b:Types) &#123;
+  if (typeof a === &#39;string&#39; || typeof b === &#39;string&#39;) &#123;
+    return a.toString() + b.toString();
+  &#125;
+  return a + b;
+&#125;
+</code></pre>
+<p>tuple(元组)</p>
+<pre><code class="ts">let x: [string, number]; 
+// 类型必须匹配且个数必须为2
+x = [&#39;hello&#39;, 10]; // OK 
+</code></pre>
+<p>可以用可选元素，剩余元素，readonly</p>
+<p>void 函数返回空<br>never（异常 or 死循环）</p>
+<pre><code class="ts">type Foo = string | number;
+
+function controlFlowAnalysisWithNever(foo: Foo) &#123;
+  if (typeof foo === &quot;string&quot;) &#123;
+    // 这里 foo 被收窄为 string 类型
+  &#125; else if (typeof foo === &quot;number&quot;) &#123;
+    // 这里 foo 被收窄为 number 类型
+  &#125; else &#123;
+    // foo 在这里是 never
+    const check: never = foo;
+  &#125;
+&#125;
+</code></pre>
+<p>如果Foo类型有新增，可以检测出来报错<br>作用：避免出现新增了联合类型没有对应的实现，目的就是写出类型绝对安全的代码</p>
+<p>any unknown<br>任何类型的值可以赋值给any，同时any类型的值也可以赋值给任何类型。unknown 任何类型的值都可以赋值给它，但它只能赋值给unknown和any<br>必须缩小unknown的类型</p>
+<p>类型断言 : as &#x2F; &lt;&gt; &#x2F; !（非空断言）</p>
+<pre><code class="ts">// 尖括号 语法
+let someValue: any = &quot;this is a string&quot;;
+let strLength: number = (&lt;string&gt;someValue).length;
+
+// as 语法
+let someValue: any = &quot;this is a string&quot;;
+let strLength: number = (someValue as string).length;
+</code></pre>
+<p>类型字面量：使用常量表示类型<br>如<br>（联合类型 类型别名）</p>
+<pre><code class="ts">type Direction = &#39;up&#39; | &#39;down&#39;;
+</code></pre>
+<p>交叉类型（&amp;） 合并多个接口</p>
+<p>enum类型：定义一些带名字的常量</p>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>可选&#x2F;readonly属性<br>任意属性</p>
+<pre><code class="ts">interface Person &#123;
+    name: string;
+    age?: number;
+    [propName: string]: any;
+&#125;
+</code></pre>
+<p>接口的扩展：</p>
+<pre><code class="ts">interface PointX &#123;
+    x: number
+&#125;
+
+interface Point extends PointX &#123;
+    y: number
+&#125;
+or
+type PointX = &#123;
+    x: number
+&#125;//类型别名
+interface Point extends PointX &#123;
+    y: number
+&#125;
+</code></pre>
+<p>类型别名的扩展使用 &amp;</p>
+<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p>typeof 返回变量的类型（和原生js不一样），可以直接获取复杂对象的类型<br>keyof 获取所有键</p>
+<pre><code class="ts">interface Person &#123;
+  name: string;
+  age: number;
+&#125;
+
+type K1 = keyof Person; // &quot;name&quot; | &quot;age&quot;
+
+function prop&lt;T extends object, K extends keyof T&gt;(obj: T, key: K) &#123;
+  return obj[key];
+&#125;
+</code></pre>
+<p>in 遍历枚举类型</p>
+<pre><code class="ts">type Keys = &quot;a&quot; | &quot;b&quot; | &quot;c&quot;
+
+type Obj =  &#123;
+  [p in Keys]: any
+&#125; // -&gt; &#123; a: any, b: any, c: any &#125;
+</code></pre>
+<p>工具类型：<br>例子</p>
+<pre><code class="ts">type Partial&lt;T&gt; = &#123;
+  [P in keyof T]?: T[P];
+&#125;; //所有属性变成可选
+
+//递归版
+type DeepPartial&lt;T&gt; = &#123;
+     // 如果是 object，则递归类型
+    [U in keyof T]?: T[U] extends object
+      ? DeepPartial&lt;T[U]&gt;
+      : T[U]
+&#125;;
+
+type Required&lt;T&gt; = &#123; 
+    [P in keyof T]-?: T[P] 
+&#125;;//必选 -?
+
+type Readonly&lt;T&gt; = &#123;
+ readonly [P in keyof T]: T[P];
+&#125;;
+
+type Pick&lt;T, K extends keyof T&gt; = &#123;
+    [P in K]: T[P];
+&#125;;//从T中挑选一些属性
+
+type Exclude&lt;T, U&gt; = T extends U ? never : T; //排除属性
+
+type Omit&lt;T, K extends keyof any&gt; = Pick&lt;T, Exclude&lt;keyof T, K&gt;&gt;;
+//移除K内的属性
+</code></pre>
+
     </div>
+    
+    
+    
+    
+    
+    
     
 </div>
 
@@ -295,6 +332,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>
