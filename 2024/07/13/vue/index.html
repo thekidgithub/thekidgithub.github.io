@@ -182,7 +182,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/vue/" style="color: #ffa2c4">
+                <a href="/tags/vue/" style="color: #ff7d73">
                     vue
                 </a>
             </span>
@@ -383,7 +383,7 @@ this.$nextTick(function () &#123;
 <li>computed watch<br>computed:，计算属性，多对一，有缓存 watch:侦听器，一对多，“副作用”，支持异步</li>
 <li>keep-alive teleport<br>keep-alive: 结合路由和动态组件，缓存组件，include&#x2F;exclude，max， activated&#x2F;deactivated生命周期<br>teleport: （模态框组件）将组件部分模板“传送”到外层</li>
 <li>插槽<br>父组件中提供内容，替代子组件的slot<br>具名：v-slot&#x2F;#</li>
-<li>router(history&#x2F;hash) store<br>hash: #后面的，location.hash,监听：onHashChange<br>history: 使用堆栈管理历史记录，需服务端允许地址可访问，否则404</li>
+<li>router(history&#x2F;hash) store<br>hash: #后面的，location.hash,监听：onHashChange<br>history: 利用historyAPI,历史记录堆栈（pushState&#x2F;popState&#x2F;replaceState）<br>history模式服务器配置时，需要将所有请求重定向到入口文件（index.html）因为路由都在前端处理，直接向服务端访问特定路由会404</li>
 <li>单向数据流<br>数据由父传子，子组件不能随意修改数据</li>
 <li>v-model双向绑定</li>
 </ul>
@@ -397,6 +397,8 @@ this.$nextTick(function () &#123;
 <li><p>为什么data是函数不是对象：防止多个实例对象共用data，造成数据污染</p>
 </li>
 <li><p>组合式函数（旧mixin）&#x2F; 自定义指令 &#x2F; 插件 实现逻辑复用</p>
+</li>
+<li><p>new Vue过程：<br>配置初始化（数据，计算属性，钩子等） -&gt; 数据响应初始化 -&gt; 模板编译（编译成渲染函数） -&gt; 创建虚拟DOM -&gt; 挂载到真实DOM</p>
 </li>
 </ul>
 

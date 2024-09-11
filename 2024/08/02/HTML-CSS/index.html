@@ -175,21 +175,21 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/HTML/" style="color: #ffa2c4">
+                <a href="/tags/HTML/" style="color: #00bcd4">
                     HTML
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/CSS/" style="color: #03a9f4">
+                <a href="/tags/CSS/" style="color: #00a596">
                     CSS
                 </a>
             </span>
@@ -214,15 +214,12 @@
 <h4 id="BFC-布局"><a href="#BFC-布局" class="headerlink" title="BFC 布局"></a>BFC 布局</h4><p>BFC：块级格式上下文（说人话就是一个div会在内部创建一个“环境”）<br>创建：绝对定位（absolute&#x2F;fixed）行内块 overflow不为visible 浮动<br>特性：<br>垂直排列<br>外边距折叠（解决：创建新的BFC）<br>内部margin的左侧与外部border左侧接触<br>浮动区域不与BFC重叠</p>
 <p>应用：<br>防止margin塌陷：在元素外层包一层容器，触发BFC<br>多栏布局:<br>两栏布局（左边固定，右边自适应）</p>
 <ol>
-<li>浮动：左边宽固定float:left 右边的margin-left为左宽度（或右边overflow:hidden，触发BFC）</li>
 <li>左定宽，右flex:1</li>
-<li>左absolute定宽 右margin-left为左宽&#x2F; 左定宽 右absolute,left为左宽</li>
 </ol>
 <p>三栏布局（左右固定，中间自适应）</p>
 <ol>
-<li>两边float，中间margin</li>
-<li>两边absolute，中间margin</li>
-<li>两边float + 负margin</li>
+<li>使用flex, 两边定宽，中间flex：1(支持滚动：overflow: auto)</li>
+<li>两边定宽，中间calc(100% - xx px)</li>
 </ol>
 <p>水平垂直居中：</p>
 <ol>
@@ -231,7 +228,7 @@
 <li>绝对定位，上下左右0，margin:auto</li>
 <li>flex 中间width100%</li>
 </ol>
-<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><p>主轴（main axis） 交叉轴（cross axis）<br>容器属性：<br>flex-direction<br>flex-wrap(换行)<br>flex-flow(上面两个)<br>justify-content(主轴)<br>align-items(交叉轴)<br>align-content(多轴线)<br>内容属性：<br>order(越小越前，默认0)<br>flex-grow(放大比例，默认0)<br>flex-shrink(缩小比例，默认1)<br>flex-basis(占据的具体空间，默认auto)<br>flex: 上面三个简写（auto: 1 1 auto none: 0 0 auto）<br>align-self: 单独的对齐方式</p>
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><p>主轴（main axis） 交叉轴（cross axis）<br>容器属性：<br>flex-direction<br>flex-wrap(换行)<br>flex-flow(上面两个)<br>justify-content(主轴)<br>align-items(交叉轴)<br>align-content(多轴线)<br>内容属性：<br>order(越小越前，默认0)<br>flex-grow(放大比例，默认0)<br>flex-shrink(缩小比例，默认1)<br>flex-basis(占据的具体空间，默认auto)<br>flex: 上面三个简写（auto: 1 1 auto none: 0 0 auto）<br>(flex:1 &#x3D; 1 1 0%)<br>align-self: 单独的对齐方式</p>
 <h4 id="CSS性能优化"><a href="#CSS性能优化" class="headerlink" title="CSS性能优化"></a>CSS性能优化</h4><ul>
 <li>内联首屏关键CSS</li>
 <li>异步加载CSS（使用js插入1link标签）</li>
@@ -241,6 +238,7 @@
 <li>不使用@import</li>
 </ul>
 <h4 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h4><p>单位：px绝对 em相对父 rem相对根 vw vh</p>
+<p>position: static relative absolute fixed sticky<br>relative基于自身相对定位，absolute基于父元素（前提：父元素absolute，否则基于根元素）</p>
 <p>文本溢出：<br>单行：<br>overflow: hidden<br>text-overflow: ellipsis(省略号)<br>white-space: nowrap(不换行)<br>多行：</p>
 <ol>
 <li>伪元素 + 定位<br>overflow为hidden,用省略号定位到末尾</li>
@@ -264,6 +262,8 @@
 <p>画三角形：<br>宽高0，利用边框，不要的边框透明<br>空心三角形：伪类，里面放一个白色</p>
 <p>12px问题：scale()</p>
 <p>预编语言：<br>sass less<br>核心概念<br>嵌套 变量 作用域 mixin 模块化</p>
+<p>使用rem进行自适应布局：<br>自适应：对不同大小的屏幕进行细微的改变，如大小（响应式：总体布局改变）<br>在根节点(html)设置font-size，元素使用rem,根节点上用js绑定监听事件改变font-size的大小</p>
+<p>z-index: 只有设置了relative&#x2F;absolute&#x2F;fixed&#x2F;sticky才生效，且在同一个层叠上下文才有对比的价值</p>
 
     </div>
     

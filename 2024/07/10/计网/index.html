@@ -182,7 +182,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #ff7d73">
+                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #03a9f4">
                     计网
                 </a>
             </span>
@@ -194,21 +194,34 @@
     <div class="content" v-pre>
         <h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><span id="more"></span>
 <p>TCP&#x2F;IP模型：<br>应用层（仅负责应用，不负责传输 HTTP DNS）<br>传输层（TCP UDP 传输 分块）<br>网络层（IP）<br>网络接口层（五层模型又分为数据链路层和物理层）</p>
-<p>TCP和UDP<br>TCP更可靠，传输较慢，面向字节流，有流量控制和拥塞控制<br>UDP面向报文，传输快，无xx控制</p>
-<p>OSI七层模型：<br>应用层 表示层 会话层 传输层 网络层 数据链路层 物理层</p>
-<h2 id="经典之输入URL后发生什么"><a href="#经典之输入URL后发生什么" class="headerlink" title="经典之输入URL后发生什么"></a>经典之输入URL后发生什么</h2><p>一 网络请求部分</p>
+<p>TCP和UDP<br>TCP更可靠,流式传输,需要建立连接,首部开销大,有流量控制&#x2F;拥塞控制,一对一<br>UDP不可靠,按包传输,无需建立连接,首部开销小,无xx控制,可多对多<br>场景: TCP HTTPS or 文件<br>UDP 音视频&#x2F;小包(DNS)</p>
+<p>OSI七层模型：<br>应用层 表示层 会话层 传输层 网络层 数据链路层 物理层<br>表示层：数据压缩&#x2F;加密<br>网络层：选择合适的网间路由和交换节点</p>
+<h2 id="经典之输入URL后发生什么"><a href="#经典之输入URL后发生什么" class="headerlink" title="经典之输入URL后发生什么"></a>经典之输入URL后发生什么</h2><p>URL格式：协议&#x2F;&#x2F;web服务器+文件路径:端口号<br>一 网络请求部分</p>
 <ol>
 <li>DNS解析<br>首先看有无缓存，若没有，通过本地DNS服务器递归查询(根-&gt;顶级域-&gt;权威)</li>
 <li>TCP建立连接：三次握手<br>client发SYN,close -&gt; SYN_SENT<br>server收到后发SYN + ACK, LISTEN -&gt; SYN_RCVD<br>client收到后发ACK, SYN_SENT -&gt; ESTABLISHED<br>server收到后， SYN_RCVD -&gt; ESTAVLISHED<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image1.png" class="">
-三次握手目的是<strong>保证双方都有发送和接收的能力</strong></li>
+三次握手目的是<strong>保证双方都有发送和接收的能力</strong><br>更详细的目的:防止历史连接初始化&#x2F;保证双方序列号同步&#x2F;防止资源浪费</li>
 </ol>
-<p>四次挥手断开：<br>client发FIN server发ACK<br>server发FIN client发ACK<br>3. 发送请求&#x2F;接收响应<br>报文结构：</p>
+<p>四次挥手断开：<br>client发FIN server发ACK<br>server发FIN client发ACK<br>为什么四次:服务端通常需要等待完成数据的发送和处理，所以服务端的 ACK 和 FIN 一般都会分开发送<br>3. 发送请求&#x2F;接收响应<br>报文结构：</p>
 <img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image.png" class="">
 
-<p>二 前端渲染部分 (非计网部分)<br>见HTML&#x2F;CSS</p>
+<p>详细版：加上TCP头 -&gt; IP头 -&gt; MAC头 -&gt; 网卡 交换机 路由器 -&gt; 传送完成后解包<br>二 前端渲染部分 (非计网部分)<br>见HTML&#x2F;CSS</p>
 <h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><p>1xx: 中间状态，较少见<br>2xx: 成功处理（200 OK 204 No Content 206 Partial Content）<br>3xx: 重定向 (301 Moved Permanently 永久重定向 302 Found 临时重定向 304 Not Modified 缓存)<br>4xx: 客户端错误 (400 Bad Request 403 Forbidden 404 Not Found)<br>5xx: 服务器错误 （500 Internal Server Error 501 502 503）</p>
-<p>301用于新域名替换旧域名 302常用于未登录的重定向</p>
-<h2 id="字段-请求方法"><a href="#字段-请求方法" class="headerlink" title="字段 请求方法"></a>字段 请求方法</h2><p>GET POST （GET 安全且幂等，可以缓存）<br>字段： Host Content-length Connection(keep-alive保持长连接) Content-Type Content-Encoding</p>
+<p>301用于新域名替换旧域名 302常用于未登录的重定向<br>502错误网关 504网关超时</p>
+<h2 id="字段-请求方法"><a href="#字段-请求方法" class="headerlink" title="字段 请求方法"></a>字段 请求方法</h2><p>GET POST （GET 安全且幂等，可以缓存）PUT DELETE HEAD（获取首部）<br>OPTIONS(询问支持的方法) CONNECT(使用隧道协议) TRACE(追踪路径)<br>字段：通用 </p>
+<ul>
+<li>cache-control (控制缓存，max-age&#x2F;no-cache)</li>
+<li>connection(keep-alive)</li>
+<li>date<br>请求</li>
+<li>if-modified-since</li>
+<li>if-none-match</li>
+<li>au什么lization(携带验证信息)</li>
+<li>accept(encoding&#x2F;language)<br>响应</li>
+<li>etag</li>
+<li>location(配合重定向)</li>
+<li>age</li>
+</ul>
+<p>关于Restful API:是一种API设计规范，包括：使用HTTP方法&#x2F;api版本控制（如URL内v1&#x2F;v2）&#x2F;URL明确资源&#x2F;数据返回格式统一&#x2F;规范状态码</p>
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>强缓存和协商缓存</p>
 <img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image3.png" class="">
 
@@ -218,12 +231,19 @@
 <li>时间检测的粒度是秒级</li>
 <li>一些服务器不能正确获取最后修改时间</li>
 </ul>
-<h2 id="HTTP版本"><a href="#HTTP版本" class="headerlink" title="HTTP版本"></a>HTTP版本</h2><p>1.1 优点：简单、易扩展、应用广泛 长连接与管道化<br>缺点：无状态（解决：cookie） 队头堵塞（管道化，但是只能解决请求的堵塞，无法解决响应堵塞） 明文传输<br>2.0 头部压缩 二进制格式 并发传输 服务器推送 问题：TCP队头堵塞<br>3.0 无队头阻塞 更快的连接建立 连接迁移<br>HTTPS 在HTTP层和TCP层间加入SSL&#x2F;TLS层，TCP三次握手后还要SSL&#x2F;TLS握手</p>
+<h2 id="HTTP版本"><a href="#HTTP版本" class="headerlink" title="HTTP版本"></a>HTTP版本</h2><p>1.1 优点：简单、易扩展、应用广泛 长连接与管道化<br>缺点：无状态（解决：cookie） 队头堵塞（管道化，但是只能解决请求的堵塞，无法解决响应堵塞） 明文传输<br>2.0 头部压缩 二进制格式 并发传输 服务器推送 问题：TCP队头堵塞<br>3.0 无队头阻塞 更快的连接建立 连接迁移<br>HTTPS 在HTTP层和TCP层间加入SSL&#x2F;TLS层，TCP三次握手后还要SSL&#x2F;TLS握手<br>http&#x2F;3为了解决TCP队头堵塞的问题，改为基于QUIC协议（基于UDP），由于UDP传输不可靠，因此可靠性转移到应用层去完成<br>一个TCP连接对应一个HTTP连接吗？ 1.0是 1.1由于长连接，一个TCP可对多个，2.0可多个并发</p>
 <p>HTTPS:</p>
 <ol>
-<li>加密<br>对称加密：加密和解密的密钥相同<br>非对称： 公钥私钥<br>混合加密： 对称 + 非对称</li>
+<li>加密<br>对称加密：加密和解密的密钥相同（通信建立后）<br>非对称： 公钥私钥（通信建立前）<br>混合加密： 对称 + 非对称<br>由于只有客户端&#x2F;服务端有公钥&#x2F;私钥，中间的代理服务器是解不开报文的</li>
 <li>完整性<br>摘要算法（一种特殊的压缩算法，“数据指纹”）</li>
 <li>身份验证<br>数字签名，数字证书</li>
+</ol>
+<p>SSL&#x2F;TLS握手过程：</p>
+<ol>
+<li>客户端cilenthello, 发送支持TLS版本，加密算法和随机数1（cilent random）</li>
+<li>服务端serverhello,发送确认TLS版本，加密算法和随机数2（server random）和数字证书</li>
+<li>客户端通过公钥确认数字证书，若正常，从数字证书中取出公钥加密报文，发送：随机数3（pre-master key）和加密算法改变通知&#x2F;握手结束通知</li>
+<li>服务端根据三个随机数计算出会话密钥,发送通信算法改变通知和握手结束通知</li>
 </ol>
 <h2 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h2><p>关于同源策略：必须协议、端口、域名均相同（域名和其对应IP不行，子域不同不行）<br>跨域时，请求仍能正常发出，但是受浏览器同源策略限制而被拦截</p>
 <p>解决</p>
@@ -234,6 +254,7 @@
 <li>Node中间件代理或nginx代理（服务器向服务器请求无需遵循同源策略）</li>
 <li>CORS（主流） 在服务端设Access-Control-Allow-Origin</li>
 </ol>
+<p>关于CORS:<br>分为简单请求&#x2F;复杂请求<br>简单请求的标准：方法get&#x2F;post&#x2F;head header只能是accept(-language)&#x2F;content-language&#x2F;content-type content-type只能是text-plain&#x2F;form-data&#x2F;application-x-www-form-urlencoded<br>对于复杂请求，会先发出预检请求，判断是否符合CORS，符合再发送请求<br>作用：减少复杂请求使服务器进行无效运算，降低负载</p>
 <h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><h4 id="XSS攻击"><a href="#XSS攻击" class="headerlink" title="XSS攻击"></a>XSS攻击</h4><blockquote>
 <p>Cross-Site Scripting（跨站脚本攻击）简称 XSS，是一种代码注入攻击。攻击者通过在目标网站上注入恶意脚本，使之在用户的浏览器上运行。利用这些恶意脚本，攻击者可获取用户的敏感信息如 Cookie、SessionID 等，进而危害数据安全。</p>
 </blockquote>
@@ -265,6 +286,10 @@
 <li>缓存代理<br>选择性缓存常用资源</li>
 </ol>
 <h2 id="webSocket"><a href="#webSocket" class="headerlink" title="webSocket"></a>webSocket</h2><p>应用于实时通信<br>特点：头部小 实时性强（快） 保持连接 二进制帧 压缩率高 全双工 单次握手</p>
+<h2 id="鉴权"><a href="#鉴权" class="headerlink" title="鉴权"></a>鉴权</h2><p>cookie:<br>解决HTTP无状态，数据量小，存储在客户端，不可跨域<br>一些字段：name&#x3D;value, domain&#x2F;path:规定域&#x2F;路径 maxAge&#x2F;expires:设置过期时间 secure:是否仅用安全协议传输 httpOnly:是否可以用js脚本获取（防范xss攻击）<br>缺点：可能被XSS CSRF 无法跨域 移动端支持不好</p>
+<p>session:<br>存储在服务端，登录时服务端返回sessionID，客户端存入cookie<br>之后服务端根据cookie的sessionID，找到对应的session<br>缺点：服务端开销<br>多个服务器：存数据库&#x2F;redis存在内存</p>
+<p>token:<br>session会增加服务端开销，是有状态的<br>引入token使服务端无状态，客户端每次请求带上（放cookie或者请求头里）</p>
+<p>JWT：<br>三部分，与普通token的区别：token服务端拿到并查找数据库，JWT通过加密解密</p>
 
     </div>
     

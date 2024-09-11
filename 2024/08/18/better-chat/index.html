@@ -310,8 +310,9 @@ LoginRooms[receiver_username].ws.send(JSON.stringify(msg));
 <ol>
 <li>客户端发起http请求，经过3次握手后，建立起TCP连接；http请求里存放WebSocket支持的版本号等信息，如：Upgrade、Connection、WebSocket-Version等；</li>
 <li>服务器收到客户端的握手请求后，同样采用HTTP协议回馈数据；</li>
-<li>客户端收到连接成功的消息后，开始借助于TCP传输信道进行全双工通信。<br>断线重连，心跳包<br>&#x2F;&#x2F;todo</li>
+<li>客户端收到连接成功的消息后，开始借助于TCP传输信道进行全双工通信。<br>断线重连，心跳包<br>基本思路:设置定时器,每隔一段时间向服务端发送一个简单的包(如’ping’)<br>服务端收到ping后,返回一个’pong’<br>若长时间未收到,则手写进行自动重连,设置最大自动重连次数,超过则手动重连</li>
 </ol>
+<p>鉴权:使用token等</p>
 <p>应用：<br>聊天页面initSocket:<br>收到’create-room’，打开音视频组件<br>message的发送和接收也通过ws完成</p>
 <h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>后端：<br>ws.on(‘message’) ，判断文件类型为file<br>判断上传状态：</p>
 <ol>

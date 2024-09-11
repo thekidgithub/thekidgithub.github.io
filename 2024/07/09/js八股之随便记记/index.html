@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ffa2c4">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #ffa2c4">
+                <a href="/tags/js/" style="color: #ff7d73">
                     js
                 </a>
             </span>
@@ -203,8 +203,7 @@
 <li>Object.prototype.toString.call</li>
 </ul>
 <p>0.1 + 0.2 ：二进制无限循环 -&gt; 截断 -&gt; 精度损失<br>解决：先转整数</p>
-<p>栈内存和堆内存：引用类型地址位于栈内存，值位于堆内存</p>
-<p>关于symbol: 具有唯一性，常用于对象的键中</p>
+<p>栈内存和堆内存：引用类型地址位于栈内存，值位于堆内存<br>两种区别：栈内存空间固定，操作简单，执行环境结束自动回收<br>堆内存空间不固定，操作较复杂（需要分配空间地址），需通过gc机制垃圾回收<br>关于symbol: 具有唯一性，常用于对象的键中</p>
 <blockquote>
 <p>symbol 允许我们创建对象的“隐藏”属性，代码的任何其他部分都不能意外访问或重写这些属性。</p>
 </blockquote>
@@ -268,7 +267,8 @@ fn2Child = null//解决方法
 </ul>
 <p>垃圾回收（GC）(判断对象的可达性)<br>旧：引用计数（缺点：循环引用）<br>标记清除（缺点：内存碎片 解决：标记整理）<br>V8的优化：新老生代，并行回收，增量标记，懒性清理</p>
 <p>执行上下文：<br>全局&#x2F;函数的执行环境<br>创建时，确定this -&gt; 创建词法环境（let const）和变量环境(var)<br>执行栈：存储全局&#x2F;函数执行上下文</p>
-<h2 id="对象、原型"><a href="#对象、原型" class="headerlink" title="对象、原型"></a>对象、原型</h2><p>拷贝（深，浅）(赋值：复制地址)<br>浅：Object.assign lodash:_.clone 展开（…） slice() concat()<br>深：lodash: _.deepClone 手写 JSON(不能处理函数和正则)</p>
+<h2 id="对象、原型"><a href="#对象、原型" class="headerlink" title="对象、原型"></a>对象、原型</h2><p>原型链，要点：<br>对象原型prototype, 带有constructor属性，不存在的属性&#x2F;方法向上查找，继承，ES6class语法<br>为什么把方法放在pro上：节省内存&#x2F;继承</p>
+<p>拷贝（深，浅）(赋值：复制地址)<br>浅：Object.assign lodash:_.clone 展开（…） slice() concat()<br>深：lodash: _.deepClone 手写 JSON(不能处理函数和正则)</p>
 <p>对象的原始值转换（toString, valueOf）：<br>字符串 toString -&gt; valueOf 数值或其他： valueOf -&gt; toString<br>(toString默认 [object Object], valueOf默认 对象本身0)</p>
 <p><strong>proto</strong> 与 prototype: 前者用于具体对象，后者为构造器属性<br>constructor: 在prototype上，若重写pro会丢失<br>Object.create(pro) 以pro为原型创建对象<br>（Object.create(null) 创建无原型的对象，用于“字典”）</p>
 <p>继承：<br>class的继承现在采用寄生组合式继承：</p>
@@ -323,7 +323,7 @@ Child6.prototype.getFriends = function () &#123;
 <li>显式绑定 call apply bind</li>
 <li>new</li>
 </ul>
-<h2 id="异步-事件循环"><a href="#异步-事件循环" class="headerlink" title="异步 事件循环"></a>异步 事件循环</h2><p>浏览器事件循环<br>要点： js单线程，同步任务和异步任务，宏任务和微任务，任务队列<br>宏 -&gt; 微 -&gt; 渲染 -&gt; 宏 。。。</p>
+<h2 id="异步-事件循环"><a href="#异步-事件循环" class="headerlink" title="异步 事件循环"></a>异步 事件循环</h2><p>浏览器事件循环<br>要点： js单线程，同步任务和异步任务，宏任务和微任务，任务队列<br>宏 -&gt; 微 -&gt; 渲染 -&gt; 宏 。。。<br>为什么要有微任务队列：js单线程，避免长时间阻塞主线程，同时使异步操作能够尽快执行</p>
 <pre><code class="js">Promise.resolve().then(()=&gt;&#123;
   console.log(&#39;Promise1&#39;)  
   setTimeout(()=&gt;&#123;
@@ -396,13 +396,19 @@ console.log(&#39;script end&#39;);
 //ss as1s as2 p1 se as1e p2 sto
 //对于async await ，把await后面的当作then 前面的是同步
 </code></pre>
+<p>fetch和ajax的区别：</p>
+<img src="/2024/07/09/js%E5%85%AB%E8%82%A1%E4%B9%8B%E9%9A%8F%E4%BE%BF%E8%AE%B0%E8%AE%B0/image1.png" class="">
+<p>ajax是一种概念模型，而不是一个技术，即局部刷新页面增量更新，传统的ajax是使用XHR（XMLHttpRequests）实现的<br>fetch是对 HTTP 接口的抽象，提供了一个获取资源的接口，基于promise</p>
 <h2 id="事件-DOM"><a href="#事件-DOM" class="headerlink" title="事件 DOM"></a>事件 DOM</h2><p>事件冒泡 捕获 委托<br>target 和 currentTarget<br>事件模型：<br>DOM0级（onclick,onxx）：绑定速度快，只支持冒泡，同一类型只能绑定一次<br>DOM2级：addEventListener(事件类型，处理函数，useCapture):同一DOM可以绑定多个，可以设置为捕获</p>
 <p>DOM:<br>createElement&#x2F;createFragment<br>quertSelector(All)<br>innerHTML&#x2F;innerText&#x2F;textCotent (可修改HTML结构&#x2F;修改字符串&#x2F;修改字符串)<br>appendChild&#x2F;insertBefore</p>
 <p>BOM：<br>window对象（窗口大小控制,location,history）</p>
 <h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><p>数组方法：splice(起始位置，删除数目，增加的元素) 返回被删元素的数组<br>slice concat 浅拷贝<br>字符串方法：<br>拼接 + concat<br>切分: slice substr substring<br>模板匹配（正则）：match search replace</p>
+<p>实现轮播图：<br>放置一个视口，图片使用相对定位，用js控制currentIndex<br>循环：在首尾各拼接图片，切换时迅速切换&#x2F;循环索引<br>定时器，防抖节流<br>多图：懒加载&#x2F;分页加载</p>
+<p>虚拟列表：<br>定高：监听滚动事件，根据scrollTop计算出开始索引和结束索引，只渲染其中的部分<br>不定高：先以定值预处理，得到高度后再动态调整+缓存<br>首尾加上缓冲区， 计算索引可用二分法</p>
+<p>懒加载：延迟加载，只在图片滚动到视口才开始加载<br>做法：Intersection Observer&#x2F;React中lazy or suspense&#x2F;路由懒加载<br>预加载：将需要的资源提前加载，用到的时候读取缓存<br>做法：link标签&#x2F;img src&#x2F;webpack</p>
 <h2 id="本地存储"><a href="#本地存储" class="headerlink" title="本地存储"></a>本地存储</h2><ol>
 <li>cookie<br>&lt;4KB 解决HTTP无状态 需要HTTPS加密<br>组成：name value Max-Age Expires(优先级小) Domain Path Secure<br>删除：设置过期时间</li>
-<li>localStorage<br>5M 持久化 信息在同一域共享</li>
+<li>localStorage<br>5M 持久化 信息在同一域共享 -&gt; 作用：多个tab栏共享数据</li>
 <li>sessionStorage<br>页面关闭删除</li>
 <li>indexedDB<br>用于存储大量的结构化数据</li>
 </ol>
@@ -425,6 +431,16 @@ const calc = memoize(add);
 const num1 = calc(100,200)
 const num2 = calc(100,200) // 缓存得到的结果
 </code></pre>
+<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><p>单例模式：<br>可以全局访问并且只实例化一次的类</p>
+<pre><code class="js"> constructor() &#123;
+    if (instance) &#123;
+      throw new Error(&quot;You can only create one instance!&quot;);
+    &#125;
+    instance = this;
+  &#125;
+</code></pre>
+<p>应用：状态管理库</p>
+<p>工厂模式：即构造函数<br>观察者模式&#x2F;发布订阅模式：<br>观察者：一对多<br>发布订阅：发布者和订阅者需要通过发布订阅中心进行关联，发布者的发布动作和订阅者的订阅动作相互独立，无需关注对方，消息派发由发布订阅中心负责（订阅中心：event emitter）</p>
 
     </div>
     
