@@ -214,7 +214,7 @@ export const withPrivateRoute = (Component: React.ElementType) =&gt; &#123;
 <li>context</li>
 <li>状态管理库</li>
 </ul>
-<p>关于useState:<br>更新方式：直接复制和回调函数<br>直接赋值不能重复操作，回调函数可以<br>附：定时器<br>错误</p>
+<p>关于useState:<br>更新方式：直接复制和回调函数<br>直接赋值不能重复操作，回调函数可以<br>附：定时器<br>错误（原因: useEffect闭包）</p>
 <pre><code class="js">useEffect(() =&gt; &#123;
   const timer = setInterval(() =&gt; &#123;
     setCount(count + 1);

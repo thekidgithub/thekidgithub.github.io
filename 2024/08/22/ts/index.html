@@ -244,6 +244,10 @@ interface Point extends PointX &#123;
 &#125;
 </code></pre>
 <p>类型别名的扩展使用 &amp;</p>
+<p>和type的区别：<br>interface仅对象&#x2F;函数，type还可以声明基本类型&#x2F;联合类型等<br>继承方式不同（见上）<br>interface支持声明合并，type不支持</p>
+<pre><code class="ts">interface Person &#123; name: string &#125;
+interface Person &#123; age: number &#125;
+</code></pre>
 <h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><p>typeof 返回变量的类型（和原生js不一样），可以直接获取复杂对象的类型<br>keyof 获取所有键</p>
 <pre><code class="ts">interface Person &#123;
   name: string;

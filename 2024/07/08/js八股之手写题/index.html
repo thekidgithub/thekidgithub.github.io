@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #ff7d73">
+                <a href="/tags/js/" style="color: #03a9f4">
                     js
                 </a>
             </span>
@@ -234,7 +234,7 @@
 
     for(const key in target) &#123;
       if(target.hasOwnProperty(key))
-      cloneTarget(key) = clone(target(key), map)
+      cloneTarget[key] = clone(target[key], map)
     &#125;
     return cloneTarget
   &#125;
@@ -422,26 +422,7 @@ function ajax(options) &#123;
 &#125;
 &#125;
 </code></pre>
-<h2 id="判断是否可见"><a href="#判断是否可见" class="headerlink" title="判断是否可见"></a>判断是否可见</h2><p>应用：懒加载 虚拟列表</p>
-<p>1. </p>
-<pre><code class="js">el.offsetTop - document.documentElement.scrollTop &lt;= viewPortHeight
-</code></pre>
-<p>2. </p>
-<pre><code class="js"> const &#123;
-    top,
-    right,
-    bottom,
-    left,
-  &#125; = element.getBoundingClientRect();
-
-  return (
-    top &gt;= 0 &amp;&amp;
-    left &gt;= 0 &amp;&amp;
-    right &lt;= viewWidth &amp;&amp;
-    bottom &lt;= viewHeight
-  );
-</code></pre>
-<p>3.<br>利用Intersection Observer</p>
+<h2 id="判断是否可见"><a href="#判断是否可见" class="headerlink" title="判断是否可见"></a>判断是否可见</h2><p>利用Intersection Observer</p>
 <pre><code class="js">const options = &#123;
   // 表示重叠面积占被观察者的比例，从 0 - 1 取值，
   // 1 表示完全被包含
@@ -541,6 +522,180 @@ function myInterval(func, time) &#123;
 function myClear() &#123;
   if(timer) timer = null;
 &#125;
+</code></pre>
+<h2 id="js并发请求"><a href="#js并发请求" class="headerlink" title="js并发请求"></a>js并发请求</h2><pre><code class="js">const concurrencyRequest = (urls, maxNum) =&gt; &#123;
+    return new Promise((resolve) =&gt; &#123;
+        if (urls.length === 0) &#123;
+            resolve([]);
+            return;
+        &#125;
+        const results = [];
+        let count = 0; // 当前请求完成的数量
+
+        // 发送请求
+        async function request(url, i) &#123;
+            try &#123;
+                const resp = await fetch(url);
+                results[i] = resp;
+            &#125; catch (err) &#123;
+                results[i] = err;
+            &#125; finally &#123;
+                count++;
+                if (count === urls.length) &#123;
+                    resolve(results);
+                &#125; else if (urls.length &gt; count + maxNum) &#123;
+                    request(urls[count + maxNum], count + maxNum);
+                &#125;
+            &#125;
+        &#125;
+
+        // 初始化并发请求
+        for (let i = 0; i &lt; Math.min(maxNum, urls.length); i++) &#123;
+            request(urls[i], i);
+        &#125;
+    &#125;);
+&#125;
+</code></pre>
+<h2 id="jsonp"><a href="#jsonp" class="headerlink" title="jsonp"></a>jsonp</h2><pre><code class="js">const jsonp = (&#123; url, params, callbackName &#125;) =&gt; &#123;
+  const generateUrl = () =&gt; &#123;
+    let dataSrc = &#39;&#39;;
+    for (let key in params) &#123;
+      dataSrc += `$&#123;key&#125;=$&#123;params[key]&#125;&amp;`;
+    &#125;
+    dataSrc += `callback=$&#123;callbackName&#125;`;
+    return `$&#123;url&#125;?$&#123;dataSrc&#125;`;
+  &#125;
+  return new Promise((resolve, reject) =&gt; &#123;
+    const scriptEle = document.createElement(&#39;script&#39;);
+    scriptEle.src = generateUrl();
+    document.body.appendChild(scriptEle);
+    window[callbackName] = data =&gt; &#123;
+      resolve(data);
+      document.removeChild(scriptEle);
+    &#125;
+  &#125;)
+&#125;
+</code></pre>
+<h2 id="图片懒加载"><a href="#图片懒加载" class="headerlink" title="图片懒加载"></a>图片懒加载</h2><pre><code class="js">function lazyload() &#123;
+  const imgs = document.getElementsByTagName(&#39;img&#39;);
+  const len = imgs.length;
+  // 视口的高度
+  const viewHeight = document.documentElement.clientHeight;
+  // 滚动条高度
+  const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
+  for (let i = 0; i &lt; len; i++) &#123;
+    const offsetHeight = imgs[i].offsetTop;
+    if (offsetHeight &lt; viewHeight + scrollHeight) &#123;
+      const src = imgs[i].dataset.src;
+      imgs[i].src = src;
+    &#125;
+  &#125;
+&#125;
+
+// 可以使用节流优化一下
+window.addEventListener(&#39;scroll&#39;, lazyload);
+</code></pre>
+<h2 id="虚拟列表之时间分片"><a href="#虚拟列表之时间分片" class="headerlink" title="虚拟列表之时间分片"></a>虚拟列表之时间分片</h2><pre><code class="js">setTimeout(() =&gt; &#123;
+  // 插入十万条数据
+  const total = 100000;
+  // 一次插入的数据
+  const once = 20;
+  // 插入数据需要的次数
+  const loopCount = Math.ceil(total / once);
+  let countOfRender = 0;
+  const ul = document.querySelector(&#39;ul&#39;);
+  // 添加数据的方法
+  function add() &#123;
+    const fragment = document.createDocumentFragment();
+    for(let i = 0; i &lt; once; i++) &#123;
+      const li = document.createElement(&#39;li&#39;);
+      li.innerText = Math.floor(Math.random() * total);
+      fragment.appendChild(li);
+    &#125;
+    ul.appendChild(fragment);
+    countOfRender += 1;
+    loop();
+  &#125;
+  function loop() &#123;
+    if(countOfRender &lt; loopCount) &#123;
+      window.requestAnimationFrame(add);
+    &#125;
+  &#125;
+  loop();
+&#125;, 0)
+</code></pre>
+<h2 id="VDOM-render"><a href="#VDOM-render" class="headerlink" title="VDOM render"></a>VDOM render</h2><pre><code class="js">// vnode结构：
+// &#123;
+//   tag,
+//   attrs,
+//   children,
+// &#125;
+
+//Virtual DOM =&gt; DOM
+function render(vnode, container) &#123;
+  container.appendChild(_render(vnode));
+&#125;
+function _render(vnode) &#123;
+  // 字符串类型直接就是文本节点
+  if (typeof vnode === &#39;string&#39;) &#123;
+    return document.createTextNode(vnode);
+  &#125;
+  // 普通DOM
+  const dom = document.createElement(vnode.tag);
+  if (vnode.attrs) &#123;
+    // 遍历属性
+    Object.keys(vnode.attrs).forEach(key =&gt; &#123;
+      const value = vnode.attrs[key];
+      dom.setAttribute(key, value);
+    &#125;)
+  &#125;
+  // 子数组进行递归操作
+  vnode.children.forEach(child =&gt; render(child, dom));
+  return dom;
+&#125;
+</code></pre>
+<h2 id="一道promise链式调用-sleep"><a href="#一道promise链式调用-sleep" class="headerlink" title="一道promise链式调用(+ sleep)"></a>一道promise链式调用(+ sleep)</h2><pre><code class="js">class Person &#123;
+  constructor() &#123;
+    this.queue = Promise.resolve();
+  &#125;
+
+  eat(something) &#123;
+    this.queue = this.queue.then(() =&gt; &#123;
+      console.log(something);
+      return this;
+    &#125;);
+    return this;
+  &#125;
+
+  sleep(time) &#123;
+    this.queue = this.queue.then(() =&gt; &#123;
+      return new Promise(resolve =&gt; &#123;
+        setTimeout(resolve, time);
+      &#125;);
+    &#125;);
+    return this;
+  &#125;
+&#125;
+
+const p = new Person();
+p.eat(&#39;breakfast&#39;).sleep(1000).eat(&#39;lunch&#39;).sleep(2000).sleep(3000).eat(&#39;dinner&#39;);
+
+//输出
+//breakfast
+//等待1s
+//lunch
+//等待2s
+//等待3s
+//dinner
+</code></pre>
+<h2 id="响应式"><a href="#响应式" class="headerlink" title="响应式"></a>响应式</h2><pre><code class="js">// 创建一个代理对象来监听数组的变化
+    const reactiveArray = new Proxy([], &#123;
+      set(target, key, value, receiver) &#123;
+        const result = Reflect.set(target, key, value, receiver);
+        updateDOM();
+        return result;
+      &#125;
+    &#125;);
 </code></pre>
 
     </div>

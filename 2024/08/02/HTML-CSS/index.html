@@ -175,21 +175,21 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/HTML/" style="color: #00bcd4">
+                <a href="/tags/HTML/" style="color: #00a596">
                     HTML
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/CSS/" style="color: #00a596">
+                <a href="/tags/CSS/" style="color: #ffa2c4">
                     CSS
                 </a>
             </span>
@@ -209,7 +209,7 @@
 <li>script标签加上async or defer，或把script标签放底部(js进程和GUI进程互斥，阻塞DOM构建)(async解析完立即执行，defer解析完会在HTML解析完后执行)</li>
 <li>简化DOM和CSSOM树（压缩文件、减少选择器嵌套、在DOM树末端改变class）</li>
 </ul>
-<p>补充：进程与线程<br>进程是 CPU 资源分配的最小单位，线程是 CPU 调度的最小单位，一个进程包含一个或多个线程<br>浏览器的多进程架构：主进程、第三方插件进程、GPU进程、渲染进程<br>渲染进程中：GUI渲染线程、JS引擎线程、事件触发线程、定时触发器线程、异步http请求线程</p>
+<p>补充：进程与线程<br>进程是 CPU 资源分配的最小单位，线程是 CPU 调度的最小单位，一个进程包含一个或多个线程<br>浏览器的多进程架构：主进程、第三方插件进程、GPU进程、渲染进程、网络进程<br>渲染进程中：GUI渲染线程、JS引擎线程、事件触发线程、定时触发器线程、异步http请求线程</p>
 <h4 id="盒模型-选择器优先级"><a href="#盒模型-选择器优先级" class="headerlink" title="盒模型&#x2F;选择器优先级"></a>盒模型&#x2F;选择器优先级</h4><p>标准盒模型（box-sizing:content-box）：宽高只包含content<br>IE盒模型（box-sizing:border-box）：包含content padding border<br>选择器优先级：ABCD<br>A 内联<br>B id<br>C class 属性 伪类<br>D 标签 伪元素<br>其他：!important 层叠 继承</p>
 <h4 id="BFC-布局"><a href="#BFC-布局" class="headerlink" title="BFC 布局"></a>BFC 布局</h4><p>BFC：块级格式上下文（说人话就是一个div会在内部创建一个“环境”）<br>创建：绝对定位（absolute&#x2F;fixed）行内块 overflow不为visible 浮动<br>特性：<br>垂直排列<br>外边距折叠（解决：创建新的BFC）<br>内部margin的左侧与外部border左侧接触<br>浮动区域不与BFC重叠</p>
 <p>应用：<br>防止margin塌陷：在元素外层包一层容器，触发BFC<br>多栏布局:<br>两栏布局（左边固定，右边自适应）</p>

@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
                     八股
                 </a>
             </span>
@@ -314,6 +314,11 @@ module.exports = function(source) &#123;
 </ul>
 <h2 id="Vite"><a href="#Vite" class="headerlink" title="Vite"></a>Vite</h2><p>vite开发环境依赖esbuild进行预构建，生产环境则依赖rollup进行打包<br>vite支持原生ESMoudle，使用esbuild预构建，先启动开发服务器再按需编译，效率高于wp，提高冷启动速度<br>vite利用了http2并发请求的优势加速<br>vite监听到文件变更后，会用websocket通知浏览器，重新发起新的请求，只对该模块进行重新编译，然后进行替换，而wp会对整个项目重新进行打包（使用缓存机制解决）<br>生产环境下，vite使用rollup进行打包（rollup优势：体积小，支持tree-shaking，适用于js库的打包）</p>
 <h2 id="包管理工具"><a href="#包管理工具" class="headerlink" title="包管理工具"></a>包管理工具</h2><p>npm: 缺点：嵌套依赖（嵌套node_modules）占空间大<br>yarn: 扁平化解决（npm之后的版本也这么做了），问题：幽灵依赖<br>pnpm: 通过软硬链接的方式，包全局只存储一份，且支持monorepo(单仓库多项目)</p>
+<h2 id="ESModule和CommonJS"><a href="#ESModule和CommonJS" class="headerlink" title="ESModule和CommonJS"></a>ESModule和CommonJS</h2><ul>
+<li>写法： es用import&#x2F;export cjs用module.exports和reqiure</li>
+<li>es异步加载，cjs同步加载（会阻塞）</li>
+<li>es编译时加载，cjs运行时加载</li>
+</ul>
 
     </div>
     

@@ -292,7 +292,7 @@ return RespData(res, data);
 </code></pre>
 <p>2.<br>媒体协商（SDP交换）</p>
 <img src="/2024/08/18/better-chat/image.png" class="">
-<p>发送端发offer,调用setLocalDescription -&gt; 接收端收到offer,调用setRemoteDescription -&gt; 接收端发answer, 调用setLocalDescription -&gt; 发送端收到answer, 调用setRemoteDescription<br>offer 和 answer 本质就是存有 SDP 信息的对象<br>信令服务器：一般用webSocket<br>3.<br>ICE（建立连接）<br>收集 Candidate -&gt; 交换 Candidate -&gt; 按优先级尝试连接<br>Candidate:WebRTC用来描述它可以连接的远端服务器的基本信息</p>
+<p>发送端发offer,调用setLocalDescription -&gt; 接收端收到offer,调用setRemoteDescription -&gt; 接收端发answer, 调用setLocalDescription -&gt; 发送端收到answer, 调用setRemoteDescription<br>offer 和 answer 本质就是存有 SDP 信息的对象<br>信令服务器：一般用webSocket<br>3.<br>ICE（建立连接）<br>收集 Candidate -&gt; 交换 Candidate -&gt; 按优先级尝试连接<br>Candidate:WebRTC用来描述它可以连接的远端服务器的基本信息，如IP地址、协议、端口等</p>
 <p>项目实现：<br>前端<br>首先useEffect，初始化socket和初始化房间内所有人的pc<br>initSocket:<br>如果socket存在，重新建立<br>const ws &#x3D; new WebSocket(url, …) url包含roomid username type<br>ws.onopen:<br>如果是发起人（判断：state &#x3D; initiate），init视频流，send”create-room”信息<br>ws.onmessage:<br>分为许多message,<br>‘connent-fail’ 关闭连接<br>‘new-peer’ 接收到新人进入房间，添加自己的音视频流到pc通道，并发送自己 offer 信息给该新人（send’offer’） setLocalDescription<br>‘offer’ 添加音视频流到pc通道,send’answer’ setLocalDescription&#x2F;setRemoteDescription<br>‘answer’ setRemoteDescription<br>‘ice_candidate’ 设置对方的candidate<br>‘reject’ 对方拒绝通话，关闭连接</p>
 <p>initStream:即上面的第一步建立音视频流<br>initPC:<br>new RTCPeerConnection()<br>给pc绑定oncandidate事件，在双方SDP设置完成后触发，send ‘ice_candidate’<br>绑定ontrack事件，用于接收远程视频流并播放</p>
 <p>后端：<br>connectRTC函数，首先从url里获取相关信息<br>然后onmessage:<br>‘create-room’ 邀请人发送邀请，被邀请人接收邀请 ———— 由邀请人向被邀请人通知<br>首先判断好友&#x2F;群友是否在线，是否在通话中<br>利用 LoginRooms 存储的 ws 连接实例向在线且空闲的被邀请人发送邀请：</p>
@@ -310,7 +310,7 @@ LoginRooms[receiver_username].ws.send(JSON.stringify(msg));
 <ol>
 <li>客户端发起http请求，经过3次握手后，建立起TCP连接；http请求里存放WebSocket支持的版本号等信息，如：Upgrade、Connection、WebSocket-Version等；</li>
 <li>服务器收到客户端的握手请求后，同样采用HTTP协议回馈数据；</li>
-<li>客户端收到连接成功的消息后，开始借助于TCP传输信道进行全双工通信。<br>断线重连，心跳包<br>基本思路:设置定时器,每隔一段时间向服务端发送一个简单的包(如’ping’)<br>服务端收到ping后,返回一个’pong’<br>若长时间未收到,则手写进行自动重连,设置最大自动重连次数,超过则手动重连</li>
+<li>客户端收到连接成功的消息后，开始借助于TCP传输信道进行全双工通信。<br>断线重连，心跳包<br>基本思路:设置定时器,每隔一段时间向服务端发送一个简单的包(如’ping’)<br>服务端收到ping后,返回一个’pong’<br>若长时间未收到,则首先进行自动重连,设置最大自动重连次数,超过则手动重连</li>
 </ol>
 <p>鉴权:使用token等</p>
 <p>应用：<br>聊天页面initSocket:<br>收到’create-room’，打开音视频组件<br>message的发送和接收也通过ws完成</p>
@@ -401,6 +401,7 @@ setTimeout(async () =&gt; &#123;
     &#125;, 50);
 </code></pre>
 <p>首先发送start,之后分块传输，根据chunk.done（是否传输完毕）和transmittedSize(小于0，之前的已经传完了，需要继续发upload)</p>
+<p>其他：使用哈希值保证文件的完整性（是否改动，webpackd的contentHash也是基于这个）和一致性（是否上传过），可以用spark-md5库<br>文件拼接&#x2F;保证相对顺序：给分片加index</p>
 <h2 id="总体架构-一些细节"><a href="#总体架构-一些细节" class="headerlink" title="总体架构 + 一些细节"></a>总体架构 + 一些细节</h2><p>前端：</p>
 <img src="/2024/08/18/better-chat/image1.png" class="">
 

@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #03a9f4">
+                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #00a596">
                     计网
                 </a>
             </span>
@@ -225,7 +225,8 @@
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>强缓存和协商缓存</p>
 <img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image3.png" class="">
 
-<p>强缓存：Cache-Control &gt; Expires<br>协商缓存：Etag和If-None-Match -&gt; Last-Modified和If-Modified-Since<br>Etag优先级更高，因为：</p>
+<p>强缓存：Cache-Control:max-age &gt; Expires<br>原因： 前者是相对时间，后者是绝对时间，绝对时间如果客户端和服务端时钟不同步会不准确</p>
+<p>协商缓存：Etag和If-None-Match -&gt; Last-Modified和If-Modified-Since<br>Etag优先级更高，因为：</p>
 <ul>
 <li>文件内容没有修改，最近修改时间也会变动</li>
 <li>时间检测的粒度是秒级</li>

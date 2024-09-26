@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
                     八股
                 </a>
             </span>
@@ -209,7 +209,7 @@
   &#125;)
 &#125;
 </code></pre>
-<p>缺点：只能侦听对象的已有属性，对新增的属性无效<br>可以使用Vue.set解决</p>
+<p>缺点：只能侦听对象的已有属性，对新增&#x2F;删除的属性无效（可以使用Vue.set&#x2F;delete解决）<br>无法监听数组的下标或长度变化（对push等方法，将数组的原型方法重写）</p>
 <p>Vue3改为Proxy + Reflect</p>
 <pre><code class="js">function reactive(target) &#123;
     const handler = &#123;
@@ -226,8 +226,7 @@
     return new Proxy(target, handler)
 &#125;
 </code></pre>
-<p>对传入reactive的target，将其包装成proxy，对get和set操作进行拦截<br>（Reflect.get相当于receiver[key] .set相当于receiver[key] &#x3D; value）<br>使用reflect的优点：和Proxy搭配提高语义化，且应该把操作放在receiver（代理化的对象）上</p>
-<p>track:依赖收集</p>
+<p>对传入reactive的target，将其包装成proxy，对get和set操作进行拦截<br>（Reflect.get相当于receiver[key] .set相当于receiver[key] &#x3D; value）<br>使用reflect的优点：和Proxy搭配提高语义化，且应该把操作放在receiver（代理化的对象）上<br>（proxy是浅层代码代理，Vue3源码对其加了一点判断，是对象的话就再套一层proxy）<br>track:依赖收集</p>
 <pre><code class="js">const targetMap = new WeakMap()//存储所有对象
 let activeEffect = null
 

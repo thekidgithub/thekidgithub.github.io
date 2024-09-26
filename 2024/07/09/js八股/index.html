@@ -182,7 +182,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #ff7d73">
+                <a href="/tags/js/" style="color: #00bcd4">
                     js
                 </a>
             </span>
@@ -272,27 +272,47 @@ fn2Child = null//解决方法
 <p>对象的原始值转换（toString, valueOf）：<br>字符串 toString -&gt; valueOf 数值或其他： valueOf -&gt; toString<br>(toString默认 [object Object], valueOf默认 对象本身0)</p>
 <p><strong>proto</strong> 与 prototype: 前者用于具体对象，后者为构造器属性<br>constructor: 在prototype上，若重写pro会丢失<br>Object.create(pro) 以pro为原型创建对象<br>（Object.create(null) 创建无原型的对象，用于“字典”）</p>
 <p>继承：<br>class的继承现在采用寄生组合式继承：</p>
-<pre><code class="js">function clone (parent, child) &#123;
-    child.prototype = Object.create(parent.prototype);//重写prototype
-    child.prototype.constructor = child;
-&#125;
-function Parent6() &#123;
-    this.name = &#39;parent6&#39;;
-    this.play = [1, 2, 3];
-&#125;
-Parent6.prototype.getName = function () &#123;
-    return this.name;
-&#125;
-function Child6() &#123;
-    Parent6.call(this);//借用构造函数
-    this.friends = &#39;child5&#39;;
+<pre><code class="js">function Parent(name) &#123;
+  this.name = name;
 &#125;
 
-clone(Parent6, Child6);
+Parent.prototype.sayName = function() &#123;
+  console.log(this.name);
+&#125;;
 
-Child6.prototype.getFriends = function () &#123;
-    return this.friends;
+function Child(name, age) &#123;
+  Parent.call(this, name); // 只调用一次 Parent 构造函数
+  this.age = age;
 &#125;
+
+// 创建父类原型的副本
+function inheritPrototype(child, parent) &#123;
+  const prototype = Object.create(parent.prototype); // 创建父类原型的副本
+  prototype.constructor = child; // 修正 constructor 指向
+  child.prototype = prototype; // 将子类的原型指向这个副本
+&#125;
+
+inheritPrototype(Child, Parent);
+</code></pre>
+<p>过去的方法：组合继承，缺点：会调用两次父类的构造函数，影响性能</p>
+<pre><code class="js">function Parent(name) &#123;
+  this.name = name;
+&#125;
+
+Parent.prototype.sayName = function() &#123;
+  console.log(this.name);
+&#125;;
+
+function Child(name, age) &#123;
+  Parent.call(this, name); // 第一次调用 Parent 构造函数
+  this.age = age;
+&#125;
+
+Child.prototype = new Parent(); // 第二次调用 Parent 构造函数
+Child.prototype.constructor = Child;
+
+const child = new Child(&#39;Tom&#39;, 18);
+child.sayName(); // 输出 &#39;Tom&#39;
 </code></pre>
 <p>关于this绑定：<br>this永远指向最后调用的对象：</p>
 <pre><code class="js">    var name = &quot;windowsName&quot;;
@@ -340,7 +360,7 @@ setTimeout(()=&gt;&#123;
 </code></pre>
 <p>宏任务：sett, seti, setimmediate, script 微任务：promise.then process.nextTick(微任务优先级最高) queueMicrotask</p>
 <p>Node事件循环</p>
-<img src="/2024/07/09/js%E5%85%AB%E8%82%A1%E4%B9%8B%E9%9A%8F%E4%BE%BF%E8%AE%B0%E8%AE%B0/image.png" class="">
+<img src="/2024/07/09/js%E5%85%AB%E8%82%A1/image.png" class="">
 <p>timer: sett,seti<br>check : setimmediate</p>
 <pre><code class="js">console.log(&#39;start&#39;)
 setTimeout(() =&gt; &#123;
@@ -397,7 +417,7 @@ console.log(&#39;script end&#39;);
 //对于async await ，把await后面的当作then 前面的是同步
 </code></pre>
 <p>fetch和ajax的区别：</p>
-<img src="/2024/07/09/js%E5%85%AB%E8%82%A1%E4%B9%8B%E9%9A%8F%E4%BE%BF%E8%AE%B0%E8%AE%B0/image1.png" class="">
+<img src="/2024/07/09/js%E5%85%AB%E8%82%A1/image1.png" class="">
 <p>ajax是一种概念模型，而不是一个技术，即局部刷新页面增量更新，传统的ajax是使用XHR（XMLHttpRequests）实现的<br>fetch是对 HTTP 接口的抽象，提供了一个获取资源的接口，基于promise</p>
 <h2 id="事件-DOM"><a href="#事件-DOM" class="headerlink" title="事件 DOM"></a>事件 DOM</h2><p>事件冒泡 捕获 委托<br>target 和 currentTarget<br>事件模型：<br>DOM0级（onclick,onxx）：绑定速度快，只支持冒泡，同一类型只能绑定一次<br>DOM2级：addEventListener(事件类型，处理函数，useCapture):同一DOM可以绑定多个，可以设置为捕获</p>
 <p>DOM:<br>createElement&#x2F;createFragment<br>quertSelector(All)<br>innerHTML&#x2F;innerText&#x2F;textCotent (可修改HTML结构&#x2F;修改字符串&#x2F;修改字符串)<br>appendChild&#x2F;insertBefore</p>
