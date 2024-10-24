@@ -190,10 +190,10 @@
 <h3 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h3><p>二进制缓冲区 .from .alloc初始化<br>应用：IO操作</p>
 <h3 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h3><p>可写流：fs.createWriteStream()<br>可读流：fs.createReadStream()<br>双工流 转换流<br>应用：</p>
 <pre><code class="js"> if (method === &#39;GET&#39;) &#123; // get 请求
-        const fileName = path.resolve(__dirname, &#39;data.txt&#39;);
-        let stream = fs.createReadStream(fileName);
-        stream.pipe(res); // 将 res 作为 stream 的 dest
-    &#125;
+  const fileName = path.resolve(__dirname, &#39;data.txt&#39;);
+  let stream = fs.createReadStream(fileName);
+  stream.pipe(res); // 将 res 作为 stream 的 dest
+&#125;
 </code></pre>
 <pre><code class="js">// 两个文件名
 const fileName1 = path.resolve(__dirname, &#39;data.txt&#39;)
@@ -227,28 +227,6 @@ module.exports = (options) =&gt; async (ctx, next) =&gt; &#123;
 &#125;
 </code></pre>
 <p>内置的中间件： koa-bodyparser(转换post请求，挂载ctx.request上)<br>koa-static(处理静态资源)等</p>
-<h3 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h3><p>JSON Web Token<br>三部分：头部（算法 type）<br>载荷（payload 消息体） 存储具体信息<br>签名对前两个部分进行签名并设置SecretKey<br>生成：<br>使用第三方库</p>
-<pre><code class="js">jwt = require(&quot;jsonwebtoken&quot;);
- const token = jwt.sign(  
-        &#123;
-          name: result.name//payload
-        &#125;,
-        &quot;test_token&quot;, // secret
-        &#123; expiresIn: 60 * 60 &#125; // 过期时间：60 * 60 s
-      );
-</code></pre>
-<p>校验：<br>koa-jwt</p>
-<pre><code class="js">app.use(koajwt(&#123;
-  secret: &#39;test_token&#39;
-&#125;).unless(&#123; // 配置白名单
-  path: [/\/api\/register/, /\/api\/login/]
-&#125;))
-</code></pre>
-<p>流程：</p>
-<blockquote>
-<p>服务器当验证用户账号和密码正确的时候，给用户颁发一个令牌，这个令牌作为后续用户访问一些接口的凭证<br>后续访问会根据这个令牌判断用户是否有权限进行访问<br>在前端接收到token后，一般情况会通过localStorage进行缓存，然后将token放到HTTP请求头Authorization 中</p>
-</blockquote>
-<p>应用：单点登录 预防CSRF</p>
 
     </div>
     

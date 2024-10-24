@@ -182,7 +182,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/vue/" style="color: #ff7d73">
+                <a href="/tags/vue/" style="color: #00bcd4">
                     vue
                 </a>
             </span>
@@ -306,22 +306,22 @@ function computed(fn) &#123;//内部是一个effect
 <li>状态管理库（Vuex pinia, state getters mutation action）</li>
 <li>$ref</li>
 </ul>
-<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>beforeCreate Created（此时可以获取data、computed等，但是不能获取$el $ref，可以在此时请求数据） beforeMount Mounted(已挂载，可获取DOM) beforeUpdate updated（不能在此时操作数据，会死循环） beforeDestroy(此时可以销毁定时器，解绑事件等回收内存操作) destroyed</p>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>beforeCreate Created（此时可以获取data、computed等，但是不能获取$el $ref，可以在此时请求数据） beforeMount Mounted(已挂载，可获取DOM) beforeUpdate updated（不能在此时操作数据，会死循环） beforeUnmount(此时可以销毁定时器，解绑事件等回收内存操作) unmounted</p>
 <p>父子组件生命周期顺序：</p>
 <ul>
 <li>父beC C beM -&gt; 子 beC C beM M -&gt; 父M</li>
 <li>父beU -&gt; 子beU U -&gt; 父U</li>
-<li>父beD -&gt; 子beD D -&gt; 父D</li>
+<li>父beUn -&gt; 子beUn Un -&gt; 父Un</li>
 </ul>
 <p>数据请求最好放在created，更早，如果放在mounted可能会导致页面闪动</p>
 <h2 id="Vue3-与-Vue2"><a href="#Vue3-与-Vue2" class="headerlink" title="Vue3 与 Vue2"></a>Vue3 与 Vue2</h2><ul>
 <li>diff优化</li>
 <li>响应式优化</li>
-<li>新增组合式API</li>
-<li>多根节点</li>
+<li>新增组合式API<br>好处：相同的逻辑放在一起，选项式是data&#x2F;method等放一起</li>
+<li>多根节点（template内）</li>
 <li>Teleport Suspend 组件</li>
-<li>生命周期（create -&gt; setup）</li>
-<li>虚拟DOM（静态标记，静态节点，事件缓存）</li>
+<li>生命周期（create -&gt; setup）setup是组合式API的入口点，setup之后其他的生命周期才会被启用（<script setup>）</li>
+<li>虚拟DOM（静态节点，事件函数缓存）</li>
 <li>打包优化（tree-shaking） ts支持</li>
 </ul>
 <h2 id="nextTick"><a href="#nextTick" class="headerlink" title="nextTick"></a>nextTick</h2><p>异步化，数据更新之后不会立即改变DOM，而是加入一个异步更新队列，当队列所有数据变化完成才更新</p>
@@ -360,7 +360,7 @@ this.$nextTick(function () &#123;
 &#125;
 </code></pre>
 <ol start="2">
-<li><p>timerFunc:<br>降级操作，当前环境支持什么就调用什么：<br>Promise.then -&gt; MutationObserver -&gt; setImmediate -&gt; setTimeout<br>把执行函数flushCallbacks放到里面</p>
+<li><p>timerFunc:<br>降级操作，当前环境支持什么就调用什么：<br>Promise.then -> MutationObserver -> setImmediate -> setTimeout<br>把执行函数flushCallbacks放到里面</p>
 </li>
 <li><p>flushCallbacks</p>
 </li>
@@ -378,11 +378,27 @@ this.$nextTick(function () &#123;
 <li>MVVM<br>模型（Model）-视图(view)-视图模型（VM）<br>（双向数据绑定、响应式等）</li>
 <li>SSR SPA<br>SSR：服务端渲染，在客户端把标签渲染成HTML的工作放在服务端完成，然后再把html直接返回给客户端<br>优点：SEO 首屏加载快<br>缺点：开发受限（生命周期钩子只支持bC C），只Node.js，负载压力<br>SPA: 单页面应用，使用路由机制实现页面切换而不是请求服务端，首次加载所有资源<br>优点：快 前后端分离 服务器压力小<br>缺点：SEO 首屏慢</li>
 <li>key<br>diff中的节点唯一标识，实现节点复用；用key生成map，更快速</li>
-<li>v-show 和 v-if v-if 和 v-for<br>show: 总是渲染，改变display属性 if: 有组件的销毁重建，惰性</li>
+<li>v-show 和 v-if v-if 和 v-for<br>show: 总是渲染，改变display属性 if: 有组件的销毁重建，惰性<br>优先级v-if > v-for，不能同时使用，应该在v-for里套v-if，或者提前计算filtered列表</li>
 <li>computed watch<br>computed:，计算属性，多对一，有缓存 watch:侦听器，一对多，“副作用”，支持异步</li>
-<li>keep-alive teleport<br>keep-alive: 结合路由和动态组件，缓存组件，include&#x2F;exclude，max， activated&#x2F;deactivated生命周期<br>teleport: （模态框组件）将组件部分模板“传送”到外层</li>
-<li>插槽<br>父组件中提供内容，替代子组件的slot<br>具名：v-slot&#x2F;#</li>
-<li>router(history&#x2F;hash) store<br>hash: #后面的，location.hash,监听：onHashChange<br>history: 利用historyAPI,历史记录堆栈（pushState&#x2F;popState&#x2F;replaceState）<br>history模式服务器配置时，需要将所有请求重定向到入口文件（index.html）因为路由都在前端处理，直接向服务端访问特定路由会404</li>
+<li>keep-alive teleport<br>keep-alive: 结合路由和动态组件，缓存组件，include/exclude，max， activated/deactivated生命周期</li>
+</ul>
+<pre><code class="vue">&lt;KeepAlive&gt;
+  &lt;component :is=&quot;activeComponent&quot; /&gt;
+&lt;/KeepAlive&gt;
+</code></pre>
+<p>teleport: （模态框组件）将组件部分模板“传送”到外层</p>
+<pre><code class="vue">&lt;button @click=&quot;open = true&quot;&gt;Open Modal&lt;/button&gt;
+
+&lt;Teleport to=&quot;body&quot;&gt;
+  &lt;div v-if=&quot;open&quot; class=&quot;modal&quot;&gt;
+    &lt;p&gt;Hello from the modal!&lt;/p&gt;
+    &lt;button @click=&quot;open = false&quot;&gt;Close&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/Teleport&gt;
+</code></pre>
+<ul>
+<li>插槽<br>父组件中提供内容，替代子组件的slot<br>具名：v-slot/#</li>
+<li>router(history/hash) store<br>hash: #后面的，location.hash,监听：onHashChange<br>history: 利用historyAPI,历史记录堆栈（pushState/popState/replaceState）<br>history模式服务器配置时，需要将所有请求重定向到入口文件（index.html）因为路由都在前端处理，直接向服务端访问特定路由会404</li>
 <li>单向数据流<br>数据由父传子，子组件不能随意修改数据</li>
 <li>v-model双向绑定</li>
 </ul>
@@ -395,9 +411,11 @@ this.$nextTick(function () &#123;
 </li>
 <li><p>为什么data是函数不是对象：防止多个实例对象共用data，造成数据污染</p>
 </li>
-<li><p>组合式函数（旧mixin）&#x2F; 自定义指令 &#x2F; 插件 实现逻辑复用</p>
+<li><p>组合式函数（旧mixin）/ 自定义指令 / 插件 实现逻辑复用</p>
 </li>
-<li><p>new Vue过程：<br>配置初始化（数据，计算属性，钩子等） -&gt; 数据响应初始化 -&gt; 模板编译（编译成渲染函数） -&gt; 创建虚拟DOM -&gt; 挂载到真实DOM</p>
+<li><p>new Vue过程：<br>配置初始化（数据，计算属性，钩子等） -> 数据响应初始化 -> 模板编译（编译成渲染函数） -> 创建虚拟DOM -> 挂载到真实DOM</p>
+</li>
+<li><p>Vue与React区别：<br>单文件组件/函数式组件<br>双向数据绑定/单向数据流<br>模板语法/JSX<br>组件通信 状态管理<br>生命周期<br>diff 响应式<br>fiber架构<br>...</p>
 </li>
 </ul>
 

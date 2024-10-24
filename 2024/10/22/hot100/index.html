@@ -1,0 +1,2704 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>hot100 | The kid 的小窝</title>
+    <meta name="author" content="the kid" />
+    <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>THE KID 的小窝</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;THE KID 的小窝</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>hot100</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/10/22
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h2 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h2><span id="more"></span>
+<h3 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h3><pre><code class="js">var twoSum = function(nums, target) &#123;
+    let map = new Map();
+    const arr = [];
+    nums.forEach((e, i) =&gt; &#123;
+        map.set(e, i);
+    &#125;)
+    nums.forEach((e, i) =&gt; &#123;
+        if(map.has(target - e) &amp;&amp; !arr.length &amp;&amp; i !== map.get(target - e)) 
+        &#123;
+            arr.push(i);
+            arr.push(map.get(target - e));
+            // return arr;
+        &#125;
+    &#125;)
+    return arr;
+&#125;;
+</code></pre>
+<h3 id="字母异位词分组"><a href="#字母异位词分组" class="headerlink" title="字母异位词分组"></a>字母异位词分组</h3><pre><code class="js">var groupAnagrams = function(strs) &#123;
+    const arr = [];
+    const s = new Set();
+    strs.forEach(e =&gt; &#123;
+        let s1 = e;
+        s1 = s1.split(&#39;&#39;).sort().join(&#39;&#39;);
+        if(!s.has(s1)) &#123;
+            const newArr = [];
+            newArr.push(e);
+            arr.push(newArr);
+            s.add(s1);
+        &#125;
+        else &#123;
+            const ta = arr.find(a =&gt; &#123;
+                return a[0].split(&#39;&#39;).sort().join(&#39;&#39;) === s1; 
+            &#125;)
+            ta.push(e);
+        &#125;
+    &#125;)
+    return arr;
+&#125;;
+</code></pre>
+<h3 id="最长连续序列"><a href="#最长连续序列" class="headerlink" title="最长连续序列"></a>最长连续序列</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number&#125;
+ */
+var longestConsecutive = function(nums) &#123;
+    const s = new Set();
+    nums.forEach(e =&gt; &#123;
+        s.add(e);
+    &#125;)
+    let max = 0;
+    for(let e of s) &#123;
+        if(s.has(e - 1)) continue;
+        else &#123;
+            let k = 1;
+            let ee = e + 1;
+            while(s.has(ee)) &#123;
+                k++;
+                ee++;
+            &#125;
+            max = Math.max(max, k);
+        &#125;
+    &#125;
+    return max;
+&#125;;
+</code></pre>
+<h2 id="双指针"><a href="#双指针" class="headerlink" title="双指针"></a>双指针</h2><h3 id="移动零"><a href="#移动零" class="headerlink" title="移动零"></a>移动零</h3><pre><code class="js">var moveZeroes = function(nums) &#123;
+    let cnt = 0;
+    let k = 0;
+    while(k &lt; nums.length) &#123;
+        if(nums[k] === 0) &#123;
+            cnt++;
+            nums.splice(k, 1);
+        &#125;
+        else k++;
+    &#125;
+        
+    
+    console.log(nums);
+    for(let i = 0; i &lt; cnt; i++) nums.push(0);
+    return nums;
+&#125;;
+</code></pre>
+<h3 id="盛最多水的容器"><a href="#盛最多水的容器" class="headerlink" title="盛最多水的容器"></a>盛最多水的容器</h3><pre><code class="js">var maxArea = function(height) &#123;
+    let l = 0, r = height.length - 1;
+    let max = 0;
+    while(l &lt; r) &#123;
+        const s = (r - l) * Math.min(height[r], height[l]);
+        if(s &gt; max) max = s;
+        if(height[r] &gt; height[l]) l++;
+        else r--;
+    &#125; 
+    return max;
+&#125;;
+</code></pre>
+<h3 id="三数之和"><a href="#三数之和" class="headerlink" title="三数之和"></a>三数之和</h3><pre><code class="js">var threeSum = function(nums) &#123;
+    nums.sort((a, b) =&gt; a - b);
+    const n = nums.length;
+    const ans = [];
+    for (let i = 0; i &lt; n - 2; i++) &#123;
+        const x = nums[i];
+        if (i &gt; 0 &amp;&amp; x === nums[i - 1]) continue; // 跳过重复数字
+        if (x + nums[i + 1] + nums[i + 2] &gt; 0) break; // 优化一
+        if (x + nums[n - 2] + nums[n - 1] &lt; 0) continue; // 优化二
+        let j = i + 1, k = n - 1;
+        while (j &lt; k) &#123;
+            const s = x + nums[j] + nums[k];
+            if (s &gt; 0) &#123;
+                k--;
+            &#125; else if (s &lt; 0) &#123;
+                j++;
+            &#125; else &#123;
+                ans.push([x, nums[j], nums[k]]);
+                for (j++; j &lt; k &amp;&amp; nums[j] === nums[j - 1]; j++); // 跳过重复数字
+                for (k--; k &gt; j &amp;&amp; nums[k] === nums[k + 1]; k--); // 跳过重复数字
+            &#125;
+        &#125;
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h3 id="接雨水"><a href="#接雨水" class="headerlink" title="接雨水"></a>接雨水</h3><pre><code class="js">var trap = function(height) &#123;
+    let ans = 0;
+    let left = 0, right = height.length - 1;
+    let leftMax = 0, rightMax = 0;
+    while (left &lt; right) &#123;
+        leftMax = Math.max(leftMax, height[left]);
+        rightMax = Math.max(rightMax, height[right]);
+        if (leftMax &lt; rightMax) &#123;
+            ans += leftMax - height[left];
+            ++left;
+        &#125; else &#123;
+            ans += rightMax - height[right];
+            --right;
+        &#125;
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><h3 id="无重复字符的最长子串"><a href="#无重复字符的最长子串" class="headerlink" title="无重复字符的最长子串"></a>无重复字符的最长子串</h3><pre><code class="js">var lengthOfLongestSubstring = function(s) &#123;
+    let ans = 0;
+    let left = 0;
+    const map = new Map(); // 记录字符最后出现的位置
+
+    for (let right = 0; right &lt; s.length; right++) &#123;
+        const c = s[right];
+        if (map.has(c)) &#123;
+            // 更新 left 为重复字符的下一个位置
+            left = Math.max(map.get(c) + 1, left);
+        &#125;
+        map.set(c, right); // 更新字符的最后出现位置
+        ans = Math.max(ans, right - left + 1); // 更新窗口长度最大值
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h3 id="找到字符串中所有字母异位词"><a href="#找到字符串中所有字母异位词" class="headerlink" title="找到字符串中所有字母异位词"></a>找到字符串中所有字母异位词</h3><pre><code class="js">var findAnagrams = function(s, p) &#123;
+    if(s.length &lt; p.length) return [];
+    const ans = [];
+    const a1 = new Array(26).fill(0);
+    for(let i=0;i&lt;p.length;i++) &#123;
+        a1[p[i].charCodeAt() - &#39;a&#39;.charCodeAt()]++;
+    &#125;
+    const a2 = new Array(26).fill(0);
+    let i=0,j=p.length-1;
+    for(let k=i;k&lt;=j;k++) &#123;
+        a2[s[k].charCodeAt() - &#39;a&#39;.charCodeAt()]++;
+    &#125;
+     if(a1.toString() === a2.toString()) ans.push(0);
+     i++;j++;
+    while(j &lt; s.length) &#123;
+        a2[s[j].charCodeAt() - &#39;a&#39;.charCodeAt()]++;
+        a2[s[i-1].charCodeAt() - &#39;a&#39;.charCodeAt()]--;
+        if(a1.toString() === a2.toString()) &#123;
+        ans.push(i);
+        &#125;
+        i++;
+        j++;
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h2 id="子串"><a href="#子串" class="headerlink" title="子串"></a>子串</h2><h3 id="和为-K-的子数组"><a href="#和为-K-的子数组" class="headerlink" title="和为 K 的子数组"></a>和为 K 的子数组</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @param &#123;number&#125; k
+ * @return &#123;number&#125;
+ */
+var subarraySum = function(nums, k) &#123;
+    const m = new Map();
+    let ans=0;
+    let sum = 0;
+    m.set(sum, 1);
+    for(let i=0;i&lt;nums.length;i++) &#123;
+        sum += nums[i];
+        ans += m.get(sum - k) || 0;
+        if(m.has(sum)) m.set(sum, m.get(sum) + 1);
+        else m.set(sum, 1);
+        
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h3 id="滑动窗口最大值"><a href="#滑动窗口最大值" class="headerlink" title="滑动窗口最大值"></a>滑动窗口最大值</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @param &#123;number&#125; k
+ * @return &#123;number[]&#125;
+ */
+var maxSlidingWindow = function(nums, k) &#123;
+    const q = [];
+    const ans = [];
+    for(let i=0;i&lt;k;i++) &#123;
+        while(q.length &amp;&amp; nums[q[q.length-1]] &lt;= nums[i]) q.pop();
+        q.push(i);
+    &#125;
+    ans.push(nums[q[0]]);
+    for(let i=k;i&lt;nums.length;i++) &#123;
+        
+        while(q.length &amp;&amp; nums[q[q.length-1]] &lt; nums[i]) q.pop();
+        q.push(i);
+        while(i-k &gt;= q[0]) q.shift();
+        ans.push(nums[q[0]])
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h3 id="最小覆盖子串"><a href="#最小覆盖子串" class="headerlink" title="最小覆盖子串"></a>最小覆盖子串</h3><pre><code class="js">var minWindow = function(s, t) &#123;
+    const m = s.length;
+    let ansLeft = -1, ansRight = m;
+    const cnt = Array(128).fill(0);
+    let less = 0;
+    for (let c of t) &#123;
+        c = c.codePointAt(0);
+        if (cnt[c] === 0) &#123;
+            less++; // 有 less 种字母的出现次数 &lt; t 中的字母出现次数
+        &#125;
+        cnt[c]++;
+    &#125;
+
+    let left = 0;
+    for (let right = 0; right &lt; m; right++) &#123; // 移动子串右端点
+        const c = s[right].codePointAt(0); // 右端点字母
+        cnt[c]--; // 右端点字母移入子串
+        if (cnt[c] === 0) &#123;
+            // 原来窗口内 c 的出现次数比 t 的少，现在一样多
+            less--;
+        &#125;
+        while (less === 0) &#123; // 涵盖：所有字母的出现次数都是 &gt;=
+            if (right - left &lt; ansRight - ansLeft) &#123; // 找到更短的子串
+                ansLeft = left; // 记录此时的左右端点
+                ansRight = right;
+            &#125;
+            const x = s[left].codePointAt(0); // 左端点字母
+            if (cnt[x] === 0) &#123;
+                // x 移出窗口之前，检查出现次数，
+                // 如果窗口内 x 的出现次数和 t 一样，
+                // 那么 x 移出窗口后，窗口内 x 的出现次数比 t 的少
+                less++;
+            &#125;
+            cnt[x]++; // 左端点字母移出子串
+            left++;
+        &#125;
+    &#125;
+    return ansLeft &lt; 0 ? &quot;&quot; : s.substring(ansLeft, ansRight + 1);
+&#125;;
+</code></pre>
+<h2 id="普通数组"><a href="#普通数组" class="headerlink" title="普通数组"></a>普通数组</h2><h3 id="最大子数组和"><a href="#最大子数组和" class="headerlink" title="最大子数组和"></a>最大子数组和</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number&#125;
+ */
+var maxSubArray = function(nums) &#123;
+let pre = 0, maxAns = nums[0];
+    nums.forEach((x) =&gt; &#123;
+        pre = Math.max(pre + x, x);
+        maxAns = Math.max(maxAns, pre);
+    &#125;);
+    return maxAns;
+
+
+&#125;;
+</code></pre>
+<h3 id="合并区间"><a href="#合并区间" class="headerlink" title="合并区间"></a>合并区间</h3><pre><code class="js">/**
+ * @param &#123;number[][]&#125; intervals
+ * @return &#123;number[][]&#125;
+ */
+var merge = function(intervals) &#123;
+    intervals.sort((p, q) =&gt; p[0] - q[0]);
+    const ans = [];
+    for(const p of intervals) &#123;
+        if(ans.length &amp;&amp; p[0] &lt;= ans[ans.length-1][1]) &#123;
+            ans[ans.length-1][1] = Math.max(ans[ans.length-1][1], p[1])
+        &#125;
+        else &#123;
+            ans.push(p);
+        &#125;
+    &#125;
+    return ans
+&#125;;
+</code></pre>
+<h3 id="轮转数组"><a href="#轮转数组" class="headerlink" title="轮转数组"></a>轮转数组</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @param &#123;number&#125; k
+ * @return &#123;void&#125; Do not return anything, modify nums in-place instead.
+ */
+const reverse = (nums, start, end) =&gt; &#123;
+    while (start &lt; end) &#123;
+        const temp = nums[start];
+        nums[start] = nums[end];
+        nums[end] = temp;
+        start += 1;
+        end -= 1;
+    &#125;
+&#125;
+
+var rotate = function(nums, k) &#123;
+    k %= nums.length;
+    reverse(nums, 0, nums.length - 1);
+    reverse(nums, 0, k - 1);
+    reverse(nums, k, nums.length - 1);
+&#125;;
+</code></pre>
+<h3 id="除自身以外数组的乘积"><a href="#除自身以外数组的乘积" class="headerlink" title="除自身以外数组的乘积"></a>除自身以外数组的乘积</h3><pre><code class="js">var productExceptSelf = function(nums) &#123;
+    const length = nums.length;
+
+    // L 和 R 分别表示左右两侧的乘积列表
+    const L = new Array(length);
+    const R = new Array(length);
+
+    const answer = new Array(length);
+
+    // L[i] 为索引 i 左侧所有元素的乘积
+    // 对于索引为 &#39;0&#39; 的元素，因为左侧没有元素，所以 L[0] = 1
+    L[0] = 1;
+    for (let i = 1; i &lt; length; i++) &#123;
+        L[i] = nums[i - 1] * L[i - 1];
+    &#125;
+
+    // R[i] 为索引 i 右侧所有元素的乘积
+    // 对于索引为 &#39;length-1&#39; 的元素，因为右侧没有元素，所以 R[length-1] = 1
+    R[length - 1] = 1;
+    for (let i = length - 2; i &gt;= 0; i--) &#123;
+        R[i] = nums[i + 1] * R[i + 1];
+    &#125;
+
+    // 对于索引 i，除 nums[i] 之外其余各元素的乘积就是左侧所有元素的乘积乘以右侧所有元素的乘积
+    for (let i = 0; i &lt; length; i++) &#123;
+        answer[i] = L[i] * R[i];
+    &#125;
+
+    return answer;
+&#125;;
+</code></pre>
+<h3 id="缺失的第一个正数"><a href="#缺失的第一个正数" class="headerlink" title="缺失的第一个正数"></a>缺失的第一个正数</h3><pre><code class="js">var firstMissingPositive = function(nums) &#123;
+  for (const num of nums)
+    if (typeof nums[+num - 1] !== &#39;undefined&#39;)
+      nums[+num - 1] = &#39;&#39; + nums[+num - 1]
+  for (let i = 0; i &lt; nums.length; i++)
+    if (typeof nums[i] === &#39;number&#39;)
+      return i + 1
+  return nums.length + 1
+&#125;;
+</code></pre>
+<h2 id="矩阵"><a href="#矩阵" class="headerlink" title="矩阵"></a>矩阵</h2><h3 id="矩阵置零"><a href="#矩阵置零" class="headerlink" title="矩阵置零"></a>矩阵置零</h3><pre><code class="js">var setZeroes = function(matrix) &#123;
+    const m = matrix.length, n = matrix[0].length;
+    let flagCol0 = false, flagRow0 = false;
+    for (let i = 0; i &lt; m; i++) &#123;
+        if (matrix[i][0] === 0) &#123;
+            flagCol0 = true;
+        &#125;
+    &#125;
+    for (let j = 0; j &lt; n; j++) &#123;
+        if (matrix[0][j] === 0) &#123;
+            flagRow0 = true;
+        &#125;
+    &#125;
+    for (let i = 1; i &lt; m; i++) &#123;
+        for (let j = 1; j &lt; n; j++) &#123;
+            if (matrix[i][j] === 0) &#123;
+                matrix[i][0] = matrix[0][j] = 0;
+            &#125;
+        &#125;
+    &#125;
+    for (let i = 1; i &lt; m; i++) &#123;
+        for (let j = 1; j &lt; n; j++) &#123;
+            if (matrix[i][0] === 0 || matrix[0][j] === 0) &#123;
+                matrix[i][j] = 0;
+            &#125;
+        &#125;
+    &#125;
+    if (flagCol0) &#123;
+        for (let i = 0; i &lt; m; i++) &#123;
+            matrix[i][0] = 0;
+        &#125;
+    &#125;
+    if (flagRow0) &#123;
+        for (let j = 0; j &lt; n; j++) &#123;
+            matrix[0][j] = 0;
+        &#125;
+    &#125;
+&#125;;
+</code></pre>
+<h3 id="螺旋矩阵"><a href="#螺旋矩阵" class="headerlink" title="螺旋矩阵"></a>螺旋矩阵</h3><pre><code class="js">var spiralOrder = function(matrix) &#123;
+    if (!matrix.length || !matrix[0].length) &#123;
+        return [];
+    &#125;
+    const rows = matrix.length, columns = matrix[0].length;
+    const visited = new Array(rows).fill(0).map(() =&gt; new Array(columns).fill(false));
+    const total = rows * columns;
+    const order = new Array(total).fill(0);
+
+    let directionIndex = 0, row = 0, column = 0;
+    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+    for (let i = 0; i &lt; total; i++) &#123; 
+        order[i] = matrix[row][column];
+        visited[row][column] = true;
+        const nextRow = row + directions[directionIndex][0], nextColumn = column + directions[directionIndex][1];
+        if (!(0 &lt;= nextRow &amp;&amp; nextRow &lt; rows &amp;&amp; 0 &lt;= nextColumn &amp;&amp; nextColumn &lt; columns &amp;&amp; !(visited[nextRow][nextColumn]))) &#123;
+            directionIndex = (directionIndex + 1) % 4;
+        &#125;
+        row += directions[directionIndex][0];
+        column += directions[directionIndex][1];
+    &#125;
+    return order;
+&#125;;
+</code></pre>
+<h3 id="旋转图像"><a href="#旋转图像" class="headerlink" title="旋转图像"></a>旋转图像</h3><pre><code class="js">var rotate = function(matrix) &#123;
+    const n = matrix.length;
+    // 水平翻转
+    for (let i = 0; i &lt; Math.floor(n / 2); i++) &#123;
+        for (let j = 0; j &lt; n; j++) &#123;
+            [matrix[i][j], matrix[n - i - 1][j]] = [matrix[n - i - 1][j], matrix[i][j]];
+        &#125;
+    &#125;
+    // 主对角线翻转
+    for (let i = 0; i &lt; n; i++) &#123;
+        for (let j = 0; j &lt; i; j++) &#123;
+            [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+        &#125;
+    &#125;
+&#125;;
+</code></pre>
+<h3 id="搜索二维矩阵-II"><a href="#搜索二维矩阵-II" class="headerlink" title="搜索二维矩阵 II"></a>搜索二维矩阵 II</h3><pre><code class="js">var searchMatrix = function(matrix, target) &#123;
+    const m = matrix.length, n = matrix[0].length;
+    let x = 0, y = n - 1;
+    while (x &lt; m &amp;&amp; y &gt;= 0) &#123;
+        if (matrix[x][y] === target) &#123;
+            return true;
+        &#125;
+        if (matrix[x][y] &gt; target) &#123;
+            --y;
+        &#125; else &#123;
+            ++x;
+        &#125;
+    &#125;
+    return false;
+&#125;;
+</code></pre>
+<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><h3 id="相交链表"><a href="#相交链表" class="headerlink" title="相交链表"></a>相交链表</h3><pre><code class="js">var getIntersectionNode = function(headA, headB) &#123;
+    if (headA === null || headB === null) &#123;
+        return null;
+    &#125;
+    let pA = headA, pB = headB;
+    while (pA !== pB) &#123;
+        pA = pA === null ? headB : pA.next;
+        pB = pB === null ? headA : pB.next;
+    &#125;
+    return pA;
+&#125;;
+</code></pre>
+<h3 id="反转链表"><a href="#反转链表" class="headerlink" title="反转链表"></a>反转链表</h3><pre><code class="js">var reverseList = function(head) &#123;
+    let prev = null;
+    let curr = head;
+    while(curr) &#123;
+        const next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    &#125;
+    return prev; 
+&#125;;
+</code></pre>
+<h3 id="回文链表"><a href="#回文链表" class="headerlink" title="回文链表"></a>回文链表</h3><pre><code class="js">const reverseList = (head) =&gt; &#123;
+    let prev = null;
+    let curr = head;
+    while (curr !== null) &#123;
+        let nextTemp = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nextTemp;
+    &#125;
+    return prev;
+&#125;
+
+const endOfFirstHalf = (head) =&gt; &#123;
+    let fast = head;
+    let slow = head;
+    while (fast.next !== null &amp;&amp; fast.next.next !== null) &#123;
+        fast = fast.next.next;
+        slow = slow.next;
+    &#125;
+    return slow;
+&#125;
+
+var isPalindrome = function(head) &#123;
+    if (head == null) return true;
+
+    // 找到前半部分链表的尾节点并反转后半部分链表
+    const firstHalfEnd = endOfFirstHalf(head);
+    const secondHalfStart = reverseList(firstHalfEnd.next);
+
+    // 判断是否回文
+    let p1 = head;
+    let p2 = secondHalfStart;
+    let result = true;
+    while (result &amp;&amp; p2 != null) &#123;
+        if (p1.val != p2.val) result = false;
+        p1 = p1.next;
+        p2 = p2.next;
+    &#125;        
+
+    // 还原链表并返回结果
+    return result;
+&#125;;
+</code></pre>
+<h3 id="环形链表"><a href="#环形链表" class="headerlink" title="环形链表"></a>环形链表</h3><pre><code class="js">var hasCycle = function (head) &#123;
+    let slow = head, fast = head; // 乌龟和兔子同时从起点出发
+    while (fast &amp;&amp; fast.next) &#123;
+        slow = slow.next; // 乌龟走一步
+        fast = fast.next.next; // 兔子走两步
+        if (fast === slow) // 兔子追上乌龟（套圈），说明有环
+            return true;
+    &#125;
+    return false; // 访问到了链表末尾，无环
+&#125;;
+</code></pre>
+<h3 id="环形链表-II"><a href="#环形链表-II" class="headerlink" title="环形链表 II"></a>环形链表 II</h3><pre><code class="js">var detectCycle = function(head) &#123;
+   if (head === null) &#123;
+       return null;
+   &#125;
+   let slow = head, fast = head;
+   while (fast !== null) &#123;
+       slow = slow.next;
+       if (fast.next !== null) &#123;
+           fast = fast.next.next;
+       &#125; else &#123;
+           return null;
+       &#125;
+       if (fast === slow) &#123;
+           let ptr = head;
+           while (ptr !== slow) &#123;
+               ptr = ptr.next;
+               slow = slow.next;
+           &#125;
+           return ptr;
+       &#125;
+   &#125;
+   return null;
+&#125;;
+</code></pre>
+<h3 id="合并两个有序链表"><a href="#合并两个有序链表" class="headerlink" title="合并两个有序链表"></a>合并两个有序链表</h3><pre><code class="js">var mergeTwoLists = function(list1, list2) &#123;
+    let l = new ListNode();
+    let pre = l;
+    while(list1 &amp;&amp; list2) &#123;
+        if(list1.val &lt;= list2.val) &#123;
+            pre.next = list1;
+            list1 = list1.next;
+        &#125;
+        else &#123;
+            pre.next = list2;
+            list2 = list2.next;
+        &#125;
+        pre = pre.next;
+    &#125;
+    pre.next = list1 === null ? list2 : list1;
+    return l.next;
+&#125;;
+</code></pre>
+<h3 id="两数相加"><a href="#两数相加" class="headerlink" title="两数相加"></a>两数相加</h3><pre><code class="js">var addTwoNumbers = function(l1, l2) &#123;
+    let head = null, tail = null;
+    let carry = 0;
+    while (l1 || l2) &#123;
+        const n1 = l1 ? l1.val : 0;
+        const n2 = l2 ? l2.val : 0;
+        const sum = n1 + n2 + carry;
+        if (!head) &#123;
+            head = tail = new ListNode(sum % 10);
+        &#125; else &#123;
+            tail.next = new ListNode(sum % 10);
+            tail = tail.next;
+        &#125;
+        carry = Math.floor(sum / 10);
+        if (l1) &#123;
+            l1 = l1.next;
+        &#125;
+        if (l2) &#123;
+            l2 = l2.next;
+        &#125;
+    &#125;
+    if (carry &gt; 0) &#123;
+        tail.next = new ListNode(carry);
+    &#125;
+    return head;
+&#125;;
+</code></pre>
+<h3 id="删除链表的倒数第-N-个结点"><a href="#删除链表的倒数第-N-个结点" class="headerlink" title="删除链表的倒数第 N 个结点"></a>删除链表的倒数第 N 个结点</h3><pre><code class="js">var removeNthFromEnd = function(head, n) &#123;
+    // 由于可能会删除链表头部，用哨兵节点简化代码
+    const dummy = new ListNode(0, head);
+    let left = dummy, right = dummy;
+    while (n--) &#123;
+        right = right.next; // 右指针先向右走 n 步
+    &#125;
+    while (right.next) &#123;
+        left = left.next;
+        right = right.next; // 左右指针一起走
+    &#125;
+    left.next = left.next.next; // 左指针的下一个节点就是倒数第 n 个节点
+    return dummy.next;
+&#125;;
+</code></pre>
+<h3 id="两两交换链表中的节点"><a href="#两两交换链表中的节点" class="headerlink" title="两两交换链表中的节点"></a>两两交换链表中的节点</h3><pre><code class="js">var swapPairs = function(head) &#123;
+    const dummyHead = new ListNode(0);
+    dummyHead.next = head;
+    let temp = dummyHead;
+    while (temp.next !== null &amp;&amp; temp.next.next !== null) &#123;
+        const node1 = temp.next;
+        const node2 = temp.next.next;
+        temp.next = node2;
+        node1.next = node2.next;
+        node2.next = node1;
+        temp = node1;
+    &#125;
+    return dummyHead.next;
+&#125;;
+</code></pre>
+<h3 id="K-个一组翻转链表"><a href="#K-个一组翻转链表" class="headerlink" title="K 个一组翻转链表"></a>K 个一组翻转链表</h3><pre><code class="js">var reverseKGroup = function (head, k) &#123;
+  let cur = head;
+  let count = 0;
+  while (cur &amp;&amp; count &lt; k) &#123; // 想让cur指针推进k个长度
+    cur = cur.next;
+    count++; // 计数 cur 实际推进的长度
+  &#125; 
+  if (count === k) &#123; // 如果 cur 推进了 k 个长度
+    cur = reverseKGroup(cur, k); // 递归调用
+    while (count &gt; 0) &#123; // k次循环
+      let next = head.next; // head指针推进 
+      head.next = cur; // 让head节点的next指向cur
+      cur = head; 
+      head = next; // head推进一步，cur尾随它
+      count--;
+    &#125;
+    head = cur; // 让head指针重新指向新链的头结点
+  &#125;
+  return head; // 返回头指针
+&#125;;
+</code></pre>
+<h3 id="随机链表的复制"><a href="#随机链表的复制" class="headerlink" title="随机链表的复制"></a>随机链表的复制</h3><pre><code class="js">var copyRandomList = function(head, cachedNode = new Map()) &#123;
+    if (head === null) &#123;
+        return null;
+    &#125;
+    if (!cachedNode.has(head)) &#123;
+        cachedNode.set(head, &#123;val: head.val&#125;), Object.assign(cachedNode.get(head), &#123;next: copyRandomList(head.next, cachedNode), random: copyRandomList(head.random, cachedNode)&#125;)
+    &#125;
+    return cachedNode.get(head);
+&#125;
+</code></pre>
+<h3 id="排序链表"><a href="#排序链表" class="headerlink" title="排序链表"></a>排序链表</h3><pre><code class="js">var sortList = function (head) &#123;
+    if (!head || !head.next)  return head;
+    let slow = head, fast = head;
+    let preSlow = null;
+    while (fast &amp;&amp; fast.next) &#123;
+        preSlow = slow;
+        slow = slow.next;
+        fast = fast.next.next;
+    &#125;
+    preSlow.next = null;
+    const l = sortList(head);
+    const r = sortList(slow);
+    return merge(l, r);
+&#125;;
+
+function merge(l1, l2) &#123;
+    const dummy = new ListNode(0);
+    let prev = dummy;
+    while (l1 &amp;&amp; l2) &#123;
+        if (l1.val &lt; l2.val) &#123;
+            prev.next = l1;
+            l1 = l1.next;
+        &#125; else &#123;
+            prev.next = l2;
+            l2 = l2.next;
+        &#125;
+        prev = prev.next;
+    &#125;
+    if (l1) prev.next = l1;
+    if (l2) prev.next = l2;
+    return dummy.next;
+&#125;
+</code></pre>
+<h3 id="合并-K-个升序链表"><a href="#合并-K-个升序链表" class="headerlink" title="合并 K 个升序链表"></a>合并 K 个升序链表</h3><pre><code class="js">var mergeTwoLists = function (list1, list2) &#123;
+    let dummy = new ListNode(); // 用哨兵节点简化代码逻辑
+    let cur = dummy; // cur 指向新链表的末尾
+    while (list1 &amp;&amp; list2) &#123;
+        if (list1.val &lt; list2.val) &#123;
+            cur.next = list1; // 把 list1 加到新链表中
+            list1 = list1.next;
+        &#125; else &#123; // 注：相等的情况加哪个节点都是可以的
+            cur.next = list2; // 把 list2 加到新链表中
+            list2 = list2.next;
+        &#125;
+        cur = cur.next;
+    &#125;
+    cur.next = list1 ? list1 : list2; // 拼接剩余链表
+    return dummy.next;
+&#125;;
+
+var mergeKLists = function (lists) &#123;
+    // 合并从 lists[i] 到 lists[j-1] 的链表
+    function dfs(i, j) &#123;
+        const m = j - i;
+        if (m === 0) return null; // 注意输入的 lists 可能是空的
+        if (m === 1) return lists[i]; // 无需合并，直接返回
+        const left = dfs(i, i + (m &gt;&gt; 1)); // 合并左半部分
+        const right = dfs(i + (m &gt;&gt; 1), j); // 合并右半部分
+        return mergeTwoLists(left, right); // 最后把左半和右半合并
+    &#125;
+    return dfs(0, lists.length);
+&#125;;
+</code></pre>
+<h3 id="LRU-缓存"><a href="#LRU-缓存" class="headerlink" title="LRU 缓存"></a>LRU 缓存</h3><pre><code class="js">class Node &#123;
+    constructor(key = 0, value = 0) &#123;
+        this.key = key;
+        this.value = value;
+        this.prev = null;
+        this.next = null;
+    &#125;
+&#125;
+
+class LRUCache &#123;
+    constructor(capacity) &#123;
+        this.capacity = capacity;
+        this.dummy = new Node(); // 哨兵节点
+        this.dummy.prev = this.dummy;
+        this.dummy.next = this.dummy;
+        this.keyToNode = new Map();
+    &#125;
+
+    getNode(key) &#123;
+        if (!this.keyToNode.has(key)) &#123; // 没有这本书
+            return null;
+        &#125;
+        const node = this.keyToNode.get(key); // 有这本书
+        this.remove(node); // 把这本书抽出来
+        this.pushFront(node); // 放在最上面
+        return node;
+    &#125;
+
+    get(key) &#123;
+        const node = this.getNode(key);
+        return node ? node.value : -1;
+    &#125;
+
+    put(key, value) &#123;
+        let node = this.getNode(key);
+        if (node) &#123; // 有这本书
+            node.value = value; // 更新 value
+            return;
+        &#125;
+        node = new Node(key, value) // 新书
+        this.keyToNode.set(key, node);
+        this.pushFront(node); // 放在最上面
+        if (this.keyToNode.size &gt; this.capacity) &#123; // 书太多了
+            const backNode = this.dummy.prev;
+            this.keyToNode.delete(backNode.key);
+            this.remove(backNode); // 去掉最后一本书
+        &#125;
+    &#125;
+
+    // 删除一个节点（抽出一本书）
+    remove(x) &#123;
+        x.prev.next = x.next;
+        x.next.prev = x.prev;
+    &#125;
+
+    // 在链表头添加一个节点（把一本书放在最上面）
+    pushFront(x) &#123;
+        x.prev = this.dummy;
+        x.next = this.dummy.next;
+        x.prev.next = x;
+        x.next.prev = x;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><h3 id="二叉树的中序遍历"><a href="#二叉树的中序遍历" class="headerlink" title="二叉树的中序遍历"></a>二叉树的中序遍历</h3><pre><code class="js">var inorderTraversal = function(root) &#123;
+    const arr = [];
+    const s = [];
+    while(root || s.length) &#123;
+        while(root) &#123;
+            s.push(root);
+            root = root.left;
+        &#125;
+        root = s.pop();
+        arr.push(root.val);
+        root = root.right;
+    &#125;
+    return arr;
+&#125;;
+</code></pre>
+<h3 id="二叉树的最大深度"><a href="#二叉树的最大深度" class="headerlink" title="二叉树的最大深度"></a>二叉树的最大深度</h3><pre><code class="js">var maxDepth = function(root) &#123;
+    // let d = 0;
+    const de = (root) =&gt; &#123;
+        if(!root) return 0;
+        if(!root.left &amp;&amp; !root.right) return 1;
+        return Math.max(de(root.left), de(root.right)) + 1;
+    &#125;
+    return de(root);
+    // return d;
+&#125;;
+</code></pre>
+<h3 id="翻转二叉树"><a href="#翻转二叉树" class="headerlink" title="翻转二叉树"></a>翻转二叉树</h3><pre><code class="js">var invertTree = function(root) &#123;
+    if (root === null) &#123;
+        return null;
+    &#125;
+    const left = invertTree(root.left);
+    const right = invertTree(root.right);
+    root.left = right;
+    root.right = left;
+    return root;
+&#125;;
+</code></pre>
+<h3 id="对称二叉树"><a href="#对称二叉树" class="headerlink" title="对称二叉树"></a>对称二叉树</h3><pre><code class="js">var isSymmetric = function(root) &#123;
+    let flag = 1;
+    const cmp = (l, r) =&gt; &#123;
+        if(!l &amp;&amp; !r) return;
+        if((!l &amp;&amp; r) || (!r &amp;&amp; l)) &#123;
+            flag = 0;
+            return;
+        &#125;
+        if(l.val !== r.val) flag = 0;
+        cmp(l.left, r.right);
+        cmp(l.right, r.left);
+    &#125;
+    cmp(root.left, root.right);
+    return flag;
+&#125;;
+</code></pre>
+<h3 id="二叉树的直径"><a href="#二叉树的直径" class="headerlink" title="二叉树的直径"></a>二叉树的直径</h3><pre><code class="js">var diameterOfBinaryTree = function(root) &#123;
+ let ans = 1;
+ function depth(root) &#123;
+    if(!root) return 0;
+    let L = depth(root.left);
+    let R = depth(root.right);
+    ans = Math.max(ans, L+R+1);
+    return Math.max(L, R) + 1;
+ &#125;
+    depth(root);
+    return ans - 1;
+&#125;;
+</code></pre>
+<h3 id="二叉树的层序遍历"><a href="#二叉树的层序遍历" class="headerlink" title="二叉树的层序遍历"></a>二叉树的层序遍历</h3><pre><code class="js">var levelOrder = function(root) &#123;
+    const ret = [];
+    if (!root) &#123;
+        return ret;
+    &#125;
+
+    const q = [];
+    q.push(root);
+    while (q.length !== 0) &#123;
+        const currentLevelSize = q.length;
+        ret.push([]);
+        for (let i = 1; i &lt;= currentLevelSize; ++i) &#123;
+            const node = q.shift();
+            ret[ret.length - 1].push(node.val);
+            if (node.left) q.push(node.left);
+            if (node.right) q.push(node.right);
+        &#125;
+    &#125;
+        
+    return ret;
+&#125;;
+</code></pre>
+<h3 id="将有序数组转换为二叉搜索树"><a href="#将有序数组转换为二叉搜索树" class="headerlink" title="将有序数组转换为二叉搜索树"></a>将有序数组转换为二叉搜索树</h3><pre><code class="js">var sortedArrayToBST = function(nums) &#123;
+    const bt = (nums) =&gt; &#123;
+        if(!nums.length) return null;
+        const tar = Math.floor(nums.length / 2);
+        const t = new TreeNode();
+        t.val = nums[tar];
+        t.left = bt(nums.slice(0, tar));
+        t.right = bt(nums.slice(tar + 1, nums.length))
+        return t;
+    &#125;
+    return bt(nums);
+&#125;;
+</code></pre>
+<h3 id="验证二叉搜索树"><a href="#验证二叉搜索树" class="headerlink" title="验证二叉搜索树"></a>验证二叉搜索树</h3><pre><code class="js">const helper = (root, lower, upper) =&gt; &#123;
+    if (root === null) &#123;
+        return true;
+    &#125;
+    if (root.val &lt;= lower || root.val &gt;= upper) &#123;
+        return false;
+    &#125;
+    return helper(root.left, lower, root.val) &amp;&amp; helper(root.right, root.val, upper);
+&#125;
+var isValidBST = function(root) &#123;
+    return helper(root, -Infinity, Infinity);
+&#125;;
+</code></pre>
+<h3 id="二叉搜索树中第-K-小的元素"><a href="#二叉搜索树中第-K-小的元素" class="headerlink" title="二叉搜索树中第 K 小的元素"></a>二叉搜索树中第 K 小的元素</h3><pre><code class="js">var kthSmallest = function(root, k) &#123;
+    const stack = [];
+    while (root != null || stack.length) &#123;
+        while (root != null) &#123;
+            stack.push(root);
+            root = root.left;
+        &#125;
+        root = stack.pop();
+        --k;
+        if (k === 0) &#123;
+            break;
+        &#125;
+        root = root.right;
+    &#125;
+    return root.val;
+&#125;;
+</code></pre>
+<h3 id="二叉树的右视图"><a href="#二叉树的右视图" class="headerlink" title="二叉树的右视图"></a>二叉树的右视图</h3><pre><code class="js">var rightSideView = function(root) &#123;
+const ret = [];
+const ans = [];
+    if (!root) &#123;
+        return ret;
+    &#125;
+
+    const q = [];
+    q.push(root);
+    while (q.length !== 0) &#123;
+        const currentLevelSize = q.length;
+        ret.push([]);
+        for (let i = 1; i &lt;= currentLevelSize; ++i) &#123;
+            const node = q.shift();
+            ret[ret.length - 1].push(node.val);
+            if (node.left) q.push(node.left);
+            if (node.right) q.push(node.right);
+        &#125;
+        const tempRet = ret[ret.length - 1]
+        ans.push(tempRet[tempRet.length - 1])
+    &#125;
+        
+    return ans;
+&#125;;
+</code></pre>
+<h3 id="二叉树展开为链表"><a href="#二叉树展开为链表" class="headerlink" title="二叉树展开为链表"></a>二叉树展开为链表</h3><pre><code class="js">var flatten = function(root) &#123;
+    let curr = root;
+    while (curr !== null) &#123;
+        if (curr.left !== null) &#123;
+            const next = curr.left;
+            let predecessor = next;
+            while (predecessor.right !== null) &#123;
+                predecessor = predecessor.right;
+            &#125;
+            predecessor.right = curr.right;
+            curr.left = null;
+            curr.right = next;
+        &#125;
+        curr = curr.right;
+    &#125;
+&#125;;
+</code></pre>
+<h3 id="从前序与中序遍历序列构造二叉树"><a href="#从前序与中序遍历序列构造二叉树" class="headerlink" title="从前序与中序遍历序列构造二叉树"></a>从前序与中序遍历序列构造二叉树</h3><pre><code class="js">var buildTree = function(preorder, inorder) &#123;
+    const n = preorder.length;
+    const index = new Map();
+    for (let i = 0; i &lt; n; i++) &#123;
+        index.set(inorder[i], i);
+    &#125;
+
+    function dfs(preL, preR, inL, inR) &#123;
+        if (preL === preR) &#123; // 空节点
+            return null;
+        &#125;
+        const leftSize = index.get(preorder[preL]) - inL; // 左子树的大小
+        const left = dfs(preL + 1, preL + 1 + leftSize, inL, inL + leftSize);
+        const right = dfs(preL + 1 + leftSize, preR, inL + 1 + leftSize, inR);
+        return new TreeNode(preorder[preL], left, right);
+    &#125;
+    return dfs(0, n, 0, n); // 左闭右开区间
+&#125;;
+</code></pre>
+<h3 id="路径总和-III"><a href="#路径总和-III" class="headerlink" title="路径总和 III"></a>路径总和 III</h3><pre><code class="js">const pathSum = function(root, targetSum) &#123;
+    let ans = 0;
+    const cnt = &#123;0: 1&#125;; // 把 s[0] = 0 统计进来
+    function dfs(node, s) &#123;
+        if (node === null) &#123;
+            return;
+        &#125;
+        s += node.val;
+        ans += cnt[s - targetSum] ?? 0;
+        cnt[s] = (cnt[s] ?? 0) + 1;
+        dfs(node.left, s);
+        dfs(node.right, s);
+        cnt[s]--; // 恢复现场
+    &#125;
+    dfs(root, 0);
+    return ans;
+&#125;;
+</code></pre>
+<p>二叉树的最近公共祖先</p>
+<pre><code class="js">
+var lowestCommonAncestor = function(root, p, q) &#123;
+    if (root === null || root === p || root === q) &#123;
+        return root;
+    &#125;
+    const left = lowestCommonAncestor(root.left, p, q);
+    const right = lowestCommonAncestor(root.right, p, q);
+    if (left &amp;&amp; right) &#123;
+        return root;
+    &#125;
+    return left ?? right;
+&#125;;
+</code></pre>
+<h3 id="二叉树中的最大路径和"><a href="#二叉树中的最大路径和" class="headerlink" title="二叉树中的最大路径和"></a>二叉树中的最大路径和</h3><pre><code class="js">const maxPathSum = (root) =&gt; &#123;
+    let maxSum = Number.MIN_SAFE_INTEGER; // 最大路径和
+
+    const dfs = (root) =&gt; &#123;
+        if (root == null) &#123; // 遍历到null节点，收益0
+           return 0;
+        &#125;
+        const left = dfs(root.left);   // 左子树提供的最大路径和
+        const right = dfs(root.right); // 右子树提供的最大路径和
+
+        const innerMaxSum = left + root.val + right; // 当前子树内部的最大路径和
+        maxSum = Math.max(maxSum, innerMaxSum);      // 挑战最大纪录
+
+        const outputMaxSum = root.val + Math.max(0, left, right); // 当前子树对外提供的最大和
+
+        // 如果对外提供的路径和为负，直接返回0。否则正常返回
+        return outputMaxSum &lt; 0 ? 0 : outputMaxSum;
+    &#125;;
+
+    dfs(root);  // 递归的入口
+
+    return maxSum; 
+&#125;;
+</code></pre>
+<h2 id="图"><a href="#图" class="headerlink" title="图"></a>图</h2><h3 id="岛屿数量"><a href="#岛屿数量" class="headerlink" title="岛屿数量"></a>岛屿数量</h3><pre><code class="js">/**
+ * @param &#123;character[][]&#125; grid
+ * @return &#123;number&#125;
+ */
+const numIslands = (grid) =&gt; &#123;
+  let count = 0
+  for (let i = 0; i &lt; grid.length; i++) &#123;
+    for (let j = 0; j &lt; grid[0].length; j++) &#123;
+      if (grid[i][j] === &#39;1&#39;) &#123;
+        count++
+        turnZero(i, j, grid)
+      &#125;
+    &#125;
+  &#125;
+  return count
+&#125;
+function turnZero(i, j, grid) &#123;
+  if (i &lt; 0 || i &gt;= grid.length || j &lt; 0 
+       || j &gt;= grid[0].length || grid[i][j] === &#39;0&#39;) return
+  grid[i][j] = &#39;0&#39;
+  turnZero(i, j + 1, grid)
+  turnZero(i, j - 1, grid)
+  turnZero(i + 1, j, grid)
+  turnZero(i - 1, j, grid)
+&#125;
+</code></pre>
+<h3 id="腐烂的橘子"><a href="#腐烂的橘子" class="headerlink" title="腐烂的橘子"></a>腐烂的橘子</h3><pre><code class="js">/**
+ * @param &#123;number[][]&#125; grid
+ * @return &#123;number&#125;
+ */
+var orangesRotting = function(grid) &#123;
+    const m = grid.length;
+    const n = grid[0].length;
+    let fresh = 0;
+    let q = [];
+    for (let i = 0; i &lt; m; i++) &#123;
+        for (let j = 0; j &lt; n; j++) &#123;
+            if (grid[i][j] === 1) &#123;
+                fresh++; // 统计新鲜橘子个数
+            &#125; else if (grid[i][j] === 2) &#123;
+                q.push([i, j]); // 一开始就腐烂的橘子
+            &#125;
+        &#125;
+    &#125;
+
+    let ans = -1;
+    while (q.length) &#123;
+        ans++; // 经过一分钟
+        const tmp = q;
+        q = [];
+        for (const [x, y] of tmp) &#123; // 已经腐烂的橘子
+            for (const [i, j] of [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]]) &#123; // 四方向
+                if (0 &lt;= i &amp;&amp; i &lt; m &amp;&amp; 0 &lt;= j &amp;&amp; j &lt; n &amp;&amp; grid[i][j] === 1) &#123; // 新鲜橘子
+                    fresh--;
+                    grid[i][j] = 2; // 变成腐烂橘子
+                    q.push([i, j]);
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+
+    return fresh ? -1 : Math.max(ans, 0);
+&#125;;
+</code></pre>
+<h3 id="课程表"><a href="#课程表" class="headerlink" title="课程表"></a>课程表</h3><pre><code class="js">/**
+ * @param &#123;number&#125; numCourses
+ * @param &#123;number[][]&#125; prerequisites
+ * @return &#123;boolean&#125;
+ */
+const canFinish = (numCourses, prerequisites) =&gt; &#123;
+  const inDegree = new Array(numCourses).fill(0); // 入度数组
+  const map = &#123;&#125;;                                 // 邻接表
+  for (let i = 0; i &lt; prerequisites.length; i++) &#123;
+    inDegree[prerequisites[i][0]]++;              // 求课的初始入度值
+    if (map[prerequisites[i][1]]) &#123;               // 当前课已经存在于邻接表
+      map[prerequisites[i][1]].push(prerequisites[i][0]); // 添加依赖它的后续课
+    &#125; else &#123;                                      // 当前课不存在于邻接表
+      map[prerequisites[i][1]] = [prerequisites[i][0]];
+    &#125;
+  &#125;
+  const queue = [];
+  for (let i = 0; i &lt; inDegree.length; i++) &#123; // 所有入度为0的课入列
+    if (inDegree[i] == 0) queue.push(i);
+  &#125;
+  let count = 0;
+  while (queue.length) &#123;
+    const selected = queue.shift();           // 当前选的课，出列
+    count++;                                  // 选课数+1
+    const toEnQueue = map[selected];          // 获取这门课对应的后续课
+    if (toEnQueue &amp;&amp; toEnQueue.length) &#123;      // 确实有后续课
+      for (let i = 0; i &lt; toEnQueue.length; i++) &#123;
+        inDegree[toEnQueue[i]]--;             // 依赖它的后续课的入度-1
+        if (inDegree[toEnQueue[i]] == 0) &#123;    // 如果因此减为0，入列
+          queue.push(toEnQueue[i]);
+        &#125;
+      &#125;
+    &#125;
+  &#125;
+  return count == numCourses; // 选了的课等于总课数，true，否则false
+&#125;;
+</code></pre>
+<h3 id="实现-Trie-前缀树"><a href="#实现-Trie-前缀树" class="headerlink" title="实现 Trie (前缀树)"></a>实现 Trie (前缀树)</h3><pre><code class="js">var Trie = function() &#123;
+    this.children = &#123;&#125;;
+&#125;;
+
+Trie.prototype.insert = function(word) &#123;
+    let node = this.children;
+    for (const ch of word) &#123;
+        if (!node[ch]) &#123;
+            node[ch] = &#123;&#125;;
+        &#125;
+        node = node[ch];
+    &#125;
+    node.isEnd = true;
+&#125;;
+
+Trie.prototype.searchPrefix = function(prefix) &#123;
+    let node = this.children;
+    for (const ch of prefix) &#123;
+        if (!node[ch]) &#123;
+            return false;
+        &#125;
+        node = node[ch];
+    &#125;
+    return node;
+&#125;
+
+Trie.prototype.search = function(word) &#123;
+    const node = this.searchPrefix(word);
+    return node !== undefined &amp;&amp; node.isEnd !== undefined;
+&#125;;
+
+Trie.prototype.startsWith = function(prefix) &#123;
+    return this.searchPrefix(prefix);
+&#125;;
+</code></pre>
+<h2 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h2><h3 id="全排列"><a href="#全排列" class="headerlink" title="全排列"></a>全排列</h3><pre><code class="js">
+/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number[][]&#125;
+ */
+var permute = function(nums) &#123;
+    const res = [], path = [];
+    backtracking(nums, nums.length, []);
+    return res;
+    
+    function backtracking(n, k, used) &#123;
+        if(path.length === k) &#123;
+            res.push(Array.from(path));
+            return;
+        &#125;
+        for (let i = 0; i &lt; k; i++ ) &#123;
+            if(used[i]) continue;
+            path.push(n[i]);
+            used[i] = true; // 同支
+            backtracking(n, k, used);
+            path.pop();
+            used[i] = false;
+        &#125;
+    &#125;
+&#125;;
+
+/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number[][]&#125;
+ */
+var permute = function(nums) &#123;
+    const res = [], path = [];
+    backtracking(nums, nums.length, []);
+    return res;
+    nums.sort((a, b) =&gt; a - b);
+
+    function backtracking(n, k, used) &#123;
+        if(path.length === k) &#123;
+            res.push(Array.from(path));
+            return;
+        &#125;
+        for (let i = 0; i &lt; k; i++ ) &#123;
+            if(used[i]) continue;
+            if (i &gt; 0 &amp;&amp; nums[i] === nums[i - 1] &amp;&amp; !used[i - 1]) continue;
+            path.push(n[i]);
+            used[i] = true; // 同支
+            backtracking(n, k, used);
+            path.pop();
+            used[i] = false;
+        &#125;
+    &#125;
+&#125;;
+</code></pre>
+<h3 id="子集"><a href="#子集" class="headerlink" title="子集"></a>子集</h3><pre><code class="js">var subsets = function(nums) &#123;
+    let ans = []
+    let path = []
+    const n = nums.length;
+    function dfs(i) &#123;
+        if (i === n) &#123; // 子集构造完毕
+            ans.push(path.slice()); // 复制 path
+            return;
+        &#125;
+        
+        // 不选 nums[i]
+        dfs(i + 1);
+        
+        // 选 nums[i]
+        path.push(nums[i]);
+        dfs(i + 1);
+        path.pop(); // 恢复现场
+    &#125;
+    dfs(0);
+    return ans;
+&#125;;
+
+/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number[][]&#125;
+ */
+var subsets = function(nums) &#123;
+    let ans = [];
+    let path = [];
+    const n = nums.length;
+
+    // 首先对数组进行排序
+    nums.sort((a, b) =&gt; a - b);
+
+    function dfs(i) &#123;
+        // 子集构造完毕
+        ans.push(path.slice()); // 复制 path
+        
+        for (let j = i; j &lt; n; j++) &#123;
+            // 跳过重复元素
+            if (j &gt; i &amp;&amp; nums[j] === nums[j - 1]) &#123;
+                continue; // 如果当前元素与前一个元素相同，则跳过
+            &#125;
+            path.push(nums[j]); // 选 nums[j]
+            dfs(j + 1); // 继续递归
+            path.pop(); // 恢复现场
+        &#125;
+    &#125;
+
+    dfs(0); // 从索引 0 开始深度优先搜索
+    return ans; // 返回所有子集
+&#125;;
+</code></pre>
+<h3 id="电话号码的字母组合"><a href="#电话号码的字母组合" class="headerlink" title="电话号码的字母组合"></a>电话号码的字母组合</h3><pre><code class="js">var letterCombinations = function(digits) &#123;
+    const k = digits.length;
+    const map = [&quot;&quot;,&quot;&quot;,&quot;abc&quot;,&quot;def&quot;,&quot;ghi&quot;,&quot;jkl&quot;,&quot;mno&quot;,&quot;pqrs&quot;,&quot;tuv&quot;,&quot;wxyz&quot;];
+    if(!k) return [];
+    if(k === 1) return map[digits].split(&quot;&quot;);
+
+    const res = [], path = [];
+    backtracking(digits, k, 0);
+    return res;
+
+    function backtracking(n, k, a) &#123;
+        if(path.length === k) &#123;
+            res.push(path.join(&quot;&quot;));
+            return;
+        &#125;
+        for(const v of map[n[a]]) &#123;
+            path.push(v);
+            backtracking(n, k, a + 1);
+            path.pop();
+        &#125;
+    &#125;
+&#125;;
+</code></pre>
+<h3 id="组合总和"><a href="#组合总和" class="headerlink" title="组合总和"></a>组合总和</h3><pre><code class="js">var combinationSum = function(candidates, target) &#123;
+    const res = [], path = [];
+    candidates.sort((a,b)=&gt;a-b); // 排序
+    backtracking(0, 0);
+    return res;
+    function backtracking(j, sum) &#123;
+        if (sum === target) &#123;
+            res.push(Array.from(path));
+            return;
+        &#125;
+        for(let i = j; i &lt; candidates.length; i++ ) &#123;
+            const n = candidates[i];
+            if(n &gt; target - sum) break;
+            path.push(n);
+            sum += n;
+            backtracking(i, sum);
+            path.pop();
+            sum -= n;
+        &#125;
+    &#125;
+&#125;;
+</code></pre>
+<h3 id="括号生成"><a href="#括号生成" class="headerlink" title="括号生成"></a>括号生成</h3><pre><code class="js">var generateParenthesis = function (n) &#123;
+  const res = [];
+
+  const dfs = (lRemain, rRemain, str) =&gt; &#123; // 左右括号所剩的数量，str是当前构建的字符串
+    if (str.length == 2 * n) &#123; // 字符串构建完成
+      res.push(str);           // 加入解集
+      return;                  // 结束当前递归分支
+    &#125;
+    if (lRemain &gt; 0) &#123;         // 只要左括号有剩，就可以选它，然后继续做选择（递归）
+      dfs(lRemain - 1, rRemain, str + &quot;(&quot;);
+    &#125;
+    if (lRemain &lt; rRemain) &#123;   // 右括号比左括号剩的多，才能选右括号
+      dfs(lRemain, rRemain - 1, str + &quot;)&quot;); // 然后继续做选择（递归）
+    &#125;
+  &#125;;
+
+  dfs(n, n, &quot;&quot;); // 递归的入口，剩余数量都是n，初始字符串是空串
+  return res;
+&#125;;
+</code></pre>
+<h3 id="单词搜索"><a href="#单词搜索" class="headerlink" title="单词搜索"></a>单词搜索</h3><pre><code class="js">const exist = (board, word) =&gt; &#123;
+    const m = board.length;
+    const n = board[0].length;
+    const used = new Array(m);    // 二维矩阵used，存放bool值
+    for (let i = 0; i &lt; m; i++) &#123;
+        used[i] = new Array(n);
+    &#125;
+    // canFind 判断当前点是否是目标路径上的点
+    const canFind = (row, col, i) =&gt; &#123; // row col 当前点的坐标，i当前考察的word字符索引
+        if (i == word.length) &#123;        // 递归的出口 i越界了就返回true
+            return true;
+        &#125;
+        if (row &lt; 0 || row &gt;= m || col &lt; 0 || col &gt;= n) &#123; // 当前点越界 返回false
+            return false;
+        &#125;
+        if (used[row][col] || board[row][col] != word[i]) &#123; // 当前点已经访问过，或，非目标点
+            return false;
+        &#125;
+        // 排除掉所有false的情况，当前点暂时没毛病，可以继续递归考察
+        used[row][col] = true;  // 记录一下当前点被访问了
+        // canFindRest：基于当前选择的点[row,col]，能否找到剩余字符的路径。
+        const canFindRest = canFind(row + 1, col, i + 1) || canFind(row - 1, col, i + 1) ||
+            canFind(row, col + 1, i + 1) || canFind(row, col - 1, i + 1); 
+
+        if (canFindRest) &#123; // 基于当前点[row,col]，可以为剩下的字符找到路径
+            return true;    
+        &#125;
+        used[row][col] = false; // 不能为剩下字符找到路径，返回false，撤销当前点的访问状态
+        return false;
+    &#125;;
+
+    for (let i = 0; i &lt; m; i++) &#123; // 遍历找起点，作为递归入口
+      for (let j = 0; j &lt; n; j++) &#123;
+        if (board[i][j] == word[0] &amp;&amp; canFind(i, j, 0)) &#123; // 找到起点且递归结果为真，找到目标路径
+          return true; 
+        &#125;
+      &#125;
+    &#125;
+    return false; // 怎么样都没有返回true，则返回false
+&#125;;
+</code></pre>
+<h3 id="分割回文串"><a href="#分割回文串" class="headerlink" title="分割回文串"></a>分割回文串</h3><pre><code class="js">var partition = function (s) &#123;
+    const res = [];
+    const dp = new Array(s.length);
+    for (let i = 0; i &lt; dp.length; i++) &#123;
+        dp[i] = new Array(s.length);
+    &#125;
+    for (let j = 0; j &lt; s.length; j++) &#123;
+        for (let i = 0; i &lt;= j; i++) &#123;
+            if (i == j) &#123;
+                dp[i][j] = true;
+            &#125; else if (j - i == 1 &amp;&amp; s[i] == s[j]) &#123;
+                dp[i][j] = true;
+            &#125; else if (j - i &gt; 1 &amp;&amp; s[i] == s[j] &amp;&amp; dp[i + 1][j - 1]) &#123;
+                dp[i][j] = true;
+            &#125; else &#123;
+                dp[i][j] = false;
+            &#125;
+        &#125;
+    &#125;
+    function dfs(temp, start) &#123;
+        if (start == s.length) &#123;
+            res.push(temp.slice());
+            return;
+        &#125;
+        for (let i = start; i &lt; s.length; i++) &#123;
+            if (dp[start][i]) &#123;
+                temp.push(s.substring(start, i + 1));
+                dfs(temp, i + 1);
+                temp.pop();
+            &#125;
+        &#125;
+    &#125;
+    dfs([], 0);
+    return res;
+&#125;;
+</code></pre>
+<h3 id="N-皇后"><a href="#N-皇后" class="headerlink" title="N 皇后"></a>N 皇后</h3><pre><code class="js">const solveNQueens = (n) =&gt; &#123;
+  const board = new Array(n);
+  for (let i = 0; i &lt; n; i++) &#123;
+    board[i] = new Array(n).fill(&#39;.&#39;);
+  &#125;
+
+  const cols = new Set();  // 列集，记录出现过皇后的列
+  const diag1 = new Set(); // 正对角线集
+  const diag2 = new Set(); // 反对角线集
+  const res = [];
+
+  const helper = (row) =&gt; &#123;
+    if (row == n) &#123;
+      const stringsBoard = board.slice();
+      for (let i = 0; i &lt; n; i++) &#123;
+        stringsBoard[i] = stringsBoard[i].join(&#39;&#39;);
+      &#125;
+      res.push(stringsBoard);
+      return;
+    &#125;
+    for (let col = 0; col &lt; n; col++) &#123;
+      // 如果当前点的所在的列，所在的对角线都没有皇后，即可选择，否则，跳过
+      if (!cols.has(col) &amp;&amp; !diag1.has(row + col) &amp;&amp; !diag2.has(row - col)) &#123; 
+        board[row][col] = &#39;Q&#39;;  // 放置皇后
+        cols.add(col);          // 记录放了皇后的列
+        diag2.add(row - col);   // 记录放了皇后的正对角线
+        diag1.add(row + col);   // 记录放了皇后的负对角线
+        helper(row + 1);
+        board[row][col] = &#39;.&#39;;  // 撤销该点的皇后
+        cols.delete(col);       // 对应的记录也删一下
+        diag2.delete(row - col);
+        diag1.delete(row + col);
+      &#125;
+    &#125;
+  &#125;;
+  helper(0);
+  return res;
+&#125;;
+</code></pre>
+<h2 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h2><h3 id="搜索插入位置"><a href="#搜索插入位置" class="headerlink" title="搜索插入位置"></a>搜索插入位置</h3><pre><code class="js">var searchInsert = function(nums, target) &#123;
+       let left = 0, right = nums.length - 1; // 闭区间 [left, right]
+    while (left &lt;= right) &#123; // 区间不为空
+        // 循环不变量：
+        // nums[left-1] &lt; target
+        // nums[right+1] &gt;= target
+        const mid = Math.floor((left + right) / 2);
+        if (nums[mid] &lt; target) &#123;
+            left = mid + 1; // 范围缩小到 [mid+1, right]
+        &#125; else &#123;
+            right = mid - 1; // 范围缩小到 [left, mid-1]
+        &#125;
+    &#125;
+    return left;
+&#125;;
+</code></pre>
+<h3 id="搜索二维矩阵"><a href="#搜索二维矩阵" class="headerlink" title="搜索二维矩阵"></a>搜索二维矩阵</h3><pre><code class="js">var searchMatrix = function(matrix, target) &#123;
+    const m = matrix.length, n = matrix[0].length;
+    let i = 0, j = n - 1;
+    while (i &lt; m &amp;&amp; j &gt;= 0) &#123; // 还有剩余元素
+        if (matrix[i][j] === target) &#123;
+            return true; // 找到 target
+        &#125;
+        if (matrix[i][j] &lt; target) &#123;
+            i++; // 这一行剩余元素全部小于 target，排除
+        &#125; else &#123;
+            j--; // 这一列剩余元素全部大于 target，排除
+        &#125;
+    &#125;
+    return false;
+&#125;;
+</code></pre>
+<h3 id="在排序数组中查找元素的第一个和最后一个位置"><a href="#在排序数组中查找元素的第一个和最后一个位置" class="headerlink" title="在排序数组中查找元素的第一个和最后一个位置"></a>在排序数组中查找元素的第一个和最后一个位置</h3><pre><code class="js">// 闭区间写法
+var lowerBound = function (nums, target) &#123;
+    let left = 0, right = nums.length - 1; // 闭区间 [left, right]
+    while (left &lt;= right) &#123; // 区间不为空
+        // 循环不变量：
+        // nums[left-1] &lt; target
+        // nums[right+1] &gt;= target
+        const mid = Math.floor((left + right) / 2);
+        if (nums[mid] &lt; target) &#123;
+            left = mid + 1; // 范围缩小到 [mid+1, right]
+        &#125; else &#123;
+            right = mid - 1; // 范围缩小到 [left, mid-1]
+        &#125;
+    &#125;
+    return left;
+&#125;
+
+
+var searchRange = function (nums, target) &#123;
+    const start = lowerBound(nums, target); // 选择其中一种写法即可
+    if (start === nums.length || nums[start] !== target) &#123;
+        return [-1, -1]; // nums 中没有 target
+    &#125;
+    // 如果 start 存在，那么 end 必定存在
+    const end = lowerBound(nums, target + 1) - 1;
+    return [start, end];
+&#125;;
+</code></pre>
+<h3 id="搜索旋转排序数组"><a href="#搜索旋转排序数组" class="headerlink" title="搜索旋转排序数组"></a>搜索旋转排序数组</h3><pre><code class="js">const search = function(nums, target) &#123;
+    if (!nums.length) return -1
+    let left = 0, right = nums.length - 1, mid
+    while (left &lt;= right) &#123;
+        mid = left + ((right - left) &gt;&gt; 1)
+        if (nums[mid] === target) &#123;
+            return mid
+        &#125;
+        if (nums[mid] &gt;= nums[left]) &#123;
+            if (target &gt;= nums[left] &amp;&amp; target &lt; nums[mid]) &#123;
+                right = mid - 1
+            &#125; else &#123;
+                left = mid + 1
+            &#125;
+        &#125; else &#123;
+            if (target &gt; nums[mid] &amp;&amp; target &lt;= nums[right]) &#123;
+                left = mid + 1
+            &#125; else &#123;
+                right = mid - 1
+            &#125;
+        &#125;
+    &#125;
+    return -1
+&#125;
+</code></pre>
+<h3 id="寻找旋转排序数组中的最小值"><a href="#寻找旋转排序数组中的最小值" class="headerlink" title="寻找旋转排序数组中的最小值"></a>寻找旋转排序数组中的最小值</h3><pre><code class="js">var findMin = function(nums) &#123;
+    let low = 0;
+    let high = nums.length - 1;
+    while (low &lt; high) &#123;
+        const pivot = low + Math.floor((high - low) / 2);
+        if (nums[pivot] &lt; nums[high]) &#123;
+            high = pivot;
+        &#125; else &#123;
+            low = pivot + 1;
+        &#125;
+    &#125;
+    return nums[low];
+&#125;;
+</code></pre>
+<h3 id="寻找两个正序数组的中位数"><a href="#寻找两个正序数组的中位数" class="headerlink" title="寻找两个正序数组的中位数"></a>寻找两个正序数组的中位数</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums1
+ * @param &#123;number[]&#125; nums2
+ * @return &#123;number&#125;
+ */
+var findMedianSortedArrays = function(nums1, nums2) &#123;
+    const findk = (nums1, nums2, k) =&gt; &#123;
+        let index1 = 0, index2 = 0;
+        while(1) &#123;
+            if(index1 === nums1.length) &#123;
+                return nums2[k + index2 - 1];
+            &#125;
+            if(index2 === nums2.length) &#123;
+                return nums1[k + index1 - 1];
+            &#125;
+            if(k === 1) &#123;
+                return Math.min(nums1[index1], nums2[index2]);
+            &#125;
+            let half = k &gt;&gt; 1;
+            let newIndex1 = Math.min(nums1.length, index1 + half) - 1;
+            let newIndex2 = Math.min(nums2.length, index2 + half) - 1;
+            if(nums1[newIndex1] &lt;= nums2[newIndex2]) &#123;
+                k -= (newIndex1 - index1 + 1);
+                index1 = newIndex1 + 1;
+            &#125;
+            else &#123;
+                k -= (newIndex2 - index2 + 1);
+                index2 = newIndex2 + 1;
+            &#125;
+        &#125;
+    &#125;
+    if((nums1.length + nums2.length) % 2 === 1) &#123;
+        return findk(nums1, nums2, ((nums1.length + nums2.length) &gt;&gt; 1) + 1)
+    &#125;
+    else &#123;
+        return (findk(nums1, nums2, (nums1.length + nums2.length) &gt;&gt; 1) + findk(nums1, nums2, ((nums1.length + nums2.length) &gt;&gt; 1) + 1)) / 2 ;
+    &#125;
+    
+&#125;;
+</code></pre>
+<h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><h3 id="有效的括号"><a href="#有效的括号" class="headerlink" title="有效的括号"></a>有效的括号</h3><pre><code class="js">/**
+ * @param &#123;string&#125; s
+ * @return &#123;boolean&#125;
+ */
+var isValid = function(s) &#123;
+    const stack = [];
+    let flag = 1;
+    const ss = s.split(&#39;&#39;);
+    ss.forEach(e =&gt; &#123;
+        if(e === &#39;(&#39; || e === &#39;[&#39; || e === &#39;&#123;&#39;) &#123;
+            stack.push(e);
+        &#125;
+        if(e === &#39;)&#39;) &#123;
+            if(stack[stack.length - 1] === &#39;(&#39;) &#123;
+                stack.pop();
+            &#125;
+            else flag = 0;
+        &#125;
+        if(e === &#39;]&#39;) &#123;
+            if(stack[stack.length - 1] === &#39;[&#39;) &#123;
+                stack.pop();
+            &#125;
+            else flag = 0;
+        &#125;
+        if(e === &#39;&#125;&#39;) &#123;
+            if(stack[stack.length - 1] === &#39;&#123;&#39;) &#123;
+                stack.pop();
+            &#125;
+            else flag = 0;
+        &#125;
+    &#125;)
+    if(stack.length !== 0) flag = 0;
+    return flag;
+&#125;;
+</code></pre>
+<h3 id="最小栈"><a href="#最小栈" class="headerlink" title="最小栈"></a>最小栈</h3><pre><code class="js">var MinStack = function() &#123;
+    this.x_stack = [];
+    this.min_stack = [Infinity];
+&#125;;
+
+MinStack.prototype.push = function(x) &#123;
+    this.x_stack.push(x);
+    this.min_stack.push(Math.min(this.min_stack[this.min_stack.length - 1], x));
+&#125;;
+
+MinStack.prototype.pop = function() &#123;
+    this.x_stack.pop();
+    this.min_stack.pop();
+&#125;;
+
+MinStack.prototype.top = function() &#123;
+    return this.x_stack[this.x_stack.length - 1];
+&#125;;
+
+MinStack.prototype.getMin = function() &#123;
+    return this.min_stack[this.min_stack.length - 1];
+&#125;;
+</code></pre>
+<h3 id="字符串解码"><a href="#字符串解码" class="headerlink" title="字符串解码"></a>字符串解码</h3><pre><code class="js">var decodeString = (s) =&gt; &#123;
+  let stack = []
+  for (const char of s) &#123;
+    if (char !== &#39;]&#39;) &#123; // ] 前的字符都入栈
+      stack.push(char)
+      continue
+    &#125;
+    let cur = stack.pop() // 弹出一个来检测
+    let str = &#39;&#39; // 组装字符串
+    // 接下来肯定是遇到字母，直到遇到 [
+    while (cur !== &#39;[&#39;) &#123;
+      str = cur + str // cur字符加在左边
+      cur = stack.pop() // 再拉出一个
+    &#125;
+    // 此时cur为 [，接下来要遇到数字
+    let num = &#39;&#39;
+    cur = stack.pop() // 用下一个将 [ 覆盖
+    while (!isNaN(cur)) &#123;
+      num = cur + num // 数字字符加在左边
+      cur = stack.pop() // 再拉出一个
+    &#125;
+    // 现在要么是字母，要么是 [
+    stack.push(cur)
+    stack.push(str.repeat(num))
+  &#125;
+  return stack.join(&#39;&#39;)
+&#125;
+</code></pre>
+<h3 id="每日温度"><a href="#每日温度" class="headerlink" title="每日温度"></a>每日温度</h3><pre><code class="js">const dailyTemperatures = (T) =&gt; &#123;
+  const res = new Array(T.length).fill(0)
+  const stack = []
+  for (let i = T.length - 1; i &gt;= 0; i--) &#123;
+    while (stack.length &amp;&amp; T[i] &gt;= T[stack[stack.length - 1]]) &#123;
+      stack.pop()
+    &#125;
+    if (stack.length) &#123;
+      res[i] = stack[stack.length - 1] - i
+    &#125;
+    stack.push(i)
+  &#125;
+  return res
+&#125;
+</code></pre>
+<h3 id="柱状图中最大的矩形"><a href="#柱状图中最大的矩形" class="headerlink" title="柱状图中最大的矩形"></a>柱状图中最大的矩形</h3><pre><code class="js">var largestRectangleArea = function(heights) &#123;
+    const n = heights.length;
+    const left = Array(n).fill(-1);
+    const st = [];
+    for (let i = 0; i &lt; n; i++) &#123;
+        const x = heights[i];
+        while (st.length &amp;&amp; x &lt;= heights[st[st.length - 1]]) &#123;
+            st.pop();
+        &#125;
+        if (st.length) &#123;
+            left[i] = st[st.length - 1];
+        &#125;
+        st.push(i);
+    &#125;
+
+    const right = Array(n).fill(n);
+    st.length = 0;
+    for (let i = n - 1; i &gt;= 0; i--) &#123;
+        const x = heights[i];
+        while (st.length &amp;&amp; x &lt;= heights[st[st.length - 1]]) &#123;
+            st.pop();
+        &#125;
+        if (st.length) &#123;
+            right[i] = st[st.length - 1];
+        &#125;
+        st.push(i);
+    &#125;
+
+    let ans = 0;
+    for (let i = 0; i &lt; n; i++) &#123;
+        ans = Math.max(ans, heights[i] * (right[i] - left[i] - 1));
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><h3 id="数组中的第K个最大元素"><a href="#数组中的第K个最大元素" class="headerlink" title="数组中的第K个最大元素"></a>数组中的第K个最大元素</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @param &#123;number&#125; k
+ * @return &#123;number&#125;
+ */
+ // 整个流程就是上浮下沉
+var findKthLargest = function(nums, k) &#123;
+   let heapSize=nums.length
+    buildMaxHeap(nums,heapSize) // 构建好了一个大顶堆
+    // 进行下沉 大顶堆是最大元素下沉到末尾
+    for(let i=nums.length-1;i&gt;=nums.length-k+1;i--)&#123;
+        swap(nums,0,i)
+        --heapSize // 下沉后的元素不参与到大顶堆的调整
+        // 重新调整大顶堆
+         maxHeapify(nums, 0, heapSize);
+    &#125;
+    return nums[0]
+   // 自下而上构建一颗大顶堆
+   function buildMaxHeap(nums,heapSize)&#123;
+     for(let i=Math.floor(heapSize/2)-1;i&gt;=0;i--)&#123;
+        maxHeapify(nums,i,heapSize)
+     &#125;
+   &#125;
+   // 从左向右，自上而下的调整节点
+   function maxHeapify(nums,i,heapSize)&#123;
+       let l=i*2+1
+       let r=i*2+2
+       let largest=i
+       if(l &lt; heapSize &amp;&amp; nums[l] &gt; nums[largest])&#123;
+           largest=l
+       &#125;
+       if(r &lt; heapSize &amp;&amp; nums[r] &gt; nums[largest])&#123;
+           largest=r
+       &#125;
+       if(largest!==i)&#123;
+           swap(nums,i,largest) // 进行节点调整
+           // 继续调整下面的非叶子节点
+           maxHeapify(nums,largest,heapSize)
+       &#125;
+   &#125;
+   function swap(a,  i,  j)&#123;
+        let temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+   &#125;
+&#125;;
+</code></pre>
+<h3 id="前-K-个高频元素"><a href="#前-K-个高频元素" class="headerlink" title="前 K 个高频元素"></a>前 K 个高频元素</h3><pre><code class="js">let topKFrequent = function(nums, k) &#123;
+    let map = new Map(), arr = [...new Set(nums)]
+    nums.map((num) =&gt; &#123;
+        if(map.has(num)) map.set(num, map.get(num)+1)
+        else map.set(num, 1)
+    &#125;)
+    
+    // 如果元素数量小于等于 k
+    if(map.size &lt;= k) &#123;
+        return [...map.keys()]
+    &#125;
+    
+    return bucketSort(map, k)
+&#125;;
+
+// 桶排序
+let bucketSort = (map, k) =&gt; &#123;
+    let arr = [], res = []
+    map.forEach((value, key) =&gt; &#123;
+        // 利用映射关系（出现频率作为下标）将数据分配到各个桶中
+        if(!arr[value]) &#123;
+            arr[value] = [key]
+        &#125; else &#123;
+            arr[value].push(key)
+        &#125;
+    &#125;)
+    // 倒序遍历获取出现频率最大的前k个数
+    for(let i = arr.length - 1;i &gt;= 0 &amp;&amp; res.length &lt; k;i--)&#123;
+        if(arr[i]) &#123;
+            res.push(...arr[i])
+        &#125;
+    &#125;
+    return res
+&#125;
+</code></pre>
+<h3 id="数据流的中位数"><a href="#数据流的中位数" class="headerlink" title="数据流的中位数"></a>数据流的中位数</h3><pre><code class="js">var MedianFinder = function () &#123;
+    //降序优先级队列，即小顶堆
+    this.minHeap = new CustomPriorityQueue(true)
+    //升序优先级队列，即大顶堆
+    this.maxHeap = new CustomPriorityQueue()
+&#125;;
+
+MedianFinder.prototype.addNum = function (num) &#123;
+
+    // 在添加数字时：
+    // 当 m=n（即 N 为 偶数）：需向A添加一个元素。实现方法：将新元素 num 插入至B，再将B堆顶元素插入至A。
+    // 当 m≠n（即 N 为 奇数）：需向B添加一个元素。实现方法：将新元素 num 插入至A，再将A堆顶元素插入至B。
+    if (this.minHeap.length !== this.maxHeap.length) &#123;
+        this.minHeap.enqueue(num, num);
+        let el = this.minHeap.dequeue()
+        this.maxHeap.enqueue(el.element, el.element)
+    &#125; else &#123;
+        this.maxHeap.enqueue(num, num)
+        let el = this.maxHeap.dequeue()
+        this.minHeap.enqueue(el.element, el.element)
+    &#125;
+&#125;;
+
+MedianFinder.prototype.findMedian = function () &#123;
+
+    //中位数即为：
+    //当m=n：则中位数为(A的堆顶元素 + B的堆顶元素)/2。
+    // 当m≠n：则中位数为A的堆顶元素。
+    if (this.minHeap.length == this.maxHeap.length)
+        return (this.minHeap.top.element + this.maxHeap.top.element) / 2.0
+    else return this.minHeap.top.element
+&#125;;
+
+class CustomPriorityQueue &#123;
+    constructor(isAscOrder = false) &#123;
+        // 大顶堆还是小顶堆
+        this.isAsc = isAscOrder;
+        // 初始化存放元素的数组
+        this.heap = [];
+    &#125;
+ 
+    get length() &#123;
+        return this.heap.length;
+    &#125;
+
+    get isEmpty() &#123;
+        return this.length === 0;
+    &#125;
+
+    get top() &#123;
+        return this.heap[0];
+    &#125;
+
+    enqueue(element, priority) &#123;
+        // 将元素以及优先级存入数组中
+        this.heap.push(&#123;
+            element: element,
+            priority: priority,
+        &#125;);
+        // 向上堆化
+        this.heapifyUp();
+    &#125;
+
+    dequeue() &#123;
+        // 如果当前数组为空返回null
+        if (this.isEmpty) return undefined
+        // 如果数组只有一个元素，直接出队该元素即可
+        if (this.heap.length === 1) return this.heap.pop()
+        // 否则拿到队列顶部元素
+        let node = this.heap[0]
+        // 将队列顶部/底部元素交换位置，并把数组长度-1
+        this.heap[0] = this.heap.pop()
+        // 向下堆化
+        this.heapifyDown()
+        // 返回队顶元素也就是堆中最大元素
+        return node
+    &#125;
+    heapifyUp() &#123;
+        // 获取当前元素索引
+        let index = this.heap.length - 1;
+        // 如果索引大于0，证明当前元素不在堆顶，此时执行向上堆化
+        while (index &gt; 0) &#123;
+            // 获取父元素索引
+            let rootIndex = Math.floor((index - 1) / 2);
+            // 比较两值，如是大顶堆，则当前元素值比父元素大则与父元素交换位置
+            // 如是小顶堆，则当前元素值比父元素小则与父元素交换位置
+            if (
+                (this.isAsc &amp;&amp;
+                    this.heap[index].priority &lt; this.heap[rootIndex].priority) ||
+                (!this.isAsc &amp;&amp;
+                    this.heap[index].priority &gt; this.heap[rootIndex].priority)
+            ) &#123;
+                this.swap(index, rootIndex);
+                index = rootIndex;
+            &#125;
+            // 否则直接跳出元素，结束堆化
+            else break;
+        &#125;
+    &#125;
+    heapifyDown() &#123;
+        let index = 0;
+        // 当前元素的左子节点存在
+        while (index * 2 + 1 &lt; this.heap.length) &#123;
+            // 假设左子节点即为最大节点，计算其索引
+            let minChildIndex = index * 2 + 1,
+                // 获取其右子节点索引
+                rightChildIndex = index * 2 + 2;
+            // 如果右子节点存在，并且如是大顶堆，则其值大于左子节点，将较大的节点赋值为右子节点
+            // 并且如是小顶堆，则其值小于左子节点，将较小的节点赋值为右子节点
+            if (
+                this.heap[rightChildIndex] != undefined &amp;&amp;
+                ((this.isAsc &amp;&amp;
+                    this.heap[rightChildIndex].priority &lt;
+                    this.heap[minChildIndex].priority) ||
+                    (!this.isAsc &amp;&amp;
+                        this.heap[rightChildIndex].priority &gt;
+                        this.heap[minChildIndex].priority))
+            ) &#123;
+                minChildIndex = rightChildIndex;
+            &#125;
+            // 如是大顶堆，比较较大的子节点是否大于父节点，如果是则交换位置，继续迭代
+            // 如是小顶堆，比较较小的子节点是否小于父节点，如果是则交换位置，继续迭代
+            if (
+                (this.isAsc &amp;&amp;
+                    this.heap[index].priority &gt; this.heap[minChildIndex].priority) ||
+                (!this.isAsc &amp;&amp;
+                    this.heap[index].priority &lt; this.heap[minChildIndex].priority)
+            ) &#123;
+                this.swap(index, minChildIndex);
+                index = minChildIndex;
+            &#125;
+            // 否则跳出循环，结束堆化
+            else break;
+        &#125;
+    &#125;
+
+    swap(i, j) &#123;
+        let temp = this.heap[i]
+        this.heap[i] = this.heap[j]
+        this.heap[j] = temp
+    &#125;
+
+&#125;
+</code></pre>
+<h2 id="贪心"><a href="#贪心" class="headerlink" title="贪心"></a>贪心</h2><h3 id="买卖股票的最佳时机"><a href="#买卖股票的最佳时机" class="headerlink" title="买卖股票的最佳时机"></a>买卖股票的最佳时机</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; prices
+ * @return &#123;number&#125;
+ */
+var maxProfit = function(prices) &#123;
+    let ans = -1;
+    let minn = 8888888;
+    for(let i=0;i&lt;prices.length;i++) &#123;
+        minn = Math.min(minn, prices[i]);
+        ans = Math.max(ans, prices[i] - minn);
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h3 id="跳跃游戏"><a href="#跳跃游戏" class="headerlink" title="跳跃游戏"></a>跳跃游戏</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;boolean&#125;
+ */
+var canJump = function(nums) &#123;
+    let max = 0;
+    for(let i=0;i&lt;nums.length;i++) &#123;
+        if(i &lt;= max)
+        max = Math.max(max, i + nums[i]);
+        console.log(max);
+    &#125;
+    
+    return max &gt;= nums.length - 1;
+&#125;;
+</code></pre>
+<h3 id="跳跃游戏-II"><a href="#跳跃游戏-II" class="headerlink" title="跳跃游戏 II"></a>跳跃游戏 II</h3><pre><code class="js">var jump = function(nums) &#123;
+    let curIndex = 0
+    let nextIndex = 0
+    let steps = 0
+    for(let i = 0; i &lt; nums.length - 1; i++) &#123;
+        nextIndex = Math.max(nums[i] + i, nextIndex)
+        if(i === curIndex) &#123;
+            curIndex = nextIndex
+            steps++
+        &#125;
+    &#125;
+
+    return steps
+&#125;;
+</code></pre>
+<h3 id="划分字母区间"><a href="#划分字母区间" class="headerlink" title="划分字母区间"></a>划分字母区间</h3><pre><code class="js">const partitionLabels = (S) =&gt; &#123;
+  const maxPos = &#123;&#125;;
+  for (let i = 0; i &lt; S.length; i++) &#123; // 存放字母与它的最远位置
+    maxPos[S[i]] = i;
+  &#125;
+
+  const res = [];
+  let start = 0;                        // 待切割的起始位置
+  let scannedCharMaxPos = 0;            // 已扫描的字符中最远的位置
+
+  for (let i = 0; i &lt; S.length; i++) &#123;
+    const curCharMaxPos = maxPos[S[i]]; // 当前扫描的字符的最远位置
+    scannedCharMaxPos = Math.max(scannedCharMaxPos, curCharMaxPos); // 更新「已扫描的字符中最远的位置」
+    if (i == scannedCharMaxPos) &#123; // 正好扫描到「已扫描的字符的最远位置」，到达切割点
+      res.push(i - start + 1);
+      start = i + 1;              // 更新，下一个待切割的字符串的起始位置
+    &#125;
+  &#125;
+  return res;
+&#125;;
+</code></pre>
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><h3 id="爬楼梯"><a href="#爬楼梯" class="headerlink" title="爬楼梯"></a>爬楼梯</h3><pre><code class="js">/**
+ * @param &#123;number&#125; n
+ * @return &#123;number&#125;
+ */
+const m = new Map();
+var climbStairs = function(n) &#123;
+    if(m.has(n)) return m.get(n);
+    if(n === 2) return 2;
+    if(n === 1) return 1;
+    m.set(n, climbStairs(n-1) + climbStairs(n-2))
+    return climbStairs(n-1) + climbStairs(n-2);
+&#125;;
+</code></pre>
+<h3 id="杨辉三角"><a href="#杨辉三角" class="headerlink" title="杨辉三角"></a>杨辉三角</h3><pre><code class="js">/**
+ * @param &#123;number&#125; numRows
+ * @return &#123;number[][]&#125;
+ */
+var generate = function(numRows) &#123;
+    const nums = Array(numRows).fill().map(() =&gt; [])
+    for(let i=0;i&lt;numRows;i++) &#123;
+        nums[i][0] = 1;
+        nums[i][i] = 1;
+    &#125;
+    if(numRows &lt; 3) return nums;
+    for(let i=2;i&lt;numRows;i++) &#123;
+        for(let j=1;j&lt;i;j++) &#123;
+            nums[i][j] = nums[i-1][j]+nums[i-1][j-1];
+        &#125;
+    &#125;
+    return nums;
+&#125;;
+</code></pre>
+<h3 id="打家劫舍"><a href="#打家劫舍" class="headerlink" title="打家劫舍"></a>打家劫舍</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number&#125;
+ */
+var rob = function(nums) &#123;
+    const f = [];
+    f[0] = nums[0];
+    nums.forEach((e, i) =&gt; &#123;
+        if(i !== 0) &#123;
+            if(i === 1) f[i] = Math.max(nums[0], nums[1]);
+            else f[i] = Math.max(f[i - 2] + nums[i], f[i - 1])
+        &#125;
+    &#125;)
+    return f[nums.length - 1];
+&#125;;
+</code></pre>
+<h3 id="完全平方数"><a href="#完全平方数" class="headerlink" title="完全平方数"></a>完全平方数</h3><pre><code class="js">/**
+ * @param &#123;number&#125; n
+ * @return &#123;number&#125;
+ */
+var numSquares = function(n) &#123;
+    const max = 10000;
+    const dp = Array(n + 1).fill(max);
+    dp[0] = 0;
+    for(let i = 1; i &lt;= n; i++) &#123;
+        for(let j = 1; j &lt;= 100; j++) &#123;
+            if(i &gt;= j*j) dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+        &#125;
+    &#125;
+    return dp[n];
+&#125;;
+</code></pre>
+<h3 id="零钱兑换"><a href="#零钱兑换" class="headerlink" title="零钱兑换"></a>零钱兑换</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; coins
+ * @param &#123;number&#125; amount
+ * @return &#123;number&#125;
+ */
+var coinChange = function(coins, amount) &#123;
+    const f = Array(amount + 1).fill(amount + 1);
+    f[0] = 0;
+    for(let i = 1; i &lt;= amount; i++) &#123;
+        for(let j = 0; j &lt; coins.length; j++) &#123;
+            if(coins[j] &lt;= i) &#123;
+                f[i] = Math.min(f[i], f[i - coins[j]] + 1);
+            &#125;
+        &#125;
+    &#125;
+    return f[amount] &gt; amount ? -1 : f[amount];
+&#125;;
+</code></pre>
+<h3 id="单词拆分"><a href="#单词拆分" class="headerlink" title="单词拆分"></a>单词拆分</h3><pre><code class="js">/**
+ * @param &#123;string&#125; s
+ * @param &#123;string[]&#125; wordDict
+ * @return &#123;boolean&#125;
+ */
+var wordBreak = function(s, wordDict) &#123;
+    const check = (str) =&gt; &#123;
+        return wordDict.includes(str);
+    &#125;
+
+    const l = s.length;
+    const dp = Array(l + 1).fill(0);
+    dp[0] = 1;
+    for(let i = 1; i &lt;= l; i++) &#123;
+        for(let j = 0; j &lt; i; j++) &#123;
+            if(!dp[i])
+            dp[i] = dp[j] &amp;&amp; check(s.slice(j, i));
+            // if(dp[j] &amp;&amp; check(s.slice(j, i))) 
+            // console.log(i, j, s.slice(j, i))
+            if(i === 4) 
+            console.log(i, j, dp[j], s.slice(j, i),check(s.slice(j, i) ))
+        &#125;
+    &#125;
+    return dp[l];
+&#125;;
+</code></pre>
+<h3 id="最长递增子序列"><a href="#最长递增子序列" class="headerlink" title="最长递增子序列"></a>最长递增子序列</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number&#125;
+ */
+var lengthOfLIS = function(nums) &#123;
+    let ans = 1;
+    const f = Array(nums.length).fill(1);
+    for(let i = 1; i &lt; nums.length; i++) &#123;
+        for(let j = 0; j &lt; i; j++) &#123;
+            if(nums[i] &gt; nums[j]) &#123;
+                f[i] = Math.max(f[i], f[j] + 1);
+                ans = Math.max(ans, f[i]);
+            &#125;
+        &#125;
+    &#125;
+    return ans;
+&#125;;
+
+/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number&#125;
+ */
+var lengthOfLIS = function (nums) &#123;
+  let tails = [];
+  let res = 0;
+  nums.forEach((num) =&gt; &#123;
+    let i = 0, j = res;
+    while(i &lt; j) &#123;
+        let m = Math.floor((i + j) / 2);
+        if(tails[m] &lt; num) i = m + 1;
+        else j = m;
+    &#125;
+    tails[i] = num;
+    if(res === j) res++;
+  &#125;)
+  return res;
+&#125;;
+</code></pre>
+<h3 id="乘积最大子数组"><a href="#乘积最大子数组" class="headerlink" title="乘积最大子数组"></a>乘积最大子数组</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number&#125;
+ */
+var maxProduct = function(nums) &#123;
+    let max = -99999;
+    const dp = Array(nums.length).fill(-99999);
+    const dp1 = Array(nums.length).fill(99999);
+    dp[0] = nums[0];
+    dp1[0] = nums[0];
+    max = Math.max(max, dp[0]);
+    if(nums.length === 1) return nums[0];
+    for(let i = 1; i &lt; nums.length; i++) &#123;
+        dp[i] = Math.max(nums[i], dp[i - 1] * nums[i], dp1[i - 1] * nums[i]);
+        dp1[i] = Math.min(nums[i], dp1[i - 1] * nums[i], dp[i - 1] * nums[i]);
+        max = Math.max(max, dp[i], dp1[i]);
+    &#125;
+    return max;
+&#125;;
+</code></pre>
+<h3 id="分割等和子集"><a href="#分割等和子集" class="headerlink" title="分割等和子集"></a>分割等和子集</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;boolean&#125;
+ */
+var canPartition = function(nums) &#123;
+    let sum = 0;
+    for(let i = 0; i &lt; nums.length; i++) sum += nums[i];
+    if(nums.length === 1 || sum % 2) return false;
+    const dp = Array(Math.floor(sum / 2) + 1).fill(0);
+    dp[0] = 1;
+    for(let i = 0; i &lt; nums.length; i++) &#123;
+        for(let j = Math.floor(sum / 2); j &gt;= nums[i]; j--) &#123;
+            dp[j] = dp[j] | dp[j - nums[i]];
+        &#125;
+    &#125;
+    return dp[sum / 2];
+&#125;;
+</code></pre>
+<h3 id="最长有效括号"><a href="#最长有效括号" class="headerlink" title="最长有效括号"></a>最长有效括号</h3><pre><code class="js">const longestValidParentheses = (s) =&gt; &#123;
+  let maxLen = 0;
+  const len = s.length;
+  const dp = new Array(len).fill(0);
+  for (let i = 1; i &lt; len; i++) &#123;
+    if (s[i] == &#39;)&#39;) &#123;
+      if (s[i - 1] == &#39;(&#39;) &#123;
+        if (i - 2 &gt;= 0) &#123;
+          dp[i] = dp[i - 2] + 2;
+        &#125; else &#123;
+          dp[i] = 2;
+        &#125;
+      &#125; else if (s[i - dp[i - 1] - 1] == &#39;(&#39;) &#123;
+        if (i - dp[i - 1] - 2 &gt;= 0) &#123;
+          dp[i] = dp[i - 1] + 2 + dp[i - dp[i - 1] - 2];
+        &#125; else &#123;
+          dp[i] = dp[i - 1] + 2;
+        &#125;
+      &#125;
+    &#125;
+    maxLen = Math.max(maxLen, dp[i]);
+  &#125;
+  return maxLen;
+&#125;;
+
+/**
+ * @param &#123;string&#125; s
+ * @return &#123;number&#125;
+ */
+var longestValidParentheses = function(s) &#123;
+    if(!s.length) return 0;
+    let max = 0;
+    const stack = [-1];
+    for(let i = 0; i &lt; s.length; i++) &#123;
+        if(s[i] === &#39;(&#39;) &#123;
+            stack.push(i);
+        &#125;
+        else &#123;
+            stack.pop();
+            if(!stack.length) stack.push(i);
+            else &#123;
+                max = Math.max(max, i - stack[stack.length - 1]);
+            &#125;
+        &#125;
+    &#125;
+    return max;
+&#125;;
+</code></pre>
+<h2 id="多维动态规划"><a href="#多维动态规划" class="headerlink" title="多维动态规划"></a>多维动态规划</h2><h3 id="不同路径"><a href="#不同路径" class="headerlink" title="不同路径"></a>不同路径</h3><pre><code class="js">/**
+ * @param &#123;number&#125; m
+ * @param &#123;number&#125; n
+ * @return &#123;number&#125;
+ */
+var uniquePaths = function(m, n) &#123;
+    const dp = new Array(m).fill(0).map(() =&gt; new Array(n).fill(0));
+    for(let i = 0; i &lt; m; i++) dp[i][0] = 1;
+    for(let j = 0; j &lt; n; j++) dp[0][j] = 1;
+    for(let i = 1; i &lt; m; i++) &#123;
+        for(let j = 1; j &lt; n; j++) &#123;
+            
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            // console.log(i, j,  dp[i - 1][j] , dp[i][j - 1], dp[i][j]);
+        &#125;
+    &#125;
+    return dp[m - 1][n - 1];
+&#125;;
+</code></pre>
+<h3 id="最小路径和"><a href="#最小路径和" class="headerlink" title="最小路径和"></a>最小路径和</h3><pre><code class="js">/**
+ * @param &#123;number[][]&#125; grid
+ * @return &#123;number&#125;
+ */
+var minPathSum = function(grid) &#123;
+    const m = grid.length;
+    const n = grid[0].length;
+    const dp = Array(m).fill().map(() =&gt; Array(n).fill(0));
+    dp[0][0] = grid[0][0];
+    // for(let i=0;i&lt;m;i++) dp[i][0] = grid[i][0];
+    // for(let j=0;j&lt;n;j++) dp[0][j] = grid[0][j];
+    for(let i=0;i&lt;m;i++)&#123;
+        for(let j=0;j&lt;n;j++)&#123;
+            if(i === 0 &amp;&amp; j !== 0) dp[i][j] = grid[i][j] + dp[i][j-1];
+            else if(i !== 0 &amp;&amp; j === 0) dp[i][j] = grid[i][j] + dp[i-1][j];
+            else if(i !== 0 &amp;&amp; j!== 0)dp[i][j] = Math.min(dp[i-1][j], dp[i][j-1]) + grid[i][j];
+        &#125;
+    &#125;
+    for(let i=0;i&lt;m;i++)&#123;
+        for(let j=0;j&lt;n;j++)&#123;
+            console.log(dp[i][j])
+        &#125;
+    &#125;
+    return dp[m-1][n-1];
+&#125;;
+</code></pre>
+<h3 id="最长回文子串"><a href="#最长回文子串" class="headerlink" title="最长回文子串"></a>最长回文子串</h3><pre><code class="js">/**
+ * @param &#123;string&#125; s
+ * @return &#123;string&#125;
+ */
+var longestPalindrome = function(s) &#123;
+    const l = s.length;
+    let max = 0;
+    let flag = 0;
+    const dp = Array(l).fill().map(() =&gt; Array(l).fill(0));
+    for(let k=0;k&lt;l;k++) &#123;
+        for(let i=0;i&lt;l-k;i++) &#123;
+            if(k === 0) &#123;
+                dp[i][i+k] = 1;
+                if(k + 1 &gt; max) flag = i; 
+                max = Math.max(max, k + 1);
+            &#125;
+            else if(k === 1) &#123;
+                if(s[i] === s[i + k]) &#123;
+                    dp[i][i + k] = 1;
+                    if(k + 1 &gt; max) flag = i;
+                    max = Math.max(max, k + 1);    
+                &#125;
+            &#125;
+            else &#123;
+                dp[i][i + k] = dp[i + 1][i + k - 1] &amp;&amp; s[i] === s[i + k];
+                if(dp[i][i + k]) &#123;
+                    if(k + 1 &gt; max) flag = i;
+                    max = Math.max(max, k + 1);
+                &#125;
+            &#125;      
+        &#125;
+    &#125;
+    return s.slice(flag, flag + max);
+&#125;;
+</code></pre>
+<h3 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h3><pre><code class="js">/**
+ * @param &#123;string&#125; text1
+ * @param &#123;string&#125; text2
+ * @return &#123;number&#125;
+ */
+var longestCommonSubsequence = function(text1, text2) &#123;
+    const m = text1.length;
+    const n = text2.length;
+    let max = 0;
+    const dp = Array(m+1).fill().map(() =&gt; Array(n+1).fill(0));
+    for(let i=1;i&lt;=m;i++)&#123;
+        for(let j=1;j&lt;=n;j++)&#123;
+            if(text1[i-1] === text2[j-1]) &#123;
+                dp[i][j] = dp[i-1][j-1] + 1;
+            &#125;
+            else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+            max = Math.max(max, dp[i][j])
+        &#125;
+    &#125;
+    return max;
+&#125;;
+</code></pre>
+<h3 id="编辑距离"><a href="#编辑距离" class="headerlink" title="编辑距离"></a>编辑距离</h3><pre><code class="js">const minDistance = (word1, word2) =&gt; &#123;
+    let dp = Array.from(Array(word1.length + 1), () =&gt; Array(word2.length+1).fill(0));
+
+    for(let i = 1; i &lt;= word1.length; i++) &#123;
+        dp[i][0] = i; 
+    &#125;
+
+    for(let j = 1; j &lt;= word2.length; j++) &#123;
+        dp[0][j] = j;
+    &#125;
+
+    for(let i = 1; i &lt;= word1.length; i++) &#123;
+        for(let j = 1; j &lt;= word2.length; j++) &#123;
+            if(word1[i-1] === word2[j-1]) &#123;
+                dp[i][j] = dp[i-1][j-1];
+            &#125; else &#123;
+                dp[i][j] = Math.min(dp[i-1][j] + 1, dp[i][j-1] + 1, dp[i-1][j-1] + 1);
+            &#125;
+        &#125;
+    &#125;
+    
+    return dp[word1.length][word2.length];
+&#125;;
+</code></pre>
+<h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><h3 id="只出现一次的数字"><a href="#只出现一次的数字" class="headerlink" title="只出现一次的数字"></a>只出现一次的数字</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number&#125;
+ */
+var singleNumber = function(nums) &#123;
+    let ans = nums[0];
+    for(let i=1;i&lt;nums.length;i++) &#123;
+        ans = ans ^ nums[i];
+    &#125;
+    return ans;
+&#125;;
+</code></pre>
+<h3 id="多数元素"><a href="#多数元素" class="headerlink" title="多数元素"></a>多数元素</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number&#125;
+ */
+var majorityElement = function(nums) &#123;
+    let m=0,cnt=0;
+    for(let i=0;i&lt;nums.length;i++) &#123;
+        if(cnt === 0) m=nums[i];
+        if(nums[i] === m) cnt++;
+        else cnt--;
+        console.log(m, cnt);
+    &#125;
+    return m;
+&#125;;
+</code></pre>
+<h3 id="颜色分类"><a href="#颜色分类" class="headerlink" title="颜色分类"></a>颜色分类</h3><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;void&#125; Do not return anything, modify nums in-place instead.
+ */
+var sortColors = function(nums) &#123;
+      
+      let p = -1
+      let q = nums.length
+      let i = 0
+      while(i&lt;q)&#123;
+          if(nums[i]==0)&#123;
+            swap(nums,i,p+1)
+            p = p+1
+            i++
+          &#125; else if(nums[i]==2)&#123;
+             swap(nums,i,q-1)
+             q = q-1
+          &#125; else if(nums[i]==1)&#123;
+             i++
+          &#125;
+      &#125;
+      function swap(arr,a,b)&#123;
+          let tmp = arr[a];
+          arr[a] = arr[b]
+          arr[b] = tmp;
+      &#125;
+      return nums
+
+
+&#125;;
+</code></pre>
+<h3 id="下一个排列"><a href="#下一个排列" class="headerlink" title="下一个排列"></a>下一个排列</h3><pre><code class="js">function nextPermutation(nums) &#123;
+    let i = nums.length - 2;                   // 向左遍历，i从倒数第二开始是为了nums[i+1]要存在
+    while (i &gt;= 0 &amp;&amp; nums[i] &gt;= nums[i + 1]) &#123; // 寻找第一个小于右邻居的数
+        i--;
+    &#125;
+    if (i &gt;= 0) &#123;                             // 这个数在数组中存在，从它身后挑一个数，和它换
+        let j = nums.length - 1;                // 从最后一项，向左遍历
+        while (j &gt;= 0 &amp;&amp; nums[j] &lt;= nums[i]) &#123;  // 寻找第一个大于 nums[i] 的数
+            j--;
+        &#125;
+        [nums[i], nums[j]] = [nums[j], nums[i]]; // 两数交换，实现变大
+    &#125;
+    // 如果 i = -1，说明是递减排列，如 3 2 1，没有下一排列，直接翻转为最小排列：1 2 3
+    let l = i + 1;           
+    let r = nums.length - 1;
+    while (l &lt; r) &#123;                            // i 右边的数进行翻转，使得变大的幅度小一些
+        [nums[l], nums[r]] = [nums[r], nums[l]];
+        l++;
+        r--;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="寻找重复数"><a href="#寻找重复数" class="headerlink" title="寻找重复数"></a>寻找重复数</h3><pre><code class="js">const findDuplicate = (nums) =&gt; &#123;
+    let slow = 0;
+    let fast = 0;
+    while (true) &#123;
+        slow = nums[slow];
+        fast = nums[nums[fast]];   // slow跳一步，fast跳两步
+        if (slow == fast) &#123;        // 指针首次相遇
+            fast = 0;              // 让快指针回到起点
+            while (true) &#123;         // 开启新的循环
+                if (slow == fast) &#123;// 如果再次相遇，就肯定是在入口处
+                    return slow;   // 返回入口，即重复的数
+                &#125;
+                slow = nums[slow]; // 两个指针每次都进1步
+                fast = nums[fast];
+            &#125;
+        &#125;
+    &#125;
+&#125;;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 The kid 的小窝
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;the kid
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

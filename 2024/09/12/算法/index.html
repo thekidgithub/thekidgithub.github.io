@@ -377,40 +377,40 @@ var levelOrder = function(root) &#123;
 </code></pre>
 <h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><pre><code class="js"> // 整个流程就是上浮下沉
 var findKthLargest = function(nums, k) &#123;
-   let heapSize=nums.length
-    buildMaxHeap(nums,heapSize) // 构建好了一个大顶堆
+   let heapSize = nums.length;
+    buildMaxHeap(nums, heapSize) // 构建好了一个大顶堆
     // 进行下沉 大顶堆是最大元素下沉到末尾
-    for(let i=nums.length-1;i&gt;=nums.length-k+1;i--)&#123;
-        swap(nums,0,i)
-        --heapSize // 下沉后的元素不参与到大顶堆的调整
+    for(let i = nums.length - 1; i &gt;= nums.length - k + 1; i--)&#123;
+        swap(nums, 0, i);
+        --heapSize; // 下沉后的元素不参与到大顶堆的调整
         // 重新调整大顶堆
          maxHeapify(nums, 0, heapSize);
     &#125;
-    return nums[0]
+    return nums[0];
    // 自下而上构建一颗大顶堆
-   function buildMaxHeap(nums,heapSize)&#123;
-     for(let i=Math.floor(heapSize/2)-1;i&gt;=0;i--)&#123;
-        maxHeapify(nums,i,heapSize)
+   function buildMaxHeap(nums, heapSize)&#123;
+     for(let i = Math.floor(heapSize / 2) - 1; i &gt;= 0; i--)&#123;
+        maxHeapify(nums, i, heapSize);
      &#125;
    &#125;
    // 从左向右，自上而下的调整节点
-   function maxHeapify(nums,i,heapSize)&#123;
-       let l=i*2+1
-       let r=i*2+2
-       let largest=i
+   function maxHeapify(nums, i, heapSize)&#123;
+       let l = i * 2 + 1;
+       let r = i * 2 + 2;
+       let largest = i;
        if(l &lt; heapSize &amp;&amp; nums[l] &gt; nums[largest])&#123;
-           largest=l
+           largest = l;
        &#125;
        if(r &lt; heapSize &amp;&amp; nums[r] &gt; nums[largest])&#123;
-           largest=r
+           largest = r;
        &#125;
-       if(largest!==i)&#123;
-           swap(nums,i,largest) // 进行节点调整
+       if(largest !== i)&#123;
+           swap(nums, i, largest); // 进行节点调整
            // 继续调整下面的非叶子节点
-           maxHeapify(nums,largest,heapSize)
+           maxHeapify(nums, largest, heapSize);
        &#125;
    &#125;
-   function swap(a,  i,  j)&#123;
+   function swap(a, i, j)&#123;
         let temp = a[i];
         a[i] = a[j];
         a[j] = temp;
@@ -425,9 +425,11 @@ var findKthLargest = function(nums, k) &#123;
 function quickSort(nums, left, right) &#123;
     if (left &gt;= right) return;
     let pivotIndex = partition(nums, left, right)
+    //if find kth largest: pivotIndex 和 nums.length - k 比较
     quickSort(nums, left, pivotIndex - 1)
     quickSort(nums, pivotIndex + 1, right)
     return nums;
+    // return nums[n - k]
 &#125;
 
 function partition (nums, left, right) &#123;
@@ -470,12 +472,7 @@ function partition (nums, left, right) &#123;
     return dp[sum / 2];
 &#125;;
 </code></pre>
-<h2 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h2><pre><code class="js">/**
- * @param &#123;string&#125; text1
- * @param &#123;string&#125; text2
- * @return &#123;number&#125;
- */
-var longestCommonSubsequence = function(text1, text2) &#123;
+<h2 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h2><pre><code class="js">var longestCommonSubsequence = function(text1, text2) &#123;
     const m = text1.length;
     const n = text2.length;
     let max = 0;
@@ -490,6 +487,126 @@ var longestCommonSubsequence = function(text1, text2) &#123;
         &#125;
     &#125;
     return max;
+&#125;;
+</code></pre>
+<h2 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h2><pre><code class="js">class Node &#123;
+    constructor(key = 0, value = 0) &#123;
+        this.key = key;
+        this.value = value;
+        this.prev = null;
+        this.next = null;
+    &#125;
+&#125;
+
+class LRUCache &#123;
+    constructor(capacity) &#123;
+        this.capacity = capacity;
+        this.dummy = new Node();
+        this.dummy.prev = this.dummy;
+        this.dummy.next = this.dummy;
+        this.keyToNode = new Map();
+    &#125;
+
+    getNode(key) &#123;
+        if (!this.keyToNode.has(key)) &#123;
+            return null;
+        &#125;
+        const node = this.keyToNode.get(key);
+        this.remove(node); 
+        this.pushFront(node); 
+        return node;
+    &#125;
+
+    get(key) &#123;
+        const node = this.getNode(key);
+        return node ? node.value : -1;
+    &#125;
+
+    put(key, value) &#123;
+        let node = this.getNode(key);
+        if (node) &#123; 
+            node.value = value; 
+            return;
+        &#125;
+        node = new Node(key, value) 
+        this.keyToNode.set(key, node);
+        this.pushFront(node);
+        if (this.keyToNode.size &gt; this.capacity) &#123; 
+            const backNode = this.dummy.prev;
+            this.keyToNode.delete(backNode.key);
+            this.remove(backNode);
+        &#125;
+    &#125;
+
+    remove(x) &#123;
+        x.prev.next = x.next;
+        x.next.prev = x.prev;
+    &#125;
+
+    pushFront(x) &#123;
+        x.prev = this.dummy;
+        x.next = this.dummy.next;
+        x.prev.next = x;
+        x.next.prev = x;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="全排列（带重复元素）"><a href="#全排列（带重复元素）" class="headerlink" title="全排列（带重复元素）"></a>全排列（带重复元素）</h2><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number[][]&#125;
+ */
+var permute = function(nums) &#123;
+    const res = [], path = [];
+    backtracking(nums, nums.length, []);
+    return res;
+    nums.sort((a, b) =&gt; a - b); //add
+
+    function backtracking(n, k, used) &#123;
+        if(path.length === k) &#123;
+            res.push(Array.from(path));
+            return;
+        &#125;
+        for (let i = 0; i &lt; k; i++ ) &#123;
+            if(used[i]) continue;
+            if (i &gt; 0 &amp;&amp; nums[i] === nums[i - 1] &amp;&amp; !used[i - 1]) continue; //add
+            path.push(n[i]);
+            used[i] = true; // 同支
+            backtracking(n, k, used);
+            path.pop();
+            used[i] = false;
+        &#125;
+    &#125;
+&#125;;
+</code></pre>
+<h2 id="子集（带重复元素）"><a href="#子集（带重复元素）" class="headerlink" title="子集（带重复元素）"></a>子集（带重复元素）</h2><pre><code class="js">/**
+ * @param &#123;number[]&#125; nums
+ * @return &#123;number[][]&#125;
+ */
+var subsets = function(nums) &#123;
+    let ans = [];
+    let path = [];
+    const n = nums.length;
+
+    // 首先对数组进行排序
+    nums.sort((a, b) =&gt; a - b);
+
+    function dfs(i) &#123;
+        // 子集构造完毕
+        ans.push(path.slice()); // 复制 path
+        
+        for (let j = i; j &lt; n; j++) &#123;
+            // 跳过重复元素
+            if (j &gt; i &amp;&amp; nums[j] === nums[j - 1]) &#123;
+                continue; // 如果当前元素与前一个元素相同，则跳过
+            &#125;
+            path.push(nums[j]); // 选 nums[j]
+            dfs(j + 1); // 继续递归
+            path.pop(); // 恢复现场
+        &#125;
+    &#125;
+
+    dfs(0); // 从索引 0 开始深度优先搜索
+    return ans; // 返回所有子集
 &#125;;
 </code></pre>
 

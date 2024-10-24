@@ -397,7 +397,7 @@ export function setRouteEmitter(to: RouteLocationNormalized) &#123;
 &#125;
 </code></pre>
 <ol start="2">
-<li>动态路由：</li>
+<li>路由模块化：</li>
 </ol>
 <pre><code class="js">const modules = import.meta.glob(&#39;./modules/*.ts&#39;, &#123; eager: true &#125;);
 
@@ -431,26 +431,11 @@ export const appRoutes: RouteRecordNormalized[] = formatModules(modules, []);
 &#125;);
 </code></pre>
 <p>store:<br>使用pinia，分为app（一些settings）、application（获取报名信息数据）、recruitments（管理不同招新）、user（用户信息）<br>使用状态管理库的好处是把一些全局性的数据和数据请求的逻辑单独封装而不是放在组件里，减少耦合</p>
-<h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p>在vite.config.base.ts里，plugins加载插件（vue vuejsx svgloader）<br>resolve里</p>
-<pre><code class="js">resolve: &#123;
-    alias: [//别名
-      &#123;
-        find: &#39;@&#39;,
-        replacement: resolve(__dirname, &#39;../src&#39;),
-      &#125;,
-      &#123;
-        find: &#39;vue&#39;,
-        replacement: &#39;vue/dist/vue.esm-bundler.js&#39;, // compile template
-      &#125;,
-    ],
-  &#125;,
-</code></pre>
-<p>css&#x2F;postcss 引入tailwind插件<br>build 中 使用cssCodeSplit分割css，使用rollup(类似webpack 支持tree-shaking 主要针对库，在项目里为了打包tailwind模块)</p>
-<p>vite.config.dev.ts里，主要解决跨域问题：（本质上是设置了代理服务器）</p>
+<h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p>vite.config.dev.ts里，主要解决跨域问题：（本质上是设置了代理服务器）</p>
 <pre><code class="js">server: &#123;
       proxy: &#123;
         &#39;^/api&#39;: &#123;
-          target: &#39;https://dev.back.recruitment2023.hustunique.com&#39;,
+          target: &#39;https://dev.back.recruitment2023.hustunique.com&#39;,//相当于把/api换成target的字段，发请求直接/api/...
           changeOrigin: true,
           credentials: &#39;include&#39;,//是否允许发送 Cookie
           rewrite: (path) =&gt; path.replace(/^\/api/, &#39;&#39;),
@@ -651,7 +636,7 @@ const locale = computed(() =&gt; &#123;
 </code></pre>
 <p>其他：用appStore存储一些元信息，比如是否折叠，desktop or mobile等<br>goto函数打开链接，做了：封装openWindow方法，设置seletedKey, router.push</p>
 <h2 id="个人负责"><a href="#个人负责" class="headerlink" title="个人负责"></a>个人负责</h2><p>数据总览部分，主要包含三个模块：数据总览 选手阶段分布和近期日程，逻辑部分不是很难，主要就是获取数据写UI，但是在渲染图表上费了不少精力（沟槽的Echarts）</p>
-<h4 id="难点与个人经验"><a href="#难点与个人经验" class="headerlink" title="难点与个人经验"></a>难点与个人经验</h4><p>自然就是这个沟槽的Echarts了（感觉根本原因是这类工具库和Vue Vite之类的生态链没有兼容，也不是什么组件库，所以很多问题难有现成的解决方案）<br>一是首先图表如何正常渲染：发现只有在组件挂载之后才可以进行图表init（借由生命周期钩子Mounted实现）<br>二是数据的响应式，一个是侦测变化，这里使用watch（而不是computed，因为这里要执行副作用） 一个是数据的响应式，用computed把所有依赖于store的数据封装了，一个是对图表实例也使用ref<br>三是性能优化：最初设置了resize监听器，但是没有及时回收，于是在unmounted里销毁了监听器和图表实例，解决了内存泄漏问题。<br>最后再把代码整理了下，改善了可读性</p>
+<h4 id="难点与个人经验"><a href="#难点与个人经验" class="headerlink" title="难点与个人经验"></a>难点与个人经验</h4><p>Echarts（感觉根本原因是这类工具库和Vue Vite之类的生态链没有兼容，也不是什么组件库，所以很多问题难有现成的解决方案）<br>一是首先图表如何正常渲染：发现只有在组件挂载之后才可以进行图表init（借由生命周期钩子Mounted实现）<br>二是数据的响应式，一个是侦测变化，这里使用watch（而不是computed，因为这里要执行副作用） 一个是数据的响应式，用computed把所有依赖于store的数据封装了，一个是对图表实例也使用ref<br>三是性能优化：最初设置了resize监听器，但是没有及时回收，于是在unmounted里销毁了监听器和图表实例，解决了内存泄漏问题。<br>最后再把代码整理了下，改善了可读性</p>
 <p>关于样式冲突问题：用的是tailwindcss，发现写在arco上的样式有些无法生效，查阅文档后发现存在样式优先级问题，解决方案是在style里对arco组件使用:deep</p>
 <p>学到的：注意数据的响应性（使用computed而不是普通函数） 性能问题（内存泄漏，及时回收监听器，关注生命周期） 封装与代码抽离 ts类型尽量规范化 </p>
 <h2 id="SSO"><a href="#SSO" class="headerlink" title="SSO"></a>SSO</h2><p>差点忘了这个大东西了（</p>

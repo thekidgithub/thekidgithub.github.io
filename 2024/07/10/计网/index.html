@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #00a596">
+                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #03a9f4">
                     计网
                 </a>
             </span>
@@ -194,13 +194,13 @@
     <div class="content" v-pre>
         <h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><span id="more"></span>
 <p>TCP&#x2F;IP模型：<br>应用层（仅负责应用，不负责传输 HTTP DNS）<br>传输层（TCP UDP 传输 分块）<br>网络层（IP）<br>网络接口层（五层模型又分为数据链路层和物理层）</p>
-<p>TCP和UDP<br>TCP更可靠,流式传输,需要建立连接,首部开销大,有流量控制&#x2F;拥塞控制,一对一<br>UDP不可靠,按包传输,无需建立连接,首部开销小,无xx控制,可多对多<br>场景: TCP HTTPS or 文件<br>UDP 音视频&#x2F;小包(DNS)</p>
+<p>TCP和UDP<br>TCP更可靠,流式传输,需要建立连接,首部开销大,有流量控制（滑动窗口）&#x2F;拥塞控制（调整发送速率）,一对一<br>UDP不可靠,按包传输,无需建立连接,首部开销小,无xx控制,可多对多<br>(UDP 为什么不可靠：无建立连接 不保证顺序)<br>(TCP 可靠性的保证：流量&#x2F;拥塞控制 校验和 超时重传 ACK确认应答 丢弃重复数据)<br>场景: TCP HTTPS or 文件<br>UDP 音视频&#x2F;小包(DNS)</p>
 <p>OSI七层模型：<br>应用层 表示层 会话层 传输层 网络层 数据链路层 物理层<br>表示层：数据压缩&#x2F;加密<br>网络层：选择合适的网间路由和交换节点</p>
 <h2 id="经典之输入URL后发生什么"><a href="#经典之输入URL后发生什么" class="headerlink" title="经典之输入URL后发生什么"></a>经典之输入URL后发生什么</h2><p>URL格式：协议&#x2F;&#x2F;web服务器+文件路径:端口号<br>一 网络请求部分</p>
 <ol>
-<li>DNS解析<br>首先看有无缓存，若没有，通过本地DNS服务器递归查询(根-&gt;顶级域-&gt;权威)</li>
+<li>DNS解析<br>首先看有无缓存，若没有，通过本地DNS服务器递归查询(根-&gt;顶级域-&gt;权威)<br>DNS同时使用TCP和UDP协议（区域传输时使用TCP，域名解析时使用UDP）</li>
 <li>TCP建立连接：三次握手<br>client发SYN,close -&gt; SYN_SENT<br>server收到后发SYN + ACK, LISTEN -&gt; SYN_RCVD<br>client收到后发ACK, SYN_SENT -&gt; ESTABLISHED<br>server收到后， SYN_RCVD -&gt; ESTAVLISHED<img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image1.png" class="">
-三次握手目的是<strong>保证双方都有发送和接收的能力</strong><br>更详细的目的:防止历史连接初始化&#x2F;保证双方序列号同步&#x2F;防止资源浪费</li>
+三次握手目的是<strong>保证双方都有发送和接收的能力</strong><br>更详细的目的:防止历史连接初始化&#x2F;保证双方序列号同步&#x2F;防止资源浪费 -&gt; 两次握手，如果第一个SYN阻塞（网络波动）导致重新发送SYN建立连接，当旧的SYN到达后再次建立连接，造成资源浪费</li>
 </ol>
 <p>四次挥手断开：<br>client发FIN server发ACK<br>server发FIN client发ACK<br>为什么四次:服务端通常需要等待完成数据的发送和处理，所以服务端的 ACK 和 FIN 一般都会分开发送<br>3. 发送请求&#x2F;接收响应<br>报文结构：</p>
 <img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image.png" class="">
@@ -218,6 +218,7 @@
 <li>au什么lization(携带验证信息)</li>
 <li>accept(encoding&#x2F;language)<br>响应</li>
 <li>etag</li>
+<li>last-modified</li>
 <li>location(配合重定向)</li>
 <li>age</li>
 </ul>
@@ -225,14 +226,15 @@
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>强缓存和协商缓存</p>
 <img src="/2024/07/10/%E8%AE%A1%E7%BD%91/image3.png" class="">
 
-<p>强缓存：Cache-Control:max-age &gt; Expires<br>原因： 前者是相对时间，后者是绝对时间，绝对时间如果客户端和服务端时钟不同步会不准确</p>
-<p>协商缓存：Etag和If-None-Match -&gt; Last-Modified和If-Modified-Since<br>Etag优先级更高，因为：</p>
+<p>强缓存：Cache-Control:max-age &gt; Expires (from disk cache)<br>原因： 前者是相对时间，后者是绝对时间，绝对时间如果客户端和服务端时钟不同步会不准确</p>
+<p>协商缓存：Etag和If-None-Match &gt; Last-Modified和If-Modified-Since<br>Etag优先级更高，因为：</p>
 <ul>
 <li>文件内容没有修改，最近修改时间也会变动</li>
 <li>时间检测的粒度是秒级</li>
 <li>一些服务器不能正确获取最后修改时间</li>
 </ul>
-<h2 id="HTTP版本"><a href="#HTTP版本" class="headerlink" title="HTTP版本"></a>HTTP版本</h2><p>1.1 优点：简单、易扩展、应用广泛 长连接与管道化<br>缺点：无状态（解决：cookie） 队头堵塞（管道化，但是只能解决请求的堵塞，无法解决响应堵塞） 明文传输<br>2.0 头部压缩 二进制格式 并发传输 服务器推送 问题：TCP队头堵塞<br>3.0 无队头阻塞 更快的连接建立 连接迁移<br>HTTPS 在HTTP层和TCP层间加入SSL&#x2F;TLS层，TCP三次握手后还要SSL&#x2F;TLS握手<br>http&#x2F;3为了解决TCP队头堵塞的问题，改为基于QUIC协议（基于UDP），由于UDP传输不可靠，因此可靠性转移到应用层去完成<br>一个TCP连接对应一个HTTP连接吗？ 1.0是 1.1由于长连接，一个TCP可对多个，2.0可多个并发</p>
+<p>为什么last-modified仍存在：兼容性 etag需要计算哈希值较耗资源 两者可以协同使用 </p>
+<h2 id="HTTP版本"><a href="#HTTP版本" class="headerlink" title="HTTP版本"></a>HTTP版本</h2><p>1.1  对比1.0：长连接 允许请求部分资源 引入Etag 新增host字段 新增请求方法<br>缺点：无状态（解决：cookie） 队头堵塞（管道化，但是只能解决请求的堵塞，无法解决响应堵塞） 明文传输<br>2.0 头部压缩 二进制格式 并发传输 服务器推送 问题：TCP队头堵塞（多路复用时）<br>3.0 无队头阻塞 更快的连接建立 连接迁移<br>HTTPS 在HTTP层和TCP层间加入SSL&#x2F;TLS层，TCP三次握手后还要SSL&#x2F;TLS握手<br>http&#x2F;3为了解决TCP队头堵塞的问题，改为基于QUIC协议（基于UDP），由于UDP传输不可靠，因此QUIC做了一些处理（流量控制 拥塞控制等 就是更接近TCP了）<br>一个TCP连接对应一个HTTP连接吗？ 1.0是 1.1由于长连接，一个TCP可对多个，2.0可多个并发</p>
 <p>HTTPS:</p>
 <ol>
 <li>加密<br>对称加密：加密和解密的密钥相同（通信建立后）<br>非对称： 公钥私钥（通信建立前）<br>混合加密： 对称 + 非对称<br>由于只有客户端&#x2F;服务端有公钥&#x2F;私钥，中间的代理服务器是解不开报文的</li>
@@ -252,10 +254,112 @@
 <li>iframe(利用window.name&#x2F;location.hash&#x2F;document.domain)<br>具体：iframe的src设置目标域，目标域中把数据放在window.name&#x2F;hash里，或把domain设置为共同主域（仅适用于主域相同子域不同情况）</li>
 <li>postMessage或webSocket</li>
 <li>jsonp，利用script不受同源限制，把目标域放在script的src里(支持老式浏览器，只支持GET)</li>
-<li>Node中间件代理或nginx代理（服务器向服务器请求无需遵循同源策略）</li>
+<li>Node中间件代理或nginx代理（服务器向服务器请求无需遵循同源策略）<br>数据的传递：cilent发请求给代理，代理发请求给源，源返回响应给代理，代理返回给cilent</li>
 <li>CORS（主流） 在服务端设Access-Control-Allow-Origin</li>
 </ol>
+<p>jsonp:</p>
+<pre><code class="js">const jsonp = (&#123; url, params, callbackName &#125;) =&gt; &#123;
+  const generateUrl = () =&gt; &#123;
+    let dataSrc = &#39;&#39;;
+    for (let key in params) &#123;
+      dataSrc += `$&#123;key&#125;=$&#123;params[key]&#125;&amp;`;
+    &#125;
+    dataSrc += `callback=$&#123;callbackName&#125;`;
+    return `$&#123;url&#125;?$&#123;dataSrc&#125;`;
+  &#125;
+  return new Promise((resolve, reject) =&gt; &#123;
+    const scriptEle = document.createElement(&#39;script&#39;);
+    scriptEle.src = generateUrl();
+    document.body.appendChild(scriptEle);
+    window[callbackName] = data =&gt; &#123;
+      resolve(data);
+      document.removeChild(scriptEle);
+    &#125;
+  &#125;)
+&#125;
+
+jsonp(&#123;
+  url: &#39;http://localhost:3000/say&#39;,
+  params: &#123; wd: &#39;Iloveyou&#39; &#125;,
+  callbackName: &#39;show&#39;
+&#125;).then(data =&gt; &#123;
+  console.log(data)
+&#125;)
+</code></pre>
 <p>关于CORS:<br>分为简单请求&#x2F;复杂请求<br>简单请求的标准：方法get&#x2F;post&#x2F;head header只能是accept(-language)&#x2F;content-language&#x2F;content-type content-type只能是text-plain&#x2F;form-data&#x2F;application-x-www-form-urlencoded<br>对于复杂请求，会先发出预检请求，判断是否符合CORS，符合再发送请求<br>作用：减少复杂请求使服务器进行无效运算，降低负载</p>
+<p>iframe </p>
+<ol>
+<li>window.name<br>a.html(localhost:3000)</li>
+</ol>
+<pre><code class="html">  &lt;iframe src=&quot;http://localhost:4000/c.html&quot; frameborder=&quot;0&quot; onload=&quot;load()&quot; id=&quot;iframe&quot;&gt;&lt;/iframe&gt;
+  &lt;script&gt;
+    let first = true
+    // onload事件会触发2次，第1次加载跨域页，并留存数据于window.name
+    function load() &#123;
+      if(first)&#123;
+      // 第1次onload(跨域页)成功后，切换到同域代理页面
+        let iframe = document.getElementById(&#39;iframe&#39;);
+        iframe.src = &#39;http://localhost:3000/b.html&#39;;
+        first = false;
+      &#125;else&#123;
+      // 第2次onload(同域b.html页)成功后，读取同域window.name中数据
+        console.log(iframe.contentWindow.name);
+      &#125;
+    &#125;
+  &lt;/script&gt;
+</code></pre>
+<p>b.html(localhost:3000) 无内容<br>c.html</p>
+<pre><code class="html"> &lt;script&gt;
+    window.name = &#39;111&#39;  
+  &lt;/script&gt;
+</code></pre>
+<ol start="2">
+<li>location.hash</li>
+</ol>
+<pre><code class="html">//a.html
+&lt;iframe src=&quot;http://localhost:4000/c.html#iloveyou&quot;&gt;&lt;/iframe&gt;
+  &lt;script&gt;
+    window.onhashchange = function () &#123; //检测hash的变化
+      console.log(location.hash);
+    &#125;
+  &lt;/script&gt;
+
+ // b.html
+  &lt;script&gt;
+    window.parent.parent.location.hash = location.hash 
+    //b.html将结果放到a.html的hash值中，b.html可通过parent.parent访问a.html页面
+  &lt;/script&gt;
+</code></pre>
+<pre><code class="js"> // c.html
+ console.log(location.hash);
+  let iframe = document.createElement(&#39;iframe&#39;);
+  iframe.src = &#39;http://localhost:3000/b.html#idontloveyou&#39;;
+  document.body.appendChild(iframe);
+</code></pre>
+<ol start="3">
+<li>document.domain</li>
+</ol>
+<pre><code class="html">// a.html
+&lt;body&gt;
+ helloa
+  &lt;iframe src=&quot;http://b.zf1.cn:3000/b.html&quot; frameborder=&quot;0&quot; onload=&quot;load()&quot; id=&quot;frame&quot;&gt;&lt;/iframe&gt;
+  &lt;script&gt;
+    document.domain = &#39;zf1.cn&#39;
+    function load() &#123;
+      console.log(frame.contentWindow.a);
+    &#125;
+  &lt;/script&gt;
+&lt;/body&gt;
+
+// b.html
+&lt;body&gt;
+   hellob
+   &lt;script&gt;
+     document.domain = &#39;zf1.cn&#39;
+     var a = 100;
+   &lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
 <h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><h4 id="XSS攻击"><a href="#XSS攻击" class="headerlink" title="XSS攻击"></a>XSS攻击</h4><blockquote>
 <p>Cross-Site Scripting（跨站脚本攻击）简称 XSS，是一种代码注入攻击。攻击者通过在目标网站上注入恶意脚本，使之在用户的浏览器上运行。利用这些恶意脚本，攻击者可获取用户的敏感信息如 Cookie、SessionID 等，进而危害数据安全。</p>
 </blockquote>
@@ -291,6 +395,29 @@
 <p>session:<br>存储在服务端，登录时服务端返回sessionID，客户端存入cookie<br>之后服务端根据cookie的sessionID，找到对应的session<br>缺点：服务端开销<br>多个服务器：存数据库&#x2F;redis存在内存</p>
 <p>token:<br>session会增加服务端开销，是有状态的<br>引入token使服务端无状态，客户端每次请求带上（放cookie或者请求头里）</p>
 <p>JWT：<br>三部分，与普通token的区别：token服务端拿到并查找数据库，JWT通过加密解密</p>
+<h3 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h3><p>背景：cookie-session鉴权模式，服务器有状态，单点登录场景下复杂（服务器集群）<br>解决方案是session统一存储（数据库）or 使用JWT直接在客户端存储鉴权信息</p>
+<p>JSON Web Token<br>三部分：头部（算法 type）<br>载荷（payload 消息体） 存储具体信息（过期时间在这里）<br>签名 需要一个密钥（serect key）对前两个部分使用加密算法（在头部）进行加密</p>
+<p>流程：</p>
+<blockquote>
+<p>服务器当验证用户账号和密码正确的时候，给用户颁发一个令牌，这个令牌作为后续用户访问一些接口的凭证<br>后续访问会根据这个令牌判断用户是否有权限进行访问<br>在前端接收到token后，一般情况会通过localStorage进行缓存，然后将token放到HTTP请求头Authorization 中</p>
+</blockquote>
+<p>应用：单点登录 预防CSRF XSS</p>
+<p>JWT不加密，可以自行二次加密，未加密时不能存储私密数据<br>不仅可鉴权，还可信息交换<br>缺点：服务端不保存状态，因此签发后未过期则一直有效<br>建议有效期短一些，且采用HTTPS传输防止泄漏</p>
+<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><p>关于竞态请求：先后发送多次请求，由于网络波动造成响应返回顺序混乱<br>解决： 1. 取消请求：发送新请求后取消上一次请求（利用abort,cancel等方法）<br>2. 忽略请求：加上特殊标识（id）或 做标记（react做法：effect中cleanup）</p>
+<pre><code class="js"> useEffect(() =&gt; &#123;
+    let ignore = false
+    fetchResults(query, page).then((json) =&gt; &#123;
+      if (!ignore) &#123;
+        setResults(json)
+      &#125;
+    &#125;)
+
+    return () =&gt; &#123;
+      ignore = true
+    &#125;
+  &#125;, [query, page])
+</code></pre>
+<p>(vue做法：在watch的第三个参数设置回调函数)</p>
 
     </div>
     

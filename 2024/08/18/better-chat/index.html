@@ -258,15 +258,16 @@ export const withPrivateRoute = (Component: React.ElementType) =&gt; &#123;
     return WrappedComponent;
 &#125;;
 </code></pre>
+<p>HOC优点：复用逻辑&#x2F;强化props</p>
 <h2 id="JWT鉴权"><a href="#JWT鉴权" class="headerlink" title="JWT鉴权"></a>JWT鉴权</h2><p>后端：登录成功后设置token给前端</p>
 <pre><code class="js">//登录成功后
 const token = jwt.sign(payload, secretKey);
-            const data = &#123;
-                token: token,
-                info: &#123;
-                    //...
-                &#125;
-            &#125;;
+const data = &#123;
+    token: token,
+    info: &#123;
+        //...
+    &#125;
+&#125;;
 // 4. 检查 Redis 缓存中的 Token，判断是否已经登录
 // const better_chat = new Redis();
 const redisToken = await better_chat.get(`token:$&#123;payload.username&#125;`);
@@ -276,7 +277,24 @@ if (redisToken) &#123;
 await better_chat.set(`token:$&#123;payload.username&#125;`, token, &#39;EX&#39;, 60 * 60 * 24 * 14); // 有效期为 14 天
 return RespData(res, data);
 </code></pre>
-<p>前端：先判断本地有无token，有则不用发请求，无才请求，之后把token存入tokenStorage里(tokenStorage是封装的localStorage)</p>
+<p>前端：先useEffect，如果有本地数据直接填入表单，登录时判断本地有无token，有则不用发请求，无才请求，之后把token存入tokenStorage里(tokenStorage是封装的localStorage)</p>
+<p>密码加密：加盐</p>
+<pre><code class="js">// 加盐（3 个字节的字节码转化成 16 进制字符串，生成一个 6 位的 salt）
+    const salt = crypto.randomBytes(3).toString(&#39;hex&#39;);
+    const M = salt.slice(0, 3) + password + salt.slice(3);
+    // 将 M 进行 MD5 哈希，得到哈希值
+    const hash = crypto.createHash(&#39;md5&#39;).update(M).digest(&#39;hex&#39;);
+    const user = &#123;
+        avatar,
+        username: username,
+        password: hash,
+        name: username,
+        phone: phone,
+        signature: &#39;&#39;,
+        salt: salt
+    &#125;;
+</code></pre>
+<p>用户信息加上一个salt，登录时把输入的密码以同样方式加盐再进行比对，salt从user里获取</p>
 <h2 id="webRtc-webSocket实现音视频通信"><a href="#webRtc-webSocket实现音视频通信" class="headerlink" title="webRtc + webSocket实现音视频通信"></a>webRtc + webSocket实现音视频通信</h2><p>基本流程：</p>
 <ol>
 <li>首先采集音视频数据：</li>
@@ -292,7 +310,7 @@ return RespData(res, data);
 </code></pre>
 <p>2.<br>媒体协商（SDP交换）</p>
 <img src="/2024/08/18/better-chat/image.png" class="">
-<p>发送端发offer,调用setLocalDescription -&gt; 接收端收到offer,调用setRemoteDescription -&gt; 接收端发answer, 调用setLocalDescription -&gt; 发送端收到answer, 调用setRemoteDescription<br>offer 和 answer 本质就是存有 SDP 信息的对象<br>信令服务器：一般用webSocket<br>3.<br>ICE（建立连接）<br>收集 Candidate -&gt; 交换 Candidate -&gt; 按优先级尝试连接<br>Candidate:WebRTC用来描述它可以连接的远端服务器的基本信息，如IP地址、协议、端口等</p>
+<p>发送端发offer,调用setLocalDescription -&gt; 接收端收到offer,调用setRemoteDescription -&gt; 接收端发answer, 调用setLocalDescription -&gt; 发送端收到answer, 调用setRemoteDescription<br>offer 和 answer 本质就是存有 SDP 信息的对象<br>相关API：createOffer&#x2F;createAnswer&#x2F;setLocalDescription&#x2F;setRemoteDescription<br>信令服务器：一般用webSocket<br>3.<br>ICE（建立连接）<br>收集 Candidate -&gt; 交换 Candidate -&gt; 按优先级尝试连接<br>Candidate:WebRTC用来描述它可以连接的远端服务器的基本信息，如IP地址、协议、端口等<br>优先级:host本机候选者 &gt; srflx内网主机映射的外网地址和端口 &gt; relay中继候选者<br>收集：host在本机 srflx利用STUN relay使用TURN<br>STUN和TURN用来除了NAT（进行内外网的地址转换，位于内网的网关上）<br>RTCPeerConnection：由本地计算机到远端的 WebRTC 连接，该接口提供创建，保持，监控，关闭连接的方法的实现，可以简单理解为功能强大的 socket 连接。</p>
 <p>项目实现：<br>前端<br>首先useEffect，初始化socket和初始化房间内所有人的pc<br>initSocket:<br>如果socket存在，重新建立<br>const ws &#x3D; new WebSocket(url, …) url包含roomid username type<br>ws.onopen:<br>如果是发起人（判断：state &#x3D; initiate），init视频流，send”create-room”信息<br>ws.onmessage:<br>分为许多message,<br>‘connent-fail’ 关闭连接<br>‘new-peer’ 接收到新人进入房间，添加自己的音视频流到pc通道，并发送自己 offer 信息给该新人（send’offer’） setLocalDescription<br>‘offer’ 添加音视频流到pc通道,send’answer’ setLocalDescription&#x2F;setRemoteDescription<br>‘answer’ setRemoteDescription<br>‘ice_candidate’ 设置对方的candidate<br>‘reject’ 对方拒绝通话，关闭连接</p>
 <p>initStream:即上面的第一步建立音视频流<br>initPC:<br>new RTCPeerConnection()<br>给pc绑定oncandidate事件，在双方SDP设置完成后触发，send ‘ice_candidate’<br>绑定ontrack事件，用于接收远程视频流并播放</p>
 <p>后端：<br>connectRTC函数，首先从url里获取相关信息<br>然后onmessage:<br>‘create-room’ 邀请人发送邀请，被邀请人接收邀请 ———— 由邀请人向被邀请人通知<br>首先判断好友&#x2F;群友是否在线，是否在通话中<br>利用 LoginRooms 存储的 ws 连接实例向在线且空闲的被邀请人发送邀请：</p>
@@ -305,13 +323,21 @@ return RespData(res, data);
 &#125;;
 LoginRooms[receiver_username].ws.send(JSON.stringify(msg));
 </code></pre>
+<p>（两个Map: LoginRooms: 记录当前在线用户，status记录是否正在通话<br>ChatRTCRooms: 全局变量存储聊天室房间，每个房间是一个对象，对象的键是用户名 username，值是 WebSocket 实例）</p>
 <p>new_peer：告诉房间内其他人自己要进入房间<br>offer：发送自己 offer 信息给进入房间的新人<br>answer：此时已收到并设置对方发送过来的 SDP 后，也发送自己的 SDP 给对方<br>ice_candidate：设置对方的 candidate ———— 双方都可能收到，此时双方的 ICE 设置完毕，可以进行音视频通话<br>reject: 挂断</p>
 <h2 id="webSocket-建立聊天"><a href="#webSocket-建立聊天" class="headerlink" title="webSocket 建立聊天"></a>webSocket 建立聊天</h2><p>有关webSocket:<br>WebSocket 是一种在单个TCP连接上进行全双工通信的协议，应用层<br>双工：服务器可以主动向客户端推送信息，客户端也可以主动向服务器发送信息<br>只需一次握手<br>数据格式轻量<br>好处：用于实时通信，避免了HTTP没有长连接造成的轮询问题<br>连接过程：</p>
 <ol>
-<li>客户端发起http请求，经过3次握手后，建立起TCP连接；http请求里存放WebSocket支持的版本号等信息，如：Upgrade、Connection、WebSocket-Version等；</li>
+<li>客户端发起http请求，经过3次握手后，建立起TCP连接；http请求里设置转为ws的信息，如：Connection: Upgrade<br>Upgrade: websocket、WebSocket-Version等；</li>
 <li>服务器收到客户端的握手请求后，同样采用HTTP协议回馈数据；</li>
-<li>客户端收到连接成功的消息后，开始借助于TCP传输信道进行全双工通信。<br>断线重连，心跳包<br>基本思路:设置定时器,每隔一段时间向服务端发送一个简单的包(如’ping’)<br>服务端收到ping后,返回一个’pong’<br>若长时间未收到,则首先进行自动重连,设置最大自动重连次数,超过则手动重连</li>
+<li>客户端收到连接成功的消息后，开始借助于TCP传输信道进行全双工通信。</li>
 </ol>
+<p>与HTTP2.0服务端推送区别：</p>
+<ol>
+<li>http仍然基于请求-响应模型，客户端必须首先发起请求</li>
+<li>传输资源类型：ws：文本&#x2F;二进制数据，http：js&#x2F;css文件</li>
+<li>使用场景：http用于优化资源加载的场景</li>
+</ol>
+<p>断线重连，心跳包<br>基本思路:设置定时器,每隔一段时间（时间间隔小于服务端超时时间）向服务端发送一个简单的包(如’ping’)，且发送后开启超时定时器检测超时<br>服务端收到ping后,返回一个’pong’<br>若长时间未收到,则首先进行自动重连,设置最大自动重连次数,超过则手动重连</p>
 <p>鉴权:使用token等</p>
 <p>应用：<br>聊天页面initSocket:<br>收到’create-room’，打开音视频组件<br>message的发送和接收也通过ws完成</p>
 <h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>后端：<br>ws.on(‘message’) ，判断文件类型为file<br>判断上传状态：</p>
@@ -319,39 +345,39 @@ LoginRooms[receiver_username].ws.send(JSON.stringify(msg));
 <li>start: 创建writeStream，设置断点续传（判断:existsSync，如果有，把transmittedSize传到客户端）</li>
 </ol>
 <pre><code class="js">if (message.fileTraStatus === &#39;start&#39;) &#123;
-                        receivedSize = 0;
-                        fileInfo = JSON.parse(message.fileInfo);
-                        // 判断文件是否已经有过传输，如果有则断点续传（TODO：由于不准确，待完善）
-                        if (fs.existsSync(path.join(filePath,filename))) &#123;
-                            // 这个是已经传输的文件大小，应该传回给客户端，让客户端从这个大小开始传输
-                            const transmittedSize = fs.statSync(path.join(filePath, filename)).size;
-                        &#125;
-                        notExitCreate(path.join(process.cwd(), mkdir));
-                        writeStream = fs.createWriteStream(path.join(process.cwd(), `$&#123;mkdir&#125;/$&#123;filename&#125;`));
-                        return;
-                    &#125;
+        receivedSize = 0;
+        fileInfo = JSON.parse(message.fileInfo);
+        // 判断文件是否已经有过传输，如果有则断点续传（TODO：由于不准确，待完善）
+        if (fs.existsSync(path.join(filePath,filename))) &#123;
+            // 这个是已经传输的文件大小，应该传回给客户端，让客户端从这个大小开始传输
+            const transmittedSize = fs.statSync(path.join(filePath, filename)).size;
+        &#125;
+        notExitCreate(path.join(process.cwd(), mkdir));
+        writeStream = fs.createWriteStream(path.join(process.cwd(), `$&#123;mkdir&#125;/$&#123;filename&#125;`));
+        return;
+    &#125;
 </code></pre>
 <ol start="2">
 <li>upload:</li>
 </ol>
 <pre><code class="js">else if (message.fileTraStatus === &#39;upload&#39;) &#123;
-                        fileContent = Buffer.from(message.content);
-                        // 接收文件块并写入文件
-                        writeStream.write(fileContent);
-                        receivedSize += fileContent.length;
-                        // 如果接收完整个文件，则关闭文件流并发送上传成功消息
-                        if (receivedSize === fileInfo.fileSize) &#123;
-                            writeStream.end(async () =&gt; &#123;
-                                // file 类型的消息写入和发送
-                                msg.file_size = receivedSize;
-                                msg.content = `$&#123;mkdir&#125;/$&#123;filename&#125;`;
-                                message.content = `$&#123;mkdir&#125;/$&#123;filename&#125;`;
-                                await writeAndSend(type, room, msg, message);
-                                return;
-                            &#125;);
-                        &#125;
-                        return;
-                    &#125;
+        fileContent = Buffer.from(message.content);
+        // 接收文件块并写入文件
+        writeStream.write(fileContent);
+        receivedSize += fileContent.length;
+        // 如果接收完整个文件，则关闭文件流并发送上传成功消息
+        if (receivedSize === fileInfo.fileSize) &#123;
+            writeStream.end(async () =&gt; &#123;
+                // file 类型的消息写入和发送
+                msg.file_size = receivedSize;
+                msg.content = `$&#123;mkdir&#125;/$&#123;filename&#125;`;
+                message.content = `$&#123;mkdir&#125;/$&#123;filename&#125;`;
+                await writeAndSend(type, room, msg, message);
+                return;
+            &#125;);
+        &#125;
+        return;
+    &#125;
 </code></pre>
 <p>stream写入 -&gt; receviedSize增加 -&gt; 判断是否接收完毕，是就发送</p>
 <p>前端：</p>
@@ -401,7 +427,7 @@ setTimeout(async () =&gt; &#123;
     &#125;, 50);
 </code></pre>
 <p>首先发送start,之后分块传输，根据chunk.done（是否传输完毕）和transmittedSize(小于0，之前的已经传完了，需要继续发upload)</p>
-<p>其他：使用哈希值保证文件的完整性（是否改动，webpackd的contentHash也是基于这个）和一致性（是否上传过），可以用spark-md5库<br>文件拼接&#x2F;保证相对顺序：给分片加index</p>
+<p>其他：使用哈希值保证文件的完整性（是否改动，webpack的contentHash也是基于这个）和一致性（是否上传过），可以用spark-md5库，计算分片哈希比较消耗性能，可以使用WebWorker另开线程计算<br>文件拼接&#x2F;保证相对顺序：给分片加index<br>切片：Blob.prototype.slice</p>
 <h2 id="总体架构-一些细节"><a href="#总体架构-一些细节" class="headerlink" title="总体架构 + 一些细节"></a>总体架构 + 一些细节</h2><p>前端：</p>
 <img src="/2024/08/18/better-chat/image1.png" class="">
 

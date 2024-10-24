@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ffa2c4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #00bcd4">
+                <a href="/tags/js/" style="color: #ffa2c4">
                     js
                 </a>
             </span>
@@ -203,11 +203,11 @@
 <li>Object.prototype.toString.call</li>
 </ul>
 <p>0.1 + 0.2 ：二进制无限循环 -&gt; 截断 -&gt; 精度损失<br>解决：先转整数</p>
-<p>栈内存和堆内存：引用类型地址位于栈内存，值位于堆内存<br>两种区别：栈内存空间固定，操作简单，执行环境结束自动回收<br>堆内存空间不固定，操作较复杂（需要分配空间地址），需通过gc机制垃圾回收<br>关于symbol: 具有唯一性，常用于对象的键中</p>
+<p>栈内存和堆内存：引用类型地址位于栈内存，值位于堆内存<br>两种区别：栈内存空间固定，操作简单，执行环境结束自动回收<br>堆内存空间不固定，操作较复杂（需要分配空间地址），需通过gc机制垃圾回收</p>
+<p>关于symbol: 具有唯一性，常用于对象的键中</p>
 <blockquote>
-<p>symbol 允许我们创建对象的“隐藏”属性，代码的任何其他部分都不能意外访问或重写这些属性。</p>
+<p>symbol 允许我们创建对象的“隐藏”属性，代码的任何其他部分都不能意外访问或重写这些属性。<br>不会被枚举（for in,keys）但是assign时会复制<br>全局symbol: Symbol.for()</p>
 </blockquote>
-<p>不会被枚举（for in,keys） 但是assign时会复制<br>全局symbol: Symbol.for()</p>
 <p>类型转换：<br>显式 Number() parseInt() parseFloat()<br>String() Boolean()<br>隐式 if while转bool<br>+ 转字符串<br>其他运算符 转数值<br>&#x3D;&#x3D; &#x3D;&#x3D;&#x3D; 前者会先类型转换</p>
 <h2 id="闭包与内存"><a href="#闭包与内存" class="headerlink" title="闭包与内存"></a>闭包与内存</h2><p>var let const 区别（块级作用域，变量提升，重复声明）<br>关于变量提升： var变量与函数声明（函数声明：function xx() 函数表达式: xx &#x3D; function() {}）</p>
 <pre><code class="js">console.log(a)
@@ -314,7 +314,7 @@ Child.prototype.constructor = Child;
 const child = new Child(&#39;Tom&#39;, 18);
 child.sayName(); // 输出 &#39;Tom&#39;
 </code></pre>
-<p>关于this绑定：<br>this永远指向最后调用的对象：</p>
+<p>（继承的方式：原型链，class extend，构造函数）<br>关于this绑定：<br>this永远指向最后调用的对象：</p>
 <pre><code class="js">    var name = &quot;windowsName&quot;;
     var a = &#123;
         name: &quot;Cherry&quot;,
@@ -425,7 +425,21 @@ console.log(&#39;script end&#39;);
 <h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><p>数组方法：splice(起始位置，删除数目，增加的元素) 返回被删元素的数组<br>slice concat 浅拷贝<br>字符串方法：<br>拼接 + concat<br>切分: slice substr substring<br>模板匹配（正则）：match search replace</p>
 <p>实现轮播图：<br>放置一个视口，图片使用相对定位，用js控制currentIndex<br>循环：在首尾各拼接图片，切换时迅速切换&#x2F;循环索引<br>定时器，防抖节流<br>多图：懒加载&#x2F;分页加载</p>
 <p>虚拟列表：<br>定高：监听滚动事件，根据scrollTop计算出开始索引和结束索引，只渲染其中的部分<br>不定高：先以定值预处理，得到高度后再动态调整+缓存<br>首尾加上缓冲区， 计算索引可用二分法</p>
-<p>懒加载：延迟加载，只在图片滚动到视口才开始加载<br>做法：Intersection Observer&#x2F;React中lazy or suspense&#x2F;路由懒加载<br>预加载：将需要的资源提前加载，用到的时候读取缓存<br>做法：link标签&#x2F;img src&#x2F;webpack</p>
+<p>懒加载：延迟加载，只在图片滚动到视口才开始加载<br>做法：Intersection Observer&#x2F;React中lazy or suspense&#x2F;路由懒加载</p>
+<pre><code class="js">const options = &#123;
+  // 表示重叠面积占被观察者的比例，从 0 - 1 取值，
+  // 1 表示完全被包含
+  threshold: 1.0, 
+  root: document.querySelector(&#39;#scrollArea&#39;) // 必须是目标元素的父级元素
+&#125;;
+
+const callback = (entries, observer) =&gt; &#123; ....&#125;
+
+const observer = new IntersectionObserver(callback, options);
+
+observer.observe(target);
+</code></pre>
+<p>预加载：将需要的资源提前加载，用到的时候读取缓存<br>做法：link标签&#x2F;img src&#x2F;webpack</p>
 <h2 id="本地存储"><a href="#本地存储" class="headerlink" title="本地存储"></a>本地存储</h2><ol>
 <li>cookie<br>&lt;4KB 解决HTTP无状态 需要HTTPS加密<br>组成：name value Max-Age Expires(优先级小) Domain Path Secure<br>删除：设置过期时间</li>
 <li>localStorage<br>5M 持久化 信息在同一域共享 -&gt; 作用：多个tab栏共享数据</li>

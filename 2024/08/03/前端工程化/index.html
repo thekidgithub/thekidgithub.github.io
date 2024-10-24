@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
                     八股
                 </a>
             </span>
@@ -217,7 +217,7 @@
   &#125;
 &#125;;
 </code></pre>
-<p>常见: style- css-（一起用） less&#x2F;sass- postcss- file&#x2F;url-(静态资源) babel-(es6 to es5)<br>特性：同步&#x2F;异步，链式调用<br>编写：</p>
+<p>常见: style- css-（一起用） less&#x2F;sass- postcss- file&#x2F;url-(静态资源) babel-(es6 to es5)<br>css-loader把css文件解析得到其样式代码，style-loader将解析到的样式代码插入到html中<br>特性：同步&#x2F;异步，链式调用<br>编写：</p>
 <pre><code class="js">// 导出一个函数，source为webpack传递给loader的文件源内容
 module.exports = function(source) &#123;
     const content = doSomeThing2JsString(source);
@@ -317,7 +317,7 @@ module.exports = function(source) &#123;
 <h2 id="ESModule和CommonJS"><a href="#ESModule和CommonJS" class="headerlink" title="ESModule和CommonJS"></a>ESModule和CommonJS</h2><ul>
 <li>写法： es用import&#x2F;export cjs用module.exports和reqiure</li>
 <li>es异步加载，cjs同步加载（会阻塞）</li>
-<li>es编译时加载，cjs运行时加载</li>
+<li>es静态加载：编译时加载，只能顶层调用，tree-shaking，cjs动态加载：运行时加载，可以在条件语句等调用</li>
 </ul>
 
     </div>
