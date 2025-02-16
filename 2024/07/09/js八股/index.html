@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ff7d73">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
                     八股
                 </a>
             </span>
@@ -336,6 +336,33 @@ child.sayName(); // 输出 &#39;Tom&#39;
     &#125;
     window.a.fn();
 </code></pre>
+<pre><code class="js">var name = &#39;window&#39;;
+var bar = &#123; name: &#39;bar&#39;&#125;;
+var foo = &#123;
+    name: &#39;foo&#39;,
+    say1: function() &#123;
+        console.log(this.name);
+    &#125;,
+    say2: () =&gt; &#123;
+        console.log(this.name);
+    &#125;,
+    say3: function() &#123;
+        return () =&gt; console.log(this.name);
+    &#125;
+&#125;;
+
+foo.say1(); //foo
+const temp = foo.say1;
+temp();//window
+foo.say1.call(bar);//bar
+
+foo.say2();//window
+foo.say2.call(bar);//window
+
+foo.say3()();//foo
+foo.say3.call(bar)();//bar
+foo.say3().call(bar);//foo
+</code></pre>
 <p>改变this指向：</p>
 <ul>
 <li>箭头函数(会查找作用域链确定this)</li>
@@ -490,7 +517,7 @@ const num2 = calc(100,200) // 缓存得到的结果
     <div id="footer-wrap">
         <div>
             &copy;
-            2022 - 2024 The kid 的小窝
+            2022 - 2025 The kid 的小窝
             <span id="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>

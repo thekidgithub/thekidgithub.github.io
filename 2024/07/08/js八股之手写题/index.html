@@ -182,7 +182,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #ffa2c4">
+                <a href="/tags/js/" style="color: #ff7d73">
                     js
                 </a>
             </span>
@@ -673,13 +673,26 @@ function _render(vnode) &#123;
 &#125;
 </code></pre>
 <h2 id="响应式"><a href="#响应式" class="headerlink" title="响应式"></a>响应式</h2><pre><code class="js">// 创建一个代理对象来监听数组的变化
-const reactiveArray = new Proxy([], &#123;
-  set(target, key, value, receiver) &#123;
-    const result = Reflect.set(target, key, value, receiver);
-    updateDOM();
-    return result;
-  &#125;
-&#125;);
+function reactiveArray(arr) &#123;
+    const handler = &#123;
+        get(target, prop) &#123;
+            // 重写常用的数组方法
+            if ([&#39;push&#39;, &#39;pop&#39;, &#39;shift&#39;, &#39;unshift&#39;, &#39;splice&#39;].includes(prop)) &#123;
+                return function (...args) &#123;
+                    // 调用原始方法
+                    const result = Array.prototype[prop].apply(target, args);
+                    // 响应式逻辑
+                    console.log(`数组发生变化: $&#123;prop&#125;`, target);
+                    return result;
+                &#125;;
+            &#125;
+            // 其他属性直接返回
+            return target[prop];
+        &#125;
+    &#125;;
+
+    return new Proxy(arr, handler);
+&#125;
 </code></pre>
 <h2 id="数组转树"><a href="#数组转树" class="headerlink" title="数组转树"></a>数组转树</h2><pre><code class="js">function arrayToTree(data) &#123;
     const map = &#123;&#125;;
@@ -693,11 +706,9 @@ const reactiveArray = new Proxy([], &#123;
     // 构建树结构
     data.forEach(item =&gt; &#123;
         const node = map[item.key];
-        if (item.parent) &#123;
+        if (item.parent &amp;&amp; map[item.parent]) &#123;
             // 如果有 parent，则将当前节点添加到其父节点的 children 数组中
-            if (map[item.parent]) &#123;
-                map[item.parent].children.push(node);
-            &#125;
+            map[item.parent].children.push(node);
         &#125; else &#123;
             // 如果没有 parent，说明是根节点
             tree.push(node);
@@ -722,7 +733,7 @@ const reactiveArray = new Proxy([], &#123;
     <div id="footer-wrap">
         <div>
             &copy;
-            2022 - 2024 The kid 的小窝
+            2022 - 2025 The kid 的小窝
             <span id="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>

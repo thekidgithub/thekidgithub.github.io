@@ -175,7 +175,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #03a9f4">
+                <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="color: #00a596">
                     项目
                 </a>
             </span>
@@ -446,6 +446,7 @@ export const appRoutes: RouteRecordNormalized[] = formatModules(modules, []);
       &#125;,
     &#125;,
 </code></pre>
+<p>vite会把目标域替换成localhost的端口（底层是设置了代理服务器）</p>
 <p>还可以设置whistle配置解决<br>这里主要是获取后端域名，然后在响应头加上access-control-allow-origin为5173</p>
 <pre><code>5173.hustunique.com 127.0.0.1:5173
 dev.back.recruitment2023.hustunique.com resHeaders://(access-control-allow-origin=https://5173.hustunique.com)
@@ -669,7 +670,7 @@ const locale = computed(() =&gt; &#123;
     <div id="footer-wrap">
         <div>
             &copy;
-            2022 - 2024 The kid 的小窝
+            2022 - 2025 The kid 的小窝
             <span id="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>

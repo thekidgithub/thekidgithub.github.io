@@ -175,21 +175,21 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/HTML/" style="color: #03a9f4">
+                <a href="/tags/HTML/" style="color: #00a596">
                     HTML
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/CSS/" style="color: #ff7d73">
+                <a href="/tags/CSS/" style="color: #ffa2c4">
                     CSS
                 </a>
             </span>
@@ -206,7 +206,7 @@
 <li>批量修改DOM: 1. fragment 2. 先display:none再修改 3. 元素脱离文档流</li>
 <li>减少查询节点的位置属性，可以查询后缓存（会导致回流，尤其是在循环内）<br>(现代浏览器会通过队列批量执行优化重排过程，但是获取布局信息时，会强制队列刷新)</li>
 <li>动画，使用绝对定位脱离文档流(或使用requestAnimationFrame)</li>
-<li>script标签加上async or defer，或把script标签放底部(js进程和GUI进程互斥，阻塞DOM构建)(async解析完立即执行，defer解析完会在HTML解析完后执行)<img src="/2024/08/02/HTML-CSS/image2.png" class=""></li>
+<li>script标签加上async or defer，或把script标签放底部(js进程和GUI进程互斥，阻塞DOM构建)(async解析完立即执行，defer解析完会在HTML解析完后执行)<br>（使用async时，由于解析完立即执行，因此有多个async时，执行的顺序和声明的顺序可能不一样）<img src="/2024/08/02/HTML-CSS/image2.png" class=""></li>
 <li>简化DOM和CSSOM树（压缩文件、减少选择器嵌套、在DOM树末端改变class）</li>
 </ul>
 <p>补充： requestAnimationFrame<br>传入一个回调函数，执行动画<br>好处： CPU节能（seti，在后台仍运行）<br>集中DOM操作<br>函数节流</p>
@@ -278,7 +278,7 @@
     <div id="footer-wrap">
         <div>
             &copy;
-            2022 - 2024 The kid 的小窝
+            2022 - 2025 The kid 的小窝
             <span id="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>

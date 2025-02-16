@@ -310,7 +310,7 @@ return RespData(res, data);
 </code></pre>
 <p>2.<br>媒体协商（SDP交换）</p>
 <img src="/2024/08/18/better-chat/image.png" class="">
-<p>发送端发offer,调用setLocalDescription -&gt; 接收端收到offer,调用setRemoteDescription -&gt; 接收端发answer, 调用setLocalDescription -&gt; 发送端收到answer, 调用setRemoteDescription<br>offer 和 answer 本质就是存有 SDP 信息的对象<br>相关API：createOffer&#x2F;createAnswer&#x2F;setLocalDescription&#x2F;setRemoteDescription<br>信令服务器：一般用webSocket<br>3.<br>ICE（建立连接）<br>收集 Candidate -&gt; 交换 Candidate -&gt; 按优先级尝试连接<br>Candidate:WebRTC用来描述它可以连接的远端服务器的基本信息，如IP地址、协议、端口等<br>优先级:host本机候选者 &gt; srflx内网主机映射的外网地址和端口 &gt; relay中继候选者<br>收集：host在本机 srflx利用STUN relay使用TURN<br>STUN和TURN用来除了NAT（进行内外网的地址转换，位于内网的网关上）<br>RTCPeerConnection：由本地计算机到远端的 WebRTC 连接，该接口提供创建，保持，监控，关闭连接的方法的实现，可以简单理解为功能强大的 socket 连接。</p>
+<p>发送端发offer,调用setLocalDescription -&gt; 接收端收到offer,调用setRemoteDescription -&gt; 接收端发answer, 调用setLocalDescription -&gt; 发送端收到answer, 调用setRemoteDescription<br>offer 和 answer 本质就是存有 SDP 信息的对象<br>相关API：createOffer&#x2F;createAnswer&#x2F;setLocalDescription&#x2F;setRemoteDescription<br>信令服务器：一般用webSocket<br>3.<br>ICE（建立连接）<br>收集 Candidate -&gt; 交换 Candidate -&gt; 按优先级尝试连接<br>Candidate:WebRTC用来描述它可以连接的远端服务器的基本信息，如IP地址、协议、端口等<br>优先级:host本机候选者 &gt; srflx内网主机映射的外网地址和端口 &gt; relay中继候选者<br>收集：host在本机 srflx利用STUN relay使用TURN<br>STUN和TURN用来处理NAT（进行内外网的地址转换，位于内网的网关上）<br>RTCPeerConnection：由本地计算机到远端的 WebRTC 连接，该接口提供创建，保持，监控，关闭连接的方法的实现，可以简单理解为功能强大的 socket 连接。</p>
 <p>项目实现：<br>前端<br>首先useEffect，初始化socket和初始化房间内所有人的pc<br>initSocket:<br>如果socket存在，重新建立<br>const ws &#x3D; new WebSocket(url, …) url包含roomid username type<br>ws.onopen:<br>如果是发起人（判断：state &#x3D; initiate），init视频流，send”create-room”信息<br>ws.onmessage:<br>分为许多message,<br>‘connent-fail’ 关闭连接<br>‘new-peer’ 接收到新人进入房间，添加自己的音视频流到pc通道，并发送自己 offer 信息给该新人（send’offer’） setLocalDescription<br>‘offer’ 添加音视频流到pc通道,send’answer’ setLocalDescription&#x2F;setRemoteDescription<br>‘answer’ setRemoteDescription<br>‘ice_candidate’ 设置对方的candidate<br>‘reject’ 对方拒绝通话，关闭连接</p>
 <p>initStream:即上面的第一步建立音视频流<br>initPC:<br>new RTCPeerConnection()<br>给pc绑定oncandidate事件，在双方SDP设置完成后触发，send ‘ice_candidate’<br>绑定ontrack事件，用于接收远程视频流并播放</p>
 <p>后端：<br>connectRTC函数，首先从url里获取相关信息<br>然后onmessage:<br>‘create-room’ 邀请人发送邀请，被邀请人接收邀请 ———— 由邀请人向被邀请人通知<br>首先判断好友&#x2F;群友是否在线，是否在通话中<br>利用 LoginRooms 存储的 ws 连接实例向在线且空闲的被邀请人发送邀请：</p>
@@ -445,7 +445,7 @@ setTimeout(async () =&gt; &#123;
     <div id="footer-wrap">
         <div>
             &copy;
-            2022 - 2024 The kid 的小窝
+            2022 - 2025 The kid 的小窝
             <span id="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>
