@@ -266,6 +266,7 @@ function useState(initialState) &#123;
 <h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><p>渲染时：shouldComponentUpdate、PureComponent、React.memo</p>
 <p>useCallback和useMemo:<br>cb是缓存函数体的，函数只有在props更新才更新<br>用法：函数作为依赖项（useEffect）；函数作为React.memo的组件props<br>memo缓存函数执行的结果<br>（useMemo !&#x3D;&#x3D; React.memo，后者用来包装一个组件，只有props更新才重新渲染）</p>
 <p>懒加载：lazy函数 or Suspense组件<br>Suspense: fallback&#x3D;{</Loading>} 显示后备组件<br>里面包真正渲染的组件<br>lazy： lazy(() &#x3D;&gt; import(‘.&#x2F;MarkdownPreview.js’));</p>
+<p>纯函数组件（无状态组件），相比有状态组件（class），内存占用小</p>
 <h2 id="React-Router"><a href="#React-Router" class="headerlink" title="React Router"></a>React Router</h2><p>用法：<br>组件：<Routers> <Router>(path&#x2F;element) <Link>(to) <Outlet>(插槽) <Navigate> <BrowserRouter>&#x2F;<HashRouter><br>hooks: useParams useNavigate useLocation</p>
 <p>与v5区别：<br><Switch> -&gt; <Routers> v6在外层统一配置路由结构，让路由结构更清晰，组件内部使用<Outlet>插槽<br><Link> to支持相对路径<br>API更改（useHistory -&gt; useNavigate）更支持hooks(v6使用hooks获取params, location等)<br>（附：react-router提供组件，history库提供底层路由实现（pushState等）<br>history和hash模式，监听：popState&#x2F;onHashChange<br>）</p>
 <p>原理：v6的核心是<Routes>，通过将子<Route>和URL进行匹配决定如何渲染，通过context传递的location naviagtion等信息确定hash&#x2F;params等参数</p>

@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #03a9f4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00a596">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/js/" style="color: #ff7d73">
+                <a href="/tags/js/" style="color: #00bcd4">
                     js
                 </a>
             </span>
@@ -592,6 +592,33 @@ function myClear() &#123;
             request(urls[i], i);
         &#125;
     &#125;);
+&#125;
+</code></pre>
+<h2 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a>Scheduler</h2><pre><code class="js">class Scheduler &#123;
+  concurrency = 2
+  running = 0
+  queue = []
+  
+  add(task) &#123;
+    return new Promise(resolve =&gt; &#123;
+      this.queue.push(&#123;
+        taskGenerator: task,
+        resolve
+      &#125;)
+      this.schedule()
+    &#125;)
+  &#125;
+  schedule() &#123;
+    while (this.queue.length &gt; 0 &amp;&amp; this.running &lt; this.concurrency) &#123;
+      const curTask = this.queue.shift()
+      this.running += 1
+      curTask.taskGenerator().then(result =&gt; &#123;
+        this.running -= 1
+        curTask.resolve(result)
+        this.schedule()
+      &#125;)
+    &#125;
+  &#125;
 &#125;
 </code></pre>
 <h2 id="图片懒加载"><a href="#图片懒加载" class="headerlink" title="图片懒加载"></a>图片懒加载</h2><pre><code class="js">function lazyload() &#123;

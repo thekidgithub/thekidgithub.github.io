@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>byte1 | The kid 的小窝</title>
+    <meta name="author" content="the kid" />
+    <meta name="description" content="Ciallo～(∠・ω< )⌒★" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>THE KID 的小窝</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;THE KID 的小窝</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>byte1</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/3/1
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="微前端"><a href="#微前端" class="headerlink" title="微前端"></a>微前端</h1><span id="more"></span>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>（参考了garfish文档上的介绍）<br>传统架构：SPA MPA<br>SPA的DX差（构建时间长 需求相互阻塞 实质上是模块直接耦合程度太高） UX好（体验丝滑 性能好 资源复用）<br>MPA的DX好（解决了上面的问题） UX差（多应用之间割裂 ）</p>
+<p>微前端：取两家之长</p>
+<ul>
+<li>子系统间的开发、发布从空间上完成隔离</li>
+<li>子系统可以使用不同的技术体系</li>
+<li>子系统间可以完成基础库的代码复用</li>
+<li>子系统间可以快速完成通信</li>
+<li>子系统间需求迭代互不阻塞</li>
+</ul>
+<p>整体架构</p>
+<img src="/2025/03/01/byte1/image1.png" class="">
+<p>微前端部署平台: 微前端的服务发现、服务注册、子应用版本控制、多个子应用间同灰度、增量升级子应用、下发子应用信息列表，分析子应用依赖信息提取公共基础库降低不同应用的依赖重复加载</p>
+<p>运行时：<br>为什么不用iframe：</p>
+<ul>
+<li>大幅增加资源内存消耗</li>
+<li>与上层文档不处于同一个上下文，导致：无法冒泡、难以错误监控、丢失路由状态、无法保持登录态。。。</li>
+<li>通信繁琐</li>
+</ul>
+<p>基于SPA的架构：<br>四个核心能力：加载器（loader） 沙箱隔离（sandbox） router store</p>
+<p>生命周期：</p>
+<ol>
+<li>渲染<br>触发（路由&#x2F;手动挂载）<br>初始化沙箱环境<br>判断入口类型（HTML 解析资源 JS 创建挂点DOM）<br>副作用交给沙箱处理<br>渲染DOM树</li>
+<li>销毁<br>销毁应用 销毁副作用 移除DOM</li>
+</ol>
+<p>loader的设计：（仅HTML）<br>下载文件 解析AST 将副作用（style script link等）交给沙箱处理</p>
+<img src="/2025/03/01/byte1/image2.png" class="">
+
+<p>沙箱的设计：<br>与组件完全不同的是微前端是由多个独立运行的应用组成的架构风格，这些系统可能分别来自不同的技术体系。项目的开发、测试从空间和时间上都是分离的，由于没有 Iframe 一样原生能力的隔离很难应用间不发生冲突，这些冲突可能会导致应用发生异常、报错、甚至不可用等状态<br>核心能力：隔离副作用（全局变量、全局事件、定时器、网络请求、localStorage、Style 样式、DOM 元素）<br>副作用分为静态和动态，静态指HTML标签（style link script） 动态由JS创建<br>沙箱设计思路：快照模式和VM模式</p>
+<p>快照：针对每一种副作用提供一个 Patch 类，这个类需要提供 save 和 load 两个方法。Save 对应着该副作用的环境快照存储，Load 对应着销毁该副作用的销毁恢复环境。 核心思路：存储执行环境&#x3D;&gt;执行具备副作用的代码&#x3D;&gt;恢复执行环境<br>VM模式：快照缺点是在非线性多沙箱实例下不好处理<br>VM -&gt; 仿虚拟机，提供全新的执行上下文（window document 定时器 localstorage等）</p>
+<h2 id="模块联邦"><a href="#模块联邦" class="headerlink" title="模块联邦"></a>模块联邦</h2><p>wp5新增<br>模块联邦可以在多个 webpack 编译产物之间共享模块、依赖、页面甚至应用，通过全局变量的组合，还可以在不同模块之前进行数据的获取，让跨应用间做到模块共享真正的插拔式的便捷使用。比如a应用如果想使用b应用中table的组件，通过模块联邦可以直接在a中进行import(‘b&#x2F;table’)非常的方便。<br>分为remote（生产者）和host（消费者），remote暴露模块 host使用</p>
+<img src="/2025/03/01/byte1/image3.png" class="">
+<p>分为本地模块和远程模块<br>依赖处理：<br>模块联邦可以将一个应用的包应用于另一个应用，同时具备整体应用(这两个应用)一起打包的公共依赖抽取能力<br>（可以实现依赖包的自动更新，无需手动）<br>使用sharedScope（共享作用域实现）</p>
+<p>使用：remote引用 exposes暴露模块 shared声明共享模块<br>(in shared)singleton设置为true时，使用使用sharedScope的共享依赖，当版本不一致时会抛出异常</p>
+<h1 id="BFF"><a href="#BFF" class="headerlink" title="BFF"></a>BFF</h1><p>随着业务不断的壮大及架构升级，公司不同团队在前后端协同等方面遇到了一些问题：</p>
+<ul>
+<li>微服务演进过程中，后端服务&#x2F;接口骤增，客户端&#x2F;前端开发需求时，单个页面进行多次请求后端服务，开发效率低下且数据加载时延较高，页面偏卡顿；</li>
+<li>客户端&#x2F;前端的数据模型与服务端的数据模型有一定DIFF，且服务端返回的数据存在冗余；</li>
+<li>数据&#x2F;接口规范前后端可能存在差异，比如字段命名规范、接口数据格式等；</li>
+<li>服务端往往在适配客户端&#x2F;前端不同需求时，需要对数据进行加工，导致服务端掺杂UI逻辑，边界不清晰，不能更好的专注于领域逻辑；<br>此时，在前后端增加一层适配层，即BFF，提供接口聚合、字段裁剪、数据规范等，做到前后端解耦，客户端&#x2F;前端不必受限于服务端，可以更加灵活的调整数据&#x2F;接口，服务端更专注于自己的领域逻辑。</li>
+</ul>
+<p>AGW 以GraphQL作为胶水，业务编写GraphQL查询语句并在AGW平台发布BFF路由，即可完成 HTTP(RestFul) -&gt; GQL -&gt; 后端RPC（也可以是HTTP&#x2F;TCC等）的流量链路;</p>
+<img src="/2025/03/01/byte1/image4.png" class="">
+
+<p>场景：多端展示 短生命周期业务 业务聚合</p>
+<h1 id="业务部分"><a href="#业务部分" class="headerlink" title="业务部分"></a>业务部分</h1><p>闭环开发 开环改造 达人授权码（文件）</p>
+<ol>
+<li>开环代码结构优化（逻辑抽离，之前单页面，现在把请求部分、常量（columns、filter）单独分出，index只复制整体框架）</li>
+<li>公共组件（filterGroup） （高内聚低耦合 可复用可拓展可配置化）<br>返回一个Form，根据传来的config渲染对应的form小组件，支持折叠&#x2F;reset返回预设参数&#x2F;区分config和groupconfig&#x2F;对多样的组件进行处理<br>auth组件：包装权限访问系统，使用auth相关hook获取用户权限，区分资源类型和authlevel</li>
+<li>hook useQuery<br>过去直接使用useParams，搜索参数和真正发送给后端的参数不一致，需要进行转换（searchParmas -&gt; queryParams），需要维护多个状态比较混乱<br>解决：使用统一的hook处理params，转换后返回query，所有操作都基于query（转换包括多选框选择一个时转换为单数组、时间戳的转换等）<br>搜索逻辑：表单改变触发parmasChange，navigate加上参数，使用hook转换后被useeffect检测到，触发请求</li>
+<li>文件上传（可结合分片上传）</li>
+</ol>
+<p>解决的问题？<br>上面的；<br>做公共组件抽离时没有考虑低耦合，参杂业务逻辑；<br>重复搜索问题：reset的doreload和params的useeffect叠加，在同表单使用多接口的场景导致异常，解决是不传reset函数（而不是修改组件的reset逻辑）<br>同表单多接口：请求处加逻辑判断，前端自行分页</p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2025 The kid 的小窝
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;the kid
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

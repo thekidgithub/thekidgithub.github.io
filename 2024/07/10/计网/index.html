@@ -175,14 +175,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #00bcd4">
+                <a href="/tags/%E5%85%AB%E8%82%A1/" style="color: #ffa2c4">
                     八股
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #ff7d73">
+                <a href="/tags/%E8%AE%A1%E7%BD%91/" style="color: #03a9f4">
                     计网
                 </a>
             </span>
@@ -286,7 +286,8 @@ jsonp(&#123;
   console.log(data)
 &#125;)
 </code></pre>
-<p>关于CORS:<br>分为简单请求&#x2F;复杂请求<br>简单请求的标准：方法get&#x2F;post&#x2F;head header只能是accept(-language)&#x2F;content-language&#x2F;content-type content-type只能是text-plain&#x2F;form-data&#x2F;application-x-www-form-urlencoded<br>对于复杂请求，会先发出预检请求，判断是否符合CORS，符合再发送请求<br>作用：减少复杂请求使服务器进行无效运算，降低负载</p>
+<p>关于CORS:<br>是现代浏览器提供的一种跨域请求资源的方法，需要客户端和服务器端的同时支持。整个CORS通信过程，都是浏览器自动完成，不需要用户参与。对于开发者来说，CORS通信与同源的AJAX通信没有差别，代码完全一样。浏览器一旦发现AJAX请求跨源，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感觉。因此，实现CORS通信的关键是服务器。只要服务器实现了CORS接口，就可以跨源通信  </p>
+<p>分为简单请求&#x2F;复杂请求<br>简单请求的标准：方法get&#x2F;post&#x2F;head header只能是accept(-language)&#x2F;content-language&#x2F;content-type content-type只能是text-plain&#x2F;form-data&#x2F;application-x-www-form-urlencoded<br>对于复杂请求，会先发出预检请求，判断是否符合CORS，符合再发送请求<br>作用：减少复杂请求使服务器进行无效运算，降低负载</p>
 <p>iframe </p>
 <ol>
 <li>window.name<br>a.html(localhost:3000)</li>
@@ -376,6 +377,7 @@ jsonp(&#123;
 <li>（DOM型） 少用.innerHTML、.outerHTML、document.write()，用.textContent、.setAttribute() 替代；用框架时使用v-html&#x2F;dangerouslySetInnerHTML；事件监听器、定时器、&lt;a&gt;的href慎用 </li>
 <li>CSP、长度控制、验证码、HTTP-Only Cookie等</li>
 </ol>
+<p>防止 XSS 最简单的就是使用各种框架，如 React、Vuejs 等，对用户输入进行 html 转义。<br>另外，服务端要设置 httpOnly 的 header，防止 JavaScript 操作 cookie。<br>当然，服务端也可以对输入进行转义或者过滤监测。</p>
 <h4 id="CSRF攻击"><a href="#CSRF攻击" class="headerlink" title="CSRF攻击"></a>CSRF攻击</h4><blockquote>
 <p>CSRF（Cross-site request forgery）跨站请求伪造：攻击者诱导受害者进入第三方网站，在第三方网站中，向被攻击网站发送跨站请求。利用受害者在被攻击网站已经获取的注册凭证，绕过后台的用户验证，达到冒充用户对被攻击的网站执行某项操作的目的。</p>
 </blockquote>
